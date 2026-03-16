@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 interface AuthContextType {
     user: any;
     token: string | null;
-    login: (token: string, role: string) => void;
+    login: (token: string, role: string, name: string) => void;
     logout: () => void;
     loading: boolean;
 }
@@ -26,24 +26,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         const storedRole = localStorage.getItem("role");
+        const storedName = localStorage.getItem("name");
         if (storedToken && storedRole) {
             setToken(storedToken);
-            setUser({ role: storedRole });
+            setUser({ role: storedRole, name: storedName || "User" });
         }
         setLoading(false);
     }, []);
 
-    const login = (token: string, role: string) => {
+    const login = (token: string, role: string, name: string) => {
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
+        localStorage.setItem("name", name);
         setToken(token);
-        setUser({ role });
+        setUser({ role, name });
         navigate("/dashboard");
     };
 
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("role");
+        localStorage.removeItem("name");
         setToken(null);
         setUser(null);
         navigate("/login");

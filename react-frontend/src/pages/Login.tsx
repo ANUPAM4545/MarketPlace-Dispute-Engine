@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Loader2, Lock, Mail } from "lucide-react";
+import api from "../lib/api";
 import { cn } from "../lib/utils";
 
 export default function Login() {
@@ -17,18 +18,10 @@ export default function Login() {
         setIsLoading(true);
 
         try {
-            const res = await fetch("http://localhost:5001/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
-
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.msg || "Login failed");
-
-            login(data.access_token, data.role);
+            const res = await api.post("/auth/login", { email, password });
+            login(res.data.access_token, res.data.role, res.data.name);
         } catch (err: any) {
-            setError(err.message);
+            setError(err.response?.data?.msg || err.message || "Login failed");
         } finally {
             setIsLoading(false);
         }

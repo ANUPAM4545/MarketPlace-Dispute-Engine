@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import api from "../lib/api";
 import DisputeResponse from "../components/DisputeResponse";
 import AdminPanel from "../components/AdminPanel";
 
@@ -32,14 +33,10 @@ export default function DisputeDetails() {
         const fetchDispute = async () => {
             if (!token || !id) return;
             try {
-                const res = await fetch(`http://localhost:5001/disputes/${id}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                if (!res.ok) throw new Error("Failed to fetch dispute details");
-                const data = await res.json();
-                setDispute(data);
+                const res = await api.get(`/disputes/${id}`);
+                setDispute(res.data);
             } catch (err: any) {
-                setError(err.message);
+                setError(err.response?.data?.msg || err.message || "Failed to fetch dispute details");
             } finally {
                 setFetchLoading(false);
             }

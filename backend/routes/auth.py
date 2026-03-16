@@ -34,5 +34,5 @@ def login():
     if not user or not check_password_hash(user.password_hash, password):
         return jsonify({"msg": "Bad email or password"}), 401
 
-    access_token = create_access_token(identity=str(user.id), additional_claims={"role": user.role})
-    return jsonify(access_token=access_token, role=user.role), 200
+    access_token = create_access_token(identity=str(user.id), additional_claims={"role": user.role, "name": user.name})
+    return jsonify(access_token=access_token, role=user.role, name=user.name), 200

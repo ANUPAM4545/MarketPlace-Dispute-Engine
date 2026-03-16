@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Loader2 } from "lucide-react";
+import api from "../lib/api";
 
 interface DisputeResponseProps {
     disputeId: number;
@@ -8,7 +9,6 @@ interface DisputeResponseProps {
 }
 
 export default function DisputeResponse({ disputeId, onResponseSubmitted }: DisputeResponseProps) {
-    const { token } = useAuth();
     const [response, setResponse] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
@@ -19,24 +19,11 @@ export default function DisputeResponse({ disputeId, onResponseSubmitted }: Disp
         setError("");
 
         try {
-            const res = await fetch(`http://localhost:5001/disputes/${disputeId}/respond`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ response }),
-            });
-
-            if (!res.ok) {
-                const data = await res.json();
-                throw new Error(data.msg || "Failed to submit response");
-            }
-
+            await api.post(`/disputes/${disputeId}/respond`, { response });
             setResponse("");
             onResponseSubmitted();
         } catch (err: any) {
-            setError(err.message);
+            setError(err.response?.data?.msg || err.message || "Failed to submit response");
         } finally {
             setIsSubmitting(false);
         }

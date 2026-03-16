@@ -30,8 +30,15 @@ export default function Dashboard() {
                                 </Link>
                             </div>
                         </div>
-                        <div className="flex items-center">
-                            <span className="mr-4 text-gray-700 capitalize">Role: {user.role}</span>
+                        <div className="flex items-center gap-4">
+                            <div className="text-right">
+                                <p className="text-sm font-semibold text-gray-900 leading-tight">
+                                    {user.name}
+                                </p>
+                                <p className="text-xs text-indigo-600 font-medium uppercase tracking-wider">
+                                    {user.role}
+                                </p>
+                            </div>
                             <button
                                 onClick={logout}
                                 className="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"

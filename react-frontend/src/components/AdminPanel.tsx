@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Loader2 } from "lucide-react";
+import api from "../lib/api";
 
 interface AdminPanelProps {
     disputeId: number;
@@ -8,7 +9,6 @@ interface AdminPanelProps {
 }
 
 export default function AdminPanel({ disputeId, onResolved }: AdminPanelProps) {
-    const { token } = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState("");
 
@@ -19,23 +19,10 @@ export default function AdminPanel({ disputeId, onResolved }: AdminPanelProps) {
         setError("");
 
         try {
-            const res = await fetch(`http://localhost:5001/disputes/${disputeId}/resolve`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ resolution }),
-            });
-
-            if (!res.ok) {
-                const data = await res.json();
-                throw new Error(data.msg || "Failed to resolve dispute");
-            }
-
+            await api.post(`/disputes/${disputeId}/resolve`, { resolution });
             onResolved();
         } catch (err: any) {
-            setError(err.message);
+            setError(err.response?.data?.msg || err.message || "Failed to resolve dispute");
         } finally {
             setIsSubmitting(false);
         }
