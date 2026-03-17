@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
+
 import { Loader2 } from "lucide-react";
 import api from "../lib/api";
 
