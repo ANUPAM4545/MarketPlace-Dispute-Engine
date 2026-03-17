@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import api from "../lib/api";
 
 export default function CreateDispute() {
-    const { token, user } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
-    const [orderId, setOrderId] = useState("");
+    const location = useLocation();
+    const [orderId, setOrderId] = useState(location.state?.orderId?.toString() || "");
     const [category, setCategory] = useState("Refund");
     const [description, setDescription] = useState("");
     const [file, setFile] = useState<File | null>(null);
@@ -26,20 +28,15 @@ export default function CreateDispute() {
                 formData.append("evidence", file);
             }
 
-            const res = await fetch("http://localhost:5001/disputes/", {
-                method: "POST",
+            await api.post("/disputes/", formData, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data",
                 },
-                body: formData,
             });
-
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.msg || "Failed to create dispute");
 
             navigate("/dashboard");
         } catch (err: any) {
-            setError(err.message);
+            setError(err.response?.data?.msg || err.message || "Failed to create dispute");
         } finally {
             setSubmitting(false);
         }

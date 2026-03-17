@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import api from "../lib/api";
 
 interface Order {
     id: number;
@@ -22,14 +23,10 @@ export default function OrdersList() {
         const fetchOrders = async () => {
             if (!token) return;
             try {
-                const res = await fetch("http://localhost:5001/orders/", {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                if (!res.ok) throw new Error("Failed to fetch orders");
-                const data = await res.json();
-                setOrders(data);
+                const res = await api.get("/orders/");
+                setOrders(res.data);
             } catch (err: any) {
-                setError(err.message);
+                setError(err.response?.data?.msg || err.message || "Failed to fetch orders");
             } finally {
                 setLoading(false);
             }
@@ -39,21 +36,13 @@ export default function OrdersList() {
     }, [token]);
 
     const handleFileDispute = (orderId: number) => {
-        alert(`Order ID: ${orderId}. Please use this to file a dispute.`);
-        navigate("/create-dispute");
+        navigate("/create-dispute", { state: { orderId } });
     };
 
     const seedOrders = async () => {
         try {
-            const res = await fetch("http://localhost:5001/orders/seed", {
-                method: "POST",
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            if (res.ok) {
-                window.location.reload();
-            } else {
-                alert("Failed to seed orders");
-            }
+            await api.post("/orders/seed");
+            window.location.reload();
         } catch {
             alert("Error seeding orders");
         }

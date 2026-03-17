@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2, Lock, Mail, User, Phone, ChevronDown } from "lucide-react";
+import api from "../lib/api";
 import { cn } from "../lib/utils";
 
 export default function Register() {
@@ -26,18 +27,10 @@ export default function Register() {
         setIsLoading(true);
 
         try {
-            const res = await fetch("http://localhost:5001/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, phone, password, role }),
-            });
-
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.msg || "Registration failed");
-
+            await api.post("/auth/register", { name, email, phone, password, role });
             navigate("/login");
         } catch (err: any) {
-            setError(err.message);
+            setError(err.response?.data?.msg || err.message || "Registration failed");
         } finally {
             setIsLoading(false);
         }

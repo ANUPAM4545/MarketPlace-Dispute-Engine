@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import api from "../lib/api";
 
 interface Dispute {
     id: number;
@@ -20,14 +21,10 @@ export default function DisputeList() {
         const fetchDisputes = async () => {
             if (!token) return;
             try {
-                const res = await fetch("http://localhost:5001/disputes/", {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                if (!res.ok) throw new Error("Failed to fetch disputes");
-                const data = await res.json();
-                setDisputes(data);
+                const res = await api.get("/disputes/");
+                setDisputes(res.data);
             } catch (err: any) {
-                setError(err.message);
+                setError(err.response?.data?.msg || err.message || "Failed to fetch disputes");
             } finally {
                 setLoading(false);
             }
