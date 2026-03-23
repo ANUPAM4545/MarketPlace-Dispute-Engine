@@ -48,11 +48,13 @@ export default function AdminAnalytics() {
     if (error) return <div className="p-8 text-center text-red-500">Error: {error}</div>;
     if (!data) return null;
 
-    const pieData = [
-        { name: "Resolved", value: data.resolved_disputes },
-        { name: "Rejected", value: data.rejected_disputes },
-        { name: "Open/Review", value: data.open_disputes },
+    const allPieData = [
+        { name: "Resolved", value: data.resolved_disputes, color: COLORS[0] },
+        { name: "Rejected", value: data.rejected_disputes, color: COLORS[1] },
+        { name: "Open/Review", value: data.open_disputes, color: COLORS[2] },
     ];
+    
+    const pieData = allPieData.filter(item => item.value > 0);
 
     const barData = [
         { name: "Users", count: data.total_users },
@@ -103,8 +105,8 @@ export default function AdminAnalytics() {
                                         dataKey="value"
                                         label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
                                     >
-                                        {pieData.map((_, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        {pieData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
                                         ))}
                                     </Pie>
                                     <Tooltip

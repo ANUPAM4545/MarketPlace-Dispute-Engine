@@ -209,3 +209,26 @@ def resolve_dispute(id):
     
     db.session.commit()
     return jsonify({"msg": "Dispute resolved", "status": dispute.status}), 200
+
+@bp.route('/<int:id>/status', methods=['PUT'])
+@jwt_required()
+def update_dispute_status(id):
+    claims = get_jwt()
+    role = claims.get('role')
+    
+    if role != 'Admin':
+        return jsonify({"msg": "Only admins can update dispute status directly"}), 403
+        
+    dispute = Dispute.query.get_or_404(id)
+    data = request.get_json()
+    
+    new_status = data.get('status')
+    valid_statuses = ['OPEN', 'UNDER_REVIEW', 'SELLER_RESPONDED', 'RESOLVED', 'REJECTED']
+    
+    if new_status not in valid_statuses:
+        return jsonify({"msg": f"Invalid status. Must be one of: {', '.join(valid_statuses)}"}), 400
+        
+    dispute.status = new_status
+    db.session.commit()
+    
+    return jsonify({"msg": "Dispute status updated", "status": dispute.status}), 200
