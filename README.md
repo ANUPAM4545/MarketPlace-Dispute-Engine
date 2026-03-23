@@ -2,7 +2,7 @@
 
 A modern, role-based dispute management platform built with React, Vite, and Flask. This application handles user roles (Buyers, Sellers, Admins) and features a fully integrated dispute lifecycle including file-uploaded evidence and a stunning drag-and-drop Kanban board for Admin resolution.
 
-## ✨ Key Features
+##  Key Features
 
 - **Role-Based Access Control (RBAC):** Distinct dashboards and capabilities for Buyers, Sellers, and Admins.
 - **Admin Dispute Kanban Board:** A premium drag-and-drop board for visually managing and updating dispute statuses manually (`OPEN`, `UNDER_REVIEW`, `SELLER_RESPONDED`, `RESOLVED`, `REJECTED`).
@@ -10,13 +10,13 @@ A modern, role-based dispute management platform built with React, Vite, and Fla
 - **Evidence Management:** Upload and attach evidence documents or images to open disputes.
 - **Global Theme Toggle:** Seamless switching between Light and Dark mode across the application.
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Frontend:** React 19, TypeScript, Vite, Tailwind CSS v4, `@hello-pangea/dnd` (for Kanban dragging), Lucide React (Icons), React Router v7.
 - **Backend:** Python 3.9, Flask, Flask-SQLAlchemy, Flask-JWT-Extended, Flask-CORS.
 - **Database:** SQLite (local development).
 
-## 🚀 Getting Started
+##  Getting Started
 
 Follow these steps to run the Marketplace Dispute Engine locally:
 
@@ -64,7 +64,7 @@ npm run dev
 ```
 *The React application will run on http://localhost:5173.*
 
-## 📖 Usage
+##  Usage
 
 1. Open `http://localhost:5173` in your browser.
 2. Register a new account or log in.
