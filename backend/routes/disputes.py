@@ -5,6 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 bp = Blueprint('disputes', __name__, url_prefix='/disputes')
 
 import os
+import json
 from werkzeug.utils import secure_filename
 from flask import current_app
 
@@ -57,13 +58,43 @@ def create_dispute():
         file_path = os.path.join(upload_folder, filename)
         file.save(file_path)
         
+        # Extract metadata like size
+        file_size = os.path.getsize(file_path)
+        metadata = {
+            "file_size": file_size,
+            "filename": filename
+        }
+
         # Save Evidence record
         evidence = Evidence(
             dispute_id=new_dispute.id,
+            order_id=order_id,
+            image_type='BUYER',
+            metadata_info=json.dumps(metadata),
             file_url=f"/static/uploads/{filename}",
             uploaded_by=current_user_id
         )
         db.session.add(evidence)
+
+        # FRAUD DETECTION: Check if Seller uploaded pre-delivery evidence
+        seller_evidence = Evidence.query.filter_by(order_id=order_id, image_type='SELLER').first()
+        if seller_evidence:
+            # Basic Image Comparison Logic: Compare file size metadata
+            try:
+                seller_meta = json.loads(seller_evidence.metadata_info) if seller_evidence.metadata_info else {}
+                if "file_size" in seller_meta and "file_size" in metadata:
+                    s_size = seller_meta["file_size"]
+                    b_size = metadata["file_size"]
+                    # If sizes differ by more than 5%, flag as suspicious (likely manipulated or different photo)
+                    diff_ratio = abs(s_size - b_size) / max(s_size, 1)
+                    if diff_ratio > 0.05:
+                        new_dispute.is_suspicious = True
+                else:
+                    new_dispute.is_suspicious = True # Default to suspicious if we can't compare
+            except Exception:
+                new_dispute.is_suspicious = True
+
+            db.session.add(new_dispute)
 
     db.session.commit()
     
@@ -116,12 +147,21 @@ def get_dispute(id):
     else:
         return jsonify({"msg": "Unknown role"}), 403
     
-    # Fetch evidence
-    evidence_list = Evidence.query.filter_by(dispute_id=id).all()
+    # Fetch evidence (both order-level seller evidence and dispute-level evidence)
+    evidence_list = Evidence.query.filter(
+        db.or_(
+            Evidence.dispute_id == id,
+            Evidence.order_id == dispute.order_id
+        )
+    ).all()
+    
     evidence_data = [{
+        "id": e.id,
         "file_url": e.file_url,
         "uploaded_by": e.uploaded_by,
-        "uploaded_at": e.uploaded_at
+        "uploaded_at": e.uploaded_at,
+        "image_type": e.image_type,
+        "metadata_info": json.loads(e.metadata_info) if e.metadata_info else {}
     } for e in evidence_list]
 
     return jsonify({
@@ -130,6 +170,7 @@ def get_dispute(id):
         "category": dispute.category,
         "description": dispute.description,
         "seller_response": dispute.seller_response,
+        "is_suspicious": dispute.is_suspicious,
         "created_at": dispute.created_at,
         "buyer_id": dispute.buyer_id,
         "order_id": dispute.order_id,
@@ -177,8 +218,15 @@ def respond_dispute(id):
         file.save(file_path)
         
         # Save Evidence record
+        # Seller responding to a dispute
+        file_size = os.path.getsize(file_path)
+        metadata = {"file_size": file_size, "filename": filename}
+
         evidence = Evidence(
             dispute_id=dispute.id,
+            order_id=dispute.order_id,
+            image_type='SELLER',
+            metadata_info=json.dumps(metadata),
             file_url=f"/static/uploads/{filename}",
             uploaded_by=current_user_id
         )
