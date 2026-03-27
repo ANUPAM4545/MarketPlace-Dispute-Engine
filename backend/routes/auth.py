@@ -36,3 +36,8 @@ def login():
 
     access_token = create_access_token(identity=str(user.id), additional_claims={"role": user.role, "name": user.name})
     return jsonify(access_token=access_token, role=user.role, name=user.name), 200
+
+@bp.route('/sellers', methods=['GET'])
+def get_sellers():
+    sellers = User.query.filter_by(role='Seller').all()
+    return jsonify([{"id": s.id, "name": s.name} for s in sellers]), 200

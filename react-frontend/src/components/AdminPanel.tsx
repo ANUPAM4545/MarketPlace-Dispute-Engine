@@ -13,8 +13,8 @@ export default function AdminPanel({ disputeId, onResolved }: AdminPanelProps) {
     const [error, setError] = useState("");
 
     const handleResolve = async (resolution: "RESOLVED" | "REJECTED") => {
-        if (!confirm(`Are you sure you want to mark this dispute as ${resolution}?`)) return;
-
+        // Native window.confirm occasionally gets blocked by browser security settings,
+        // so we removed it to guarantee button clicks go through instantly.
         setIsSubmitting(true);
         setError("");
 

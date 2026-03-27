@@ -12,7 +12,17 @@ interface Dispute {
     description: string;
     created_at: string;
     buyer_id: number;
+    order_id: number;
     seller_response?: string;
+    is_suspicious?: boolean;
+    evidence?: {
+        id: number;
+        file_url: string;
+        uploaded_by: number;
+        uploaded_at: string;
+        image_type: string;
+        metadata_info?: any;
+    }[];
 }
 
 export default function DisputeDetails() {
@@ -64,8 +74,13 @@ export default function DisputeDetails() {
                 <div className="bg-white shadow overflow-hidden sm:rounded-lg">
                     <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
                         <div>
-                            <h3 className="text-lg leading-6 font-medium text-gray-900">
+                            <h3 className="text-lg leading-6 font-medium text-gray-900 flex items-center">
                                 Dispute #{dispute.id}
+                                {dispute.is_suspicious && (
+                                    <span className="ml-3 px-2 py-1 inline-flex text-xs leading-5 font-bold rounded bg-red-600 text-white">
+                                        FRAUD SUSPECTED
+                                    </span>
+                                )}
                             </h3>
                             <p className="mt-1 max-w-2xl text-sm text-gray-500">Details and resolution status.</p>
                         </div>
@@ -103,6 +118,53 @@ export default function DisputeDetails() {
                                     </dd>
                                 </div>
                             )}
+                            
+                            {/* EVIDENCE SECTION */}
+                            {dispute.evidence && dispute.evidence.length > 0 && (
+                                <div className="py-4 sm:py-5 sm:px-6">
+                                    <dt className="text-sm font-medium text-gray-500 mb-4 border-b pb-2">Evidence & Audit Log</dt>
+                                    <dd className="mt-1 text-sm text-gray-900 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        {/* Seller pre-delivery evidence */}
+                                        <div className="border rounded-md p-4 bg-gray-50">
+                                            <h4 className="font-semibold text-gray-700 mb-2">Seller Pre-Delivery Images</h4>
+                                            {dispute.evidence.filter(e => e.image_type === 'SELLER').map(e => (
+                                                <div key={e.id} className="mb-4">
+                                                    <a href={`http://localhost:5000${e.file_url}`} target="_blank" rel="noreferrer">
+                                                        <img src={`http://localhost:5001${e.file_url}`} alt="Seller Evidence" className="max-h-48 object-cover rounded shadow-sm hover:opacity-75" />
+                                                    </a>
+                                                    <div className="text-xs text-gray-500 mt-2">
+                                                        <p>Uploaded At: {new Date(e.uploaded_at).toLocaleString()}</p>
+                                                        {e.metadata_info && <p>Size: {e.metadata_info.file_size} bytes</p>}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {dispute.evidence.filter(e => e.image_type === 'SELLER').length === 0 && (
+                                                <p className="text-gray-400 italic text-sm">No pre-delivery evidence provided.</p>
+                                            )}
+                                        </div>
+
+                                        {/* Buyer dispute evidence */}
+                                        <div className="border rounded-md p-4 bg-white">
+                                            <h4 className="font-semibold text-gray-700 mb-2">Buyer Dispute Images</h4>
+                                            {dispute.evidence.filter(e => e.image_type === 'BUYER').map(e => (
+                                                <div key={e.id} className="mb-4">
+                                                    <a href={`http://localhost:5000${e.file_url}`} target="_blank" rel="noreferrer">
+                                                        <img src={`http://localhost:5001${e.file_url}`} alt="Buyer Evidence" className="max-h-48 object-cover rounded shadow-sm hover:opacity-75" />
+                                                    </a>
+                                                    <div className="text-xs text-gray-500 mt-2">
+                                                        <p>Uploaded At: {new Date(e.uploaded_at).toLocaleString()}</p>
+                                                        {e.metadata_info && <p>Size: {e.metadata_info.file_size} bytes</p>}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {dispute.evidence.filter(e => e.image_type === 'BUYER').length === 0 && (
+                                                <p className="text-gray-400 italic text-sm">No damage evidence provided.</p>
+                                            )}
+                                        </div>
+                                    </dd>
+                                </div>
+                            )}
+
                         </dl>
                     </div>
                     <div className="px-4 py-5 sm:px-6">

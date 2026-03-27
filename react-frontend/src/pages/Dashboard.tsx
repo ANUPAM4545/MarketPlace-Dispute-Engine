@@ -13,6 +13,7 @@ export default function Dashboard() {
     const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
     const [adminView, setAdminView] = useState<'kanban' | 'list' | 'analytics'>('kanban');
+    const [sellerView, setSellerView] = useState<'orders' | 'disputes'>('orders');
 
     useEffect(() => {
         if (!loading && !user) {
@@ -85,6 +86,25 @@ export default function Dashboard() {
 
                     {user.role === "Buyer" && <OrdersList />}
 
+                    {user.role === "Seller" && (
+                        <div className="mb-6 flex gap-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                            <button 
+                                onClick={() => setSellerView('orders')}
+                                className={`px-4 py-2 font-medium text-sm rounded-t-lg transition-colors ${sellerView === 'orders' ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+                            >
+                                Active Orders
+                            </button>
+                            <button 
+                                onClick={() => setSellerView('disputes')}
+                                className={`px-4 py-2 font-medium text-sm rounded-t-lg transition-colors ${sellerView === 'disputes' ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+                            >
+                                Manage Disputes
+                            </button>
+                        </div>
+                    )}
+
+                    {user.role === "Seller" && sellerView === "orders" && <OrdersList />}
+
                     {user.role === "Admin" && (
                         <div className="mb-6 flex gap-4 border-b border-gray-200 dark:border-gray-700 pb-2">
                             <button 
@@ -110,7 +130,7 @@ export default function Dashboard() {
 
                     {user.role === "Admin" && adminView === "analytics" && <AdminAnalytics />}
                     {user.role === "Admin" && adminView === "kanban" && <AdminKanbanBoard />}
-                    {(user.role !== "Admin" || adminView === "list") && (
+                    {(user.role === "Buyer" || (user.role === "Admin" && adminView === "list") || (user.role === "Seller" && sellerView === "disputes")) && (
                         <>
                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 mt-8">
                                 {user.role === "Admin"

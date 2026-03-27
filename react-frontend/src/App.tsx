@@ -8,11 +8,13 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import CreateDispute from "./pages/CreateDispute";
 import DisputeDetails from "./pages/DisputeDetails";
+import Features from "./pages/Features";
 
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/features" element={<Features />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />

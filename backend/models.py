@@ -28,11 +28,15 @@ class Dispute(db.Model):
     category = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     seller_response = db.Column(db.Text)
+    is_suspicious = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Evidence(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    dispute_id = db.Column(db.Integer, db.ForeignKey('dispute.id'), nullable=False)
+    dispute_id = db.Column(db.Integer, db.ForeignKey('dispute.id'), nullable=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=True)
+    image_type = db.Column(db.String(20), nullable=False) # 'SELLER' or 'BUYER'
+    metadata_info = db.Column(db.Text, nullable=True)
     file_url = db.Column(db.String(255), nullable=False)
     uploaded_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # User ID
     uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
