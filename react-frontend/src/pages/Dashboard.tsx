@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
-import { Sun, Moon } from "lucide-react";
+import { LogOut, LayoutDashboard, Plus } from "lucide-react";
 import DisputeList from "../components/DisputeList";
 import OrdersList from "../components/OrdersList";
 import AdminAnalytics from "../components/AdminAnalytics";
@@ -10,7 +9,6 @@ import AdminKanbanBoard from "../components/AdminKanbanBoard";
 
 export default function Dashboard() {
     const { user, loading, logout } = useAuth();
-    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
     const [adminView, setAdminView] = useState<'kanban' | 'list' | 'analytics'>('kanban');
     const [sellerView, setSellerView] = useState<'orders' | 'disputes'>('orders');
@@ -22,125 +20,168 @@ export default function Dashboard() {
     }, [user, loading, navigate]);
 
     if (loading || !user) {
-        return <div className="p-8">Loading...</div>;
+        return (
+            <div className="min-h-screen bg-appbg flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold-500"></div>
+            </div>
+        );
     }
 
+    const tabBaseClass = "px-6 py-2.5 font-medium text-sm transition-all duration-200 border-b-2";
+    const tabActiveClass = "text-gold-500 border-gold-500";
+    const tabInactiveClass = "text-gray-400 border-transparent hover:text-gold-200";
+
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
-            <nav className="bg-white dark:bg-gray-800 shadow transition-colors duration-200">
+        <div className="min-h-screen bg-appbg text-gray-200 font-sans selection:bg-gold-500 selection:text-black">
+            {/* Top Navigation */}
+            <nav className="border-b border-appborder/50 bg-appbg/80 backdrop-blur-md sticky top-0 z-40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between h-16">
-                        <div className="flex">
-                            <div className="flex-shrink-0 flex items-center">
-                                <Link to="/dashboard" className="text-xl font-bold text-indigo-600">
-                                    Dispute Engine
-                                </Link>
+                    <div className="flex justify-between items-center h-20">
+                        {/* Left: Brand & Links */}
+                        <div className="flex items-center gap-8">
+                            <Link to="/dashboard" className="flex items-center gap-2 group">
+                                <div className="w-2 h-2 rounded-full bg-gold-500 group-hover:scale-150 transition-transform shadow-[0_0_8px_rgba(212,175,55,0.8)]"></div>
+                                <span className="text-xl font-medium tracking-wide text-white"><span className="font-serif italic text-gold-500">Dispute</span>Engine</span>
+                            </Link>
+                            
+                            <div className="hidden md:flex items-center gap-2 ml-4 px-1 py-1 bg-appcard border border-appborder rounded-md">
+                                <span className="px-4 py-1.5 flex items-center gap-2 text-gold-500 text-sm font-medium bg-gold-500/10 rounded">
+                                    <LayoutDashboard className="w-4 h-4" />
+                                    Dashboard
+                                </span>
                             </div>
                         </div>
+
+                        {/* Right: User actions */}
                         <div className="flex items-center gap-4">
-                            <div className="text-right">
-                                <p className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
-                                    {user.name}
-                                </p>
-                                <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium uppercase tracking-wider">
-                                    {user.role}
-                                </p>
+                            {user.role === "Buyer" && (
+                                <Link
+                                    to="/create-dispute"
+                                    className="hidden sm:flex items-center gap-2 bg-gold-500 text-black px-4 py-2 rounded-md font-medium hover:bg-gold-400 transition-colors shadow-[0_0_15px_rgba(212,175,55,0.2)]"
+                                >
+                                    <Plus className="w-4 h-4" />
+                                    New Dispute
+                                </Link>
+                            )}
+
+                            <div className="flex items-center gap-3 pl-4 border-l border-appborder">
+                                <div className="hidden sm:block text-right">
+                                    <p className="text-sm font-medium text-white">
+                                        {user.name}
+                                    </p>
+                                    <p className="text-xs text-gold-500 font-medium uppercase tracking-wider">
+                                        {user.role}
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={logout}
+                                    className="p-2 text-gray-400 hover:text-red-400 transition-colors rounded-md hover:bg-appcard"
+                                    title="Sign Out"
+                                >
+                                    <LogOut className="h-5 w-5" />
+                                </button>
                             </div>
-                            <button
-                                onClick={toggleTheme}
-                                className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                                aria-label="Toggle theme"
-                            >
-                                {theme === "light" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-                            </button>
-                            <button
-                                onClick={logout}
-                                className="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                            >
-                                Logout
-                            </button>
                         </div>
                     </div>
                 </div>
             </nav>
 
-            <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                <div className="px-4 py-6 sm:px-0">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                            {user.role === "Admin"
-                                ? "Admin Dashboard"
-                                : user.role === "Seller"
-                                    ? "Seller Dashboard"
-                                    : "Dashboard"}
-                        </h2>
-                        {user.role === "Buyer" && (
-                            <Link
-                                to="/create-dispute"
-                                className="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700"
-                            >
-                                + New Dispute
-                            </Link>
-                        )}
-                    </div>
+            <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+                {/* Hero Greeting */}
+                <div className="mb-12 mt-4">
+                    <p className="text-gold-500 uppercase tracking-[0.2em] text-xs font-semibold mb-2">{user.role} DASHBOARD</p>
+                    <h1 className="text-4xl sm:text-5xl font-light text-white tracking-wide">
+                        Hello, <span className="font-serif italic text-gold-500 font-medium">{user.name}</span>
+                    </h1>
+                </div>
 
-                    {user.role === "Buyer" && <OrdersList />}
-
-                    {user.role === "Seller" && (
-                        <div className="mb-6 flex gap-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                {/* Seller Tabs */}
+                {user.role === "Seller" && (
+                    <div className="mb-8 border-b border-appborder">
+                        <div className="flex gap-2">
                             <button 
                                 onClick={() => setSellerView('orders')}
-                                className={`px-4 py-2 font-medium text-sm rounded-t-lg transition-colors ${sellerView === 'orders' ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+                                className={`${tabBaseClass} ${sellerView === 'orders' ? tabActiveClass : tabInactiveClass}`}
                             >
                                 Active Orders
                             </button>
                             <button 
                                 onClick={() => setSellerView('disputes')}
-                                className={`px-4 py-2 font-medium text-sm rounded-t-lg transition-colors ${sellerView === 'disputes' ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+                                className={`${tabBaseClass} ${sellerView === 'disputes' ? tabActiveClass : tabInactiveClass}`}
                             >
                                 Manage Disputes
                             </button>
                         </div>
-                    )}
+                    </div>
+                )}
 
-                    {user.role === "Seller" && sellerView === "orders" && <OrdersList />}
-
-                    {user.role === "Admin" && (
-                        <div className="mb-6 flex gap-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                {/* Admin Tabs */}
+                {user.role === "Admin" && (
+                    <div className="mb-8 border-b border-appborder">
+                        <div className="flex gap-2">
                             <button 
                                 onClick={() => setAdminView('kanban')}
-                                className={`px-4 py-2 font-medium text-sm rounded-t-lg transition-colors ${adminView === 'kanban' ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+                                className={`${tabBaseClass} ${adminView === 'kanban' ? tabActiveClass : tabInactiveClass}`}
                             >
                                 Kanban Board
                             </button>
                             <button 
                                 onClick={() => setAdminView('list')}
-                                className={`px-4 py-2 font-medium text-sm rounded-t-lg transition-colors ${adminView === 'list' ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+                                className={`${tabBaseClass} ${adminView === 'list' ? tabActiveClass : tabInactiveClass}`}
                             >
                                 List View
                             </button>
                             <button 
                                 onClick={() => setAdminView('analytics')}
-                                className={`px-4 py-2 font-medium text-sm rounded-t-lg transition-colors ${adminView === 'analytics' ? 'bg-indigo-50 text-indigo-600 border-b-2 border-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 dark:border-indigo-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
+                                className={`${tabBaseClass} ${adminView === 'analytics' ? tabActiveClass : tabInactiveClass}`}
                             >
                                 Analytics
                             </button>
                         </div>
+                    </div>
+                )}
+
+                {/* Dynamic Content Views */}
+                <div className="space-y-6">
+                    {user.role === "Buyer" && (
+                        <div className="mt-8 border-t border-appborder pt-8">
+                            <div className="flex items-center justify-between mb-6">
+                                <h3 className="text-xl font-serif italic text-white">Your Orders</h3>
+                            </div>
+                            <OrdersList />
+                        </div>
                     )}
 
-                    {user.role === "Admin" && adminView === "analytics" && <AdminAnalytics />}
-                    {user.role === "Admin" && adminView === "kanban" && <AdminKanbanBoard />}
+                    {user.role === "Seller" && sellerView === "orders" && (
+                        <div className="mt-4">
+                            <OrdersList />
+                        </div>
+                    )}
+
+                    {user.role === "Admin" && adminView === "analytics" && (
+                        <div className="mt-4">
+                            <AdminAnalytics />
+                        </div>
+                    )}
+
+                    {user.role === "Admin" && adminView === "kanban" && (
+                        <div className="mt-4">
+                            <AdminKanbanBoard />
+                        </div>
+                    )}
+
+                    {/* Dispute List (Shared Context) */}
                     {(user.role === "Buyer" || (user.role === "Admin" && adminView === "list") || (user.role === "Seller" && sellerView === "disputes")) && (
-                        <>
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 mt-8">
+                        <div className={`mt-8 ${user.role === "Buyer" ? "border-t border-appborder pt-8" : "mt-4"}`}>
+                            <h3 className="text-xl font-serif italic text-white mb-6">
                                 {user.role === "Admin"
-                                    ? "All Disputes (List)"
+                                    ? "All Platform Disputes"
                                     : user.role === "Seller"
                                         ? "Incoming Disputes"
                                         : "My Disputes"}
                             </h3>
                             <DisputeList />
-                        </>
+                        </div>
                     )}
                 </div>
             </main>
