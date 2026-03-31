@@ -33,43 +33,46 @@ export default function DisputeList() {
         fetchDisputes();
     }, [token]);
 
-    if (loading) return <div>Loading disputes...</div>;
-    if (error) return <div className="text-red-500">Error: {error}</div>;
+    if (loading) return <div className="p-8 text-center text-gray-500 font-light">Loading disputes...</div>;
+    if (error) return <div className="p-8 text-center text-red-500 font-light">Error: {error}</div>;
 
     return (
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-            <ul className="divide-y divide-gray-200">
+        <div className="bg-white dark:bg-appcard shadow-[0_0_15px_rgba(0,0,0,0.05)] overflow-hidden rounded-xl border border-gray-100 dark:border-appborder transition-colors duration-200">
+            <h3 className="px-4 py-5 sm:px-6 text-xl leading-6 font-serif italic text-gray-900 dark:text-gold-500 font-medium tracking-wide flex justify-between items-center border-b border-gray-100 dark:border-appborder/50">
+                Active Disputes
+            </h3>
+            <ul className="divide-y divide-gray-100 dark:divide-appborder/50">
                 {disputes.length === 0 ? (
-                    <li className="px-4 py-4 text-center text-gray-500">No disputes found.</li>
+                    <li className="px-4 py-8 text-center text-gray-500 dark:text-gray-400 font-light">No disputes found.</li>
                 ) : (
                     disputes.map((dispute) => (
-                        <li key={dispute.id}>
-                            <Link to={`/disputes/${dispute.id}`} className="block hover:bg-gray-50">
-                                <div className="px-4 py-4 sm:px-6">
+                        <li key={dispute.id} className="group">
+                            <Link to={`/disputes/${dispute.id}`} className="block hover:bg-gray-50/50 dark:hover:bg-appbg/50 transition-colors">
+                                <div className="px-4 py-5 sm:px-6">
                                     <div className="flex items-center justify-between">
-                                        <p className="text-sm font-medium text-indigo-600 truncate">
-                                            {dispute.category}
+                                        <p className="text-sm font-semibold text-gray-900 dark:text-gold-500 truncate tracking-wide group-hover:text-gold-600 dark:group-hover:text-gold-400 transition-colors">
+                                            #{dispute.id} - {dispute.category}
                                         </p>
                                         <div className="ml-2 flex-shrink-0 flex">
                                             <p
-                                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${dispute.status === "OPEN"
-                                                        ? "bg-green-100 text-green-800"
+                                                className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-bold rounded-full border ${dispute.status === "OPEN"
+                                                        ? "bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20"
                                                         : dispute.status === "RESOLVED"
-                                                            ? "bg-gray-100 text-gray-800"
-                                                            : "bg-yellow-100 text-yellow-800"
+                                                            ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-500/10 dark:text-green-400 dark:border-green-500/20"
+                                                            : "bg-gold-50 text-gold-700 border-gold-200 dark:bg-gold-500/10 dark:text-gold-400 dark:border-gold-500/20"
                                                     }`}
                                             >
                                                 {dispute.status}
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="mt-2 sm:flex sm:justify-between">
+                                    <div className="mt-2 sm:flex sm:justify-between items-start">
                                         <div className="sm:flex">
-                                            <p className="flex items-center text-sm text-gray-500">
-                                                {dispute.description.substring(0, 100)}...
+                                            <p className="flex items-center text-sm text-gray-600 dark:text-gray-300 font-light line-clamp-1 max-w-xl">
+                                                {dispute.description.substring(0, 100)}{dispute.description.length > 100 ? '...' : ''}
                                             </p>
                                         </div>
-                                        <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                        <div className="mt-2 flex items-center text-xs text-gray-400 sm:mt-0 font-light whitespace-nowrap">
                                             <p>Created on {new Date(dispute.created_at).toLocaleDateString()}</p>
                                         </div>
                                     </div>

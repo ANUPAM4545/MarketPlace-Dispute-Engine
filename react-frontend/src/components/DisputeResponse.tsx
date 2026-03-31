@@ -30,22 +30,22 @@ export default function DisputeResponse({ disputeId, onResponseSubmitted }: Disp
     };
 
     return (
-        <div className="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <h4 className="text-lg font-medium text-gray-900 mb-4">Submit Response</h4>
+        <div className="mt-6 bg-white dark:bg-appbg p-5 rounded-xl border border-gray-200 dark:border-appborder transition-colors duration-200">
+            <h4 className="text-lg font-serif italic text-gray-900 dark:text-gold-500 mb-4 tracking-wide font-medium">Submit Response</h4>
             <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                    <div className="text-sm text-red-600 bg-red-50 p-2 rounded">{error}</div>
+                    <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-900/50">{error}</div>
                 )}
                 <div>
-                    <label htmlFor="response" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="response" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                         Explanation
                     </label>
-                    <div className="mt-1">
+                    <div className="mt-2">
                         <textarea
                             id="response"
                             name="response"
                             rows={4}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border"
+                            className="block w-full rounded-lg border border-gray-300 dark:border-appborder bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:border-gold-500 focus:ring-gold-500 sm:text-sm p-3 transition-all focus:outline-none focus:ring-2 resize-none"
                             placeholder="Provide your side of the story..."
                             value={response}
                             onChange={(e) => setResponse(e.target.value)}
@@ -53,11 +53,11 @@ export default function DisputeResponse({ disputeId, onResponseSubmitted }: Disp
                         />
                     </div>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-end pt-2">
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                        className="inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-semibold rounded-lg shadow-[0_0_15px_rgba(212,175,55,0.2)] text-white dark:text-gray-900 bg-gold-600 dark:bg-gold-500 hover:bg-gold-700 dark:hover:bg-gold-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold-500 disabled:opacity-50 transition-all active:scale-[0.98]"
                     >
                         {isSubmitting ? (
                             <>

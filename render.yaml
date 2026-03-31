@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: market-dispute-backend
+    env: python
+    region: ohio
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: gunicorn --chdir backend app:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: market-dispute-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: FLASK_APP
+        value: backend/app.py
+
+databases:
+  - name: market-dispute-db
+    region: ohio
+    plan: free

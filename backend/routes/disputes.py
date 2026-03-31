@@ -280,3 +280,73 @@ def update_dispute_status(id):
     db.session.commit()
     
     return jsonify({"msg": "Dispute status updated", "status": dispute.status}), 200
+
+@bp.route('/<int:id>/messages', methods=['GET'])
+@jwt_required()
+def get_dispute_messages(id):
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    role = claims.get('role')
+    
+    dispute = Dispute.query.get_or_404(id)
+    from models import Order, Message, User
+    order = Order.query.get(dispute.order_id)
+
+    # Access Control
+    if role == 'Seller' and order.seller_id != int(current_user_id):
+        return jsonify({"msg": "Access denied"}), 403
+    elif role == 'Buyer' and dispute.buyer_id != int(current_user_id):
+        return jsonify({"msg": "Access denied"}), 403
+    
+    messages = Message.query.filter_by(dispute_id=id).order_by(Message.created_at.asc()).all()
+    
+    return jsonify([{
+        "id": m.id,
+        "sender_id": m.sender_id,
+        "sender_name": m.sender.name,
+        "sender_role": m.sender.role,
+        "content": m.content,
+        "created_at": m.created_at.isoformat()
+    } for m in messages]), 200
+
+@bp.route('/<int:id>/messages', methods=['POST'])
+@jwt_required()
+def post_dispute_message(id):
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    role = claims.get('role')
+    
+    dispute = Dispute.query.get_or_404(id)
+    from models import Order, Message
+    order = Order.query.get(dispute.order_id)
+
+    # Access Control
+    if role == 'Seller' and order.seller_id != int(current_user_id):
+        return jsonify({"msg": "Access denied"}), 403
+    elif role == 'Buyer' and dispute.buyer_id != int(current_user_id):
+        return jsonify({"msg": "Access denied"}), 403
+    
+    data = request.get_json()
+    content = data.get('content')
+    if not content or not content.strip():
+        return jsonify({"msg": "Message content cannot be empty"}), 400
+        
+    new_message = Message(
+        dispute_id=id,
+        sender_id=current_user_id,
+        content=content.strip()
+    )
+    db.session.add(new_message)
+    db.session.commit()
+    
+    return jsonify({
+        "msg": "Message sent",
+        "message": {
+            "id": new_message.id,
+            "sender_id": new_message.sender_id,
+            "sender_name": new_message.sender.name,
+            "sender_role": new_message.sender.role,
+            "content": new_message.content,
+            "created_at": new_message.created_at.isoformat()
+        }
+    }), 201

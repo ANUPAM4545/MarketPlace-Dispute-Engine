@@ -44,11 +44,11 @@ export default function CreateDispute() {
 
     if (user?.role && user.role !== "Buyer") {
         return (
-            <div className="p-8 text-center">
-                <p className="text-red-500">Only Buyers can create disputes.</p>
+            <div className="p-8 text-center min-h-screen bg-white dark:bg-appbg transition-colors duration-200">
+                <p className="text-red-500 font-medium">Only Buyers can create disputes.</p>
                 <Link
                     to="/dashboard"
-                    className="text-indigo-600 hover:text-indigo-500 mt-4 inline-block"
+                    className="text-gold-600 hover:text-gold-500 mt-4 inline-block font-medium"
                 >
                     Back to Dashboard
                 </Link>
@@ -57,21 +57,21 @@ export default function CreateDispute() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-appbg transition-colors duration-200 flex flex-col justify-center py-12 sm:px-6 lg:px-8 selection:bg-gold-500 selection:text-black">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Create a New Dispute
+                <h2 className="mt-6 text-center text-3xl tracking-wide font-light text-gray-900 dark:text-white">
+                    Create a <span className="font-serif italic text-gold-600 dark:text-gold-500 font-medium">New Dispute</span>
                 </h2>
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+                <div className="bg-white dark:bg-appcard py-8 px-4 shadow-[0_0_20px_rgba(0,0,0,0.05)] sm:rounded-2xl sm:px-10 border border-gray-100 dark:border-appborder">
                     <form className="space-y-6" onSubmit={handleSubmit}>
-                        {error && <div className="text-red-500 text-center">{error}</div>}
+                        {error && <div className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-3 rounded-md text-center border border-red-100 dark:border-red-900/50 font-medium text-sm">{error}</div>}
 
                         <div>
-                            <label htmlFor="orderId" className="block text-sm font-medium text-gray-700">
-                                Order ID (Enter a number)
+                            <label htmlFor="orderId" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Order ID
                             </label>
                             <div className="mt-1">
                                 <input
@@ -79,7 +79,7 @@ export default function CreateDispute() {
                                     name="orderId"
                                     type="number"
                                     required
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-appborder bg-white dark:bg-appbg text-gray-900 dark:text-white rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-gold-500 sm:text-sm transition-all"
                                     value={orderId}
                                     onChange={(e) => setOrderId(e.target.value)}
                                 />
@@ -87,14 +87,14 @@ export default function CreateDispute() {
                         </div>
 
                         <div>
-                            <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                            <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Category
                             </label>
                             <div className="mt-1">
                                 <select
                                     id="category"
                                     name="category"
-                                    className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md border"
+                                    className="block w-full pl-3 pr-10 py-2 border border-gray-300 dark:border-appborder bg-white dark:bg-appbg text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-gold-500 sm:text-sm rounded-lg transition-all appearance-none"
                                     value={category}
                                     onChange={(e) => setCategory(e.target.value)}
                                 >
@@ -108,7 +108,7 @@ export default function CreateDispute() {
                         </div>
 
                         <div>
-                            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                            <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                 Description
                             </label>
                             <div className="mt-1">
@@ -117,7 +117,7 @@ export default function CreateDispute() {
                                     name="description"
                                     rows={4}
                                     required
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-appborder bg-white dark:bg-appbg text-gray-900 dark:text-white rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-gold-500 sm:text-sm transition-all resize-none"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
@@ -125,15 +125,15 @@ export default function CreateDispute() {
                         </div>
 
                         <div>
-                            <label htmlFor="evidence" className="block text-sm font-medium text-gray-700">
-                                Evidence (Optional)
+                            <label htmlFor="evidence" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Evidence <span className="text-gray-400 dark:text-gray-500 font-light">(Optional)</span>
                             </label>
-                            <div className="mt-1">
+                            <div className="mt-1 flex items-center">
                                 <input
                                     id="evidence"
                                     name="evidence"
                                     type="file"
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gold-50 file:text-gold-700 dark:file:bg-gold-500/10 dark:file:text-gold-400 hover:file:bg-gold-100 dark:hover:file:bg-gold-500/20 transition-all cursor-pointer"
                                     onChange={(e) => setFile(e.target.files ? e.target.files[0] : null)}
                                 />
                             </div>
@@ -143,14 +143,14 @@ export default function CreateDispute() {
                             <button
                                 type="submit"
                                 disabled={submitting}
-                                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                                className="w-full flex justify-center py-2.5 px-4 rounded-lg bg-gold-600 dark:bg-gold-500 text-sm font-semibold text-white dark:text-appbg shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:bg-gold-700 dark:hover:bg-gold-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold-500 disabled:opacity-70 disabled:cursor-not-allowed transition-all active:scale-[0.98]"
                             >
                                 {submitting ? "Submitting..." : "Submit Dispute"}
                             </button>
                         </div>
-                        <div className="text-center">
-                            <Link to="/dashboard" className="text-indigo-600 hover:text-indigo-500 text-sm">
-                                Cancel
+                        <div className="text-center pt-2">
+                            <Link to="/dashboard" className="text-gray-500 hover:text-gold-600 dark:text-gray-400 dark:hover:text-gold-400 text-sm font-medium transition-colors border-b border-transparent hover:border-gold-500">
+                                Cancel & Return
                             </Link>
                         </div>
                     </form>

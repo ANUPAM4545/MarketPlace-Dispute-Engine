@@ -48,3 +48,13 @@ class Resolution(db.Model):
     decision = db.Column(db.String(50), nullable=False) # REFUND, REJECT, PARTIAL_REFUND
     notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    dispute_id = db.Column(db.Integer, db.ForeignKey('dispute.id'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships for easier access
+    sender = db.relationship('User', backref='messages')

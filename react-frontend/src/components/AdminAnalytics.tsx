@@ -22,7 +22,7 @@ interface AnalyticsData {
     total_orders: number;
 }
 
-const COLORS = ["#10B981", "#EF4444", "#F59E0B"]; // Green, Red, Yellow for PieChart
+const COLORS = ["#d4af37", "#b5952f", "#937826"]; // Different shades of Gold for PieChart
 
 export default function AdminAnalytics() {
     const [data, setData] = useState<AnalyticsData | null>(null);
@@ -44,8 +44,8 @@ export default function AdminAnalytics() {
         fetchAnalytics();
     }, []);
 
-    if (loading) return <div className="p-8 text-center text-gray-500">Loading analytics...</div>;
-    if (error) return <div className="p-8 text-center text-red-500">Error: {error}</div>;
+    if (loading) return <div className="p-8 text-center text-gray-500 font-light">Loading analytics...</div>;
+    if (error) return <div className="p-8 text-center text-red-500 font-light">Error: {error}</div>;
     if (!data) return null;
 
     const allPieData = [
@@ -63,34 +63,34 @@ export default function AdminAnalytics() {
     ];
 
     return (
-        <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-8 transition-colors duration-200">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-6">
+        <div className="bg-white dark:bg-appcard shadow-[0_0_15px_rgba(0,0,0,0.05)] rounded-xl p-6 mb-8 transition-colors duration-200 border border-gray-100 dark:border-appborder">
+            <h3 className="text-xl leading-6 font-serif italic text-gray-900 dark:text-gold-500 mb-6 font-medium">
                 Platform Analytics
             </h3>
 
             {/* Top Stat Cards */}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 mb-8">
-                <div className="bg-indigo-50 dark:bg-indigo-900/30 rounded-lg px-4 py-5 overflow-hidden sm:p-6 transition-colors duration-200">
-                    <dt className="text-sm font-medium text-indigo-500 dark:text-indigo-300 truncate">Total Users</dt>
-                    <dd className="mt-1 text-3xl font-semibold text-indigo-900 dark:text-indigo-100">{data.total_users}</dd>
+                <div className="bg-gray-50 dark:bg-appbg rounded-lg px-4 py-5 overflow-hidden sm:p-6 transition-colors duration-200 border border-gray-100 dark:border-appborder/50">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate tracking-wide">Total Users</dt>
+                    <dd className="mt-1 text-3xl font-light text-gray-900 dark:text-white">{data.total_users}</dd>
                 </div>
-                <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg px-4 py-5 overflow-hidden sm:p-6 transition-colors duration-200">
-                    <dt className="text-sm font-medium text-blue-500 dark:text-blue-300 truncate">Total Orders</dt>
-                    <dd className="mt-1 text-3xl font-semibold text-blue-900 dark:text-blue-100">{data.total_orders}</dd>
+                <div className="bg-gray-50 dark:bg-appbg rounded-lg px-4 py-5 overflow-hidden sm:p-6 transition-colors duration-200 border border-gray-100 dark:border-appborder/50">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate tracking-wide">Total Orders</dt>
+                    <dd className="mt-1 text-3xl font-light text-gray-900 dark:text-white">{data.total_orders}</dd>
                 </div>
-                <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg px-4 py-5 overflow-hidden sm:p-6 transition-colors duration-200">
-                    <dt className="text-sm font-medium text-purple-500 dark:text-purple-300 truncate">Total Disputes</dt>
-                    <dd className="mt-1 text-3xl font-semibold text-purple-900 dark:text-purple-100">{data.total_disputes}</dd>
+                <div className="bg-gray-50 dark:bg-appbg rounded-lg px-4 py-5 overflow-hidden sm:p-6 transition-colors duration-200 border border-gray-100 dark:border-appborder/50">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate tracking-wide">Total Disputes</dt>
+                    <dd className="mt-1 text-3xl font-light text-gray-900 dark:text-white">{data.total_disputes}</dd>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Dispute Status Pie Chart */}
-                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl border border-gray-100 dark:border-gray-600 transition-colors duration-200">
-                    <h4 className="text-center font-medium text-gray-700 dark:text-gray-300 mb-4">Dispute Resolution Status</h4>
+                <div className="bg-white dark:bg-appbg p-4 rounded-xl border border-gray-100 dark:border-appborder transition-colors duration-200">
+                    <h4 className="text-center font-medium text-gray-700 dark:text-gray-300 mb-4 tracking-wide text-sm">Dispute Resolution Status</h4>
                     <div className="h-64 flex items-center justify-center">
                         {data.total_disputes === 0 ? (
-                            <p className="text-gray-500 dark:text-gray-400">No disputes yet.</p>
+                            <p className="text-gray-500 dark:text-gray-400 font-light">No disputes yet.</p>
                         ) : (
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
@@ -100,7 +100,7 @@ export default function AdminAnalytics() {
                                         cy="50%"
                                         innerRadius={60}
                                         outerRadius={80}
-                                        fill="#8884d8"
+                                        fill="#d4af37"
                                         paddingAngle={5}
                                         dataKey="value"
                                         label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
@@ -111,11 +111,13 @@ export default function AdminAnalytics() {
                                     </Pie>
                                     <Tooltip
                                         contentStyle={{
-                                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                            backgroundColor: 'rgba(26, 26, 26, 0.95)',
+                                            color: '#f3f4f6',
                                             borderRadius: '8px',
-                                            border: 'none',
-                                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                            border: '1px solid #333',
+                                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)'
                                         }}
+                                        itemStyle={{ color: '#d4af37' }}
                                     />
                                 </PieChart>
                             </ResponsiveContainer>
@@ -124,27 +126,29 @@ export default function AdminAnalytics() {
                 </div>
 
                 {/* Platform Growth Bar Chart */}
-                <div className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl border border-gray-100 dark:border-gray-600 transition-colors duration-200">
-                    <h4 className="text-center font-medium text-gray-700 dark:text-gray-300 mb-4">Platform Overview</h4>
+                <div className="bg-white dark:bg-appbg p-4 rounded-xl border border-gray-100 dark:border-appborder transition-colors duration-200">
+                    <h4 className="text-center font-medium text-gray-700 dark:text-gray-300 mb-4 tracking-wide text-sm">Platform Overview</h4>
                     <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart
                                 data={barData}
                                 margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
                             >
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6B7280' }} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280' }} />
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#374151" className="opacity-30 dark:opacity-100" />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#9CA3AF' }} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9CA3AF' }} />
                                 <Tooltip
-                                    cursor={{ fill: 'rgba(243, 244, 246, 0.4)' }}
+                                    cursor={{ fill: 'rgba(212, 175, 55, 0.1)' }}
                                     contentStyle={{
-                                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                        backgroundColor: 'rgba(26, 26, 26, 0.95)',
+                                        color: '#f3f4f6',
                                         borderRadius: '8px',
-                                        border: 'none',
-                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                        border: '1px solid #333',
+                                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)'
                                     }}
+                                    itemStyle={{ color: '#d4af37' }}
                                 />
-                                <Bar dataKey="count" fill="#6366F1" radius={[4, 4, 0, 0]} barSize={40} />
+                                <Bar dataKey="count" fill="#d4af37" radius={[4, 4, 0, 0]} barSize={40} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>

@@ -13,8 +13,6 @@ export default function AdminPanel({ disputeId, onResolved }: AdminPanelProps) {
     const [error, setError] = useState("");
 
     const handleResolve = async (resolution: "RESOLVED" | "REJECTED") => {
-        // Native window.confirm occasionally gets blocked by browser security settings,
-        // so we removed it to guarantee button clicks go through instantly.
         setIsSubmitting(true);
         setError("");
 
@@ -29,16 +27,16 @@ export default function AdminPanel({ disputeId, onResolved }: AdminPanelProps) {
     };
 
     return (
-        <div className="mt-6 bg-indigo-50 p-4 rounded-lg border border-indigo-200">
-            <h4 className="text-lg font-medium text-indigo-900 mb-4">Admin Actions</h4>
+        <div className="mt-6 bg-gold-50/50 dark:bg-gold-500/10 p-5 rounded-xl border border-gold-200 dark:border-gold-500/30 transition-colors duration-200">
+            <h4 className="text-lg font-serif italic text-gold-900 dark:text-gold-500 mb-4 tracking-wide font-medium">Admin Actions</h4>
             {error && (
-                <div className="text-sm text-red-600 bg-red-50 p-2 rounded mb-4">{error}</div>
+                <div className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-2 rounded-lg mb-4 border border-red-200 dark:border-red-900/50">{error}</div>
             )}
-            <div className="flex space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4">
                 <button
                     onClick={() => handleResolve("RESOLVED")}
                     disabled={isSubmitting}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
+                    className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-semibold rounded-lg shadow-sm text-white dark:text-gray-900 bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 transition-all"
                 >
                     {isSubmitting && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
                     Resolve (Refund Buyer)
@@ -46,7 +44,7 @@ export default function AdminPanel({ disputeId, onResolved }: AdminPanelProps) {
                 <button
                     onClick={() => handleResolve("REJECTED")}
                     disabled={isSubmitting}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+                    className="inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-semibold rounded-lg shadow-sm text-white dark:text-gray-900 bg-red-600 dark:bg-red-500 hover:bg-red-700 dark:hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 transition-all"
                 >
                     {isSubmitting && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
                     Reject Dispute
