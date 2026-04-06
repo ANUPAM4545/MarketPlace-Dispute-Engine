@@ -80,9 +80,13 @@ pip install -r requirements.txt
 Initialize the Database and start the Flask server:
 
 ```bash
+# Uses port 5000 by default
 python app.py
+
+# Or set a custom port
+PORT=5001 python app.py
 ```
-*The backend server will run on `http://127.0.0.1:5001`.*
+*The backend server will run on `http://127.0.0.1:5000` by default (or `http://127.0.0.1:${PORT}` if you set the `PORT` environment variable).*
 
 ### 2. Frontend Setup (React)
 
