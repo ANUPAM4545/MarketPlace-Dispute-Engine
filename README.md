@@ -4,124 +4,117 @@
   <img src="https://img.shields.io/badge/React%2019-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React 19" />
   <img src="https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E" alt="Vite" />
   <img src="https://img.shields.io/badge/Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <br/>
   <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask" />
-  <img src="https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
+  <img src="https://img.shields.io/badge/Python_3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
 </div>
 
 <br />
 
 <p align="center">
-  <strong>A modern, role-based dispute management platform built for modern marketplaces.</strong><br>
-  <em>Streamline conflict resolution, upload encrypted evidence, and manage administrative workflows intuitively with our visual Kanban board.</em>
+  <strong>A premium, high-performance resolution center built for modern multi-vendor marketplaces.</strong><br>
+  <em>Empowering Buyers, Sellers, and Administrators with seamless role-based workflows, evidence tracking, and a powerful visual Kanban board.</em>
 </p>
 
 ---
 
-## ✨ Key Features
+## 🚀 Live Deployment
 
-- **🛡️ Premium UI/UX:** A stunning, elegant "black and gold" theme optimized for modern aesthetics and usability.
-- **🔐 Role-Based Access Control (RBAC):** Distinct dashboards, interactions, and capabilities tailored for **Buyers**, **Sellers**, and **Administrators**.
-- **📋 Visual Kanban Board:** An interactive, drag-and-drop board powered by `@hello-pangea/dnd` allowing Admins to visually manage dispute stages (`OPEN` ➔ `UNDER_REVIEW` ➔ `SELLER_RESPONDED` ➔ `RESOLVED` / `REJECTED`).
-- **📊 Real-Time Analytics Dashboard:** Interactive data visualizations (Total Users, Total Orders, Open Disputes) powered by `recharts`.
-- **📎 Evidence Management:** Users can upload images and documents to attach critical evidence directly to open disputes.
-- **⚡ Lightning Fast Pipeline:** Automated assignment rules and instant UI updates.
-
-## 🛠️ Technology Stack
-
-### Frontend Architecture
-- **Framework:** [React 19](https://react.dev/) with [TypeScript](https://www.typescriptlang.org/)
-- **Build Tool:** [Vite](https://vitejs.dev/)
-- **Styling:** Custom [Tailwind CSS v4](https://tailwindcss.com/) (Black & Gold Theme Architecture)
-- **Icons & Charts:** [Lucide React](https://lucide.dev/), [Recharts](https://recharts.org/)
-- **Routing:** [React Router v7](https://reactrouter.com/)
-
-### Backend Architecture
-- **Framework:** [Flask](https://flask.palletsprojects.com/) (Python 3.9+)
-- **ORM & Database:** Flask-SQLAlchemy, SQLite (Local Development)
-- **Authentication:** JWT via Flask-JWT-Extended
-- **Middleware:** Flask-CORS for cross-origin management
+The platform is fully containerized and hosted live on modern cloud infrastructure:
+- **Frontend (Vercel):** [market-place-dispute-engine.vercel.app](https://market-place-dispute-engine.vercel.app/)
+- **Backend API (Render):** Scalable Python Flask instance connected to robust cloud storage.
 
 ---
 
-## 🚀 Getting Started
+## ✨ Key Platform Features
 
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+**Marketplace Dispute Engine** abstracts the complex logic of e-commerce conflicts into a beautiful, linear pipeline.
 
-### Prerequisites
+- **🛡️ Secure Role-Based Access Control (RBAC):** Distinct dashboards and isolated capabilities tailored for **Buyers**, **Sellers**, and **Administrators**.
+- **📋 Admin Kanban Board:** A stunning visual board (powered by `@hello-pangea/dnd`) for Admins to visually drag-and-drop disputes through critical stages (`OPEN` ➔ `UNDER_REVIEW` ➔ `SELLER_RESPONDED` ➔ `RESOLVED` / `REJECTED`).
+- **📎 Immutable Proof Management:** A specialized evidence upload module allowing both buyers and sellers to attach visual and document proof directly to dispute threads.
+- **💬 Real-Time Dispute Threading:** A centralized messaging and resolution panel tracking every interaction between the opposing parties and moderators.
+- **📊 Operational Analytics:** High-level dynamic charting tracking global metrics (Total Active Users, Order Volume, Active vs. Closed Disputes) to monitor platform health.
+- ** fraud Fraud & Suspicion Detection:** Intelligent flagging schemas isolating potentially suspicious claims automatically.
 
-Ensure you have the following installed on your system:
-- **Node.js** (v18 or higher)
-- **npm** or **yarn**
-- **Python** (v3.9 or higher)
+---
 
-### 1. Backend Setup (Flask)
+## 🏗️ System Architecture
 
-Open your terminal and navigate to the backend directory:
+The application implements a decoupled, modern SaaS architecture ensuring robust scalability and exceptional user experience.
 
+### Frontend Layer (React / Vite)
+A bleeding-edge single-page application focused on high fidelity and performance.
+- **Core:** React 19, TypeScript, Vite
+- **Styling Architecture:** Tailored "Midnight & Gold" aesthetic utilizing **Tailwind CSS v4** and `clsx` for utility management.
+- **Routing:** React Router v7 with dynamic, role-protected routes.
+- **Data Visualization:** `recharts` for interactive dashboards.
+- **API Interceptors:** Customized `Axios` instances handling JWT bearer injections automatically.
+
+### Backend Layer (Flask / Database)
+A stateless, robust JSON API powering the complex resolution logic.
+- **Framework:** Python Flask serving RESTful endpoints.
+- **Database Schema:** Defined via **Flask-SQLAlchemy**. Relationships connecting Users (`1:M`), Orders (`1:1`), Disputes (`1:M` Evidence/Messages).
+- **Authentication Strategy:** Secure JWT generation and verification via `flask-jwt-extended`.
+- **Cors & Security:** `flask-cors` locking down resource sharing to designated client URLs.
+- **Production Server:** Deployed via `gunicorn`.
+
+---
+
+## 💻 Getting Started (Local Development)
+
+To run the full stack locally on your machine, follow these steps:
+
+### 1. Initialize the Backend
+Navigate to the backend directory, install packages, and boot the server.
 ```bash
 cd backend
-```
 
-Create a virtual environment, activate it, and install dependencies:
-
-```bash
-# On macOS/Linux
+# Create and activate a virtual environment
 python3 -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # Or `venv\Scripts\activate` on Windows
 
-# On Windows
-python -m venv venv
-venv\Scripts\activate
-
-# Install dependencies
+# Install the required server dependencies
 pip install -r requirements.txt
-```
 
-Initialize the Database and start the Flask server:
-
-```bash
-# Uses port 5000 by default
+# Start the Flask API
 python app.py
-
-# Or set a custom port
-PORT=5001 python app.py
 ```
-*The backend server will run on `http://127.0.0.1:5000` by default (or `http://127.0.0.1:${PORT}` if you set the `PORT` environment variable).*
+> The API will bind natively to `http://localhost:5000`.
 
-### 2. Frontend Setup (React)
-
-Open a **new** terminal window and navigate to the frontend directory:
-
+### 2. Initialize the Frontend
+In a new terminal window, load the frontend assets.
 ```bash
 cd react-frontend
-```
 
-Install the NPM packages and start the Vite development server:
-
-```bash
+# Install node dependencies
 npm install
+
+# Boot the Vite hot-reloading server
 npm run dev
 ```
-*The React application will run on `http://localhost:5173`.*
+> The React UI will be available at `http://localhost:5173`.
 
 ---
 
-## 💻 Usage & Workflows
+## 📖 The Resolution Workflow
 
-1. **Access the Application:** Open `http://localhost:5173` in your browser.
-2. **Authentication:** Register a new account (select your role: Buyer or Seller) or log in.
-3. **Role-Specific Scenarios:**
-   - **Buyers:** Can view their past orders and initiate a new dispute against a purchase.
-   - **Sellers:** Can view incoming disputes on their products and respond/upload counter-evidence.
-   - **Administrators:** Log in with an Admin account to see the **Analytics** view and access the interactive **Kanban Board** to resolve or reject active disputes.
+The engine dictates a strict, logical path for every incident:
+
+1. **Initiation:** A **Buyer** flags a past order, attaching an initial claim description.
+2. **Review:** The Dispute opens. **Sellers** are notified and provided a portal to submit counter-claims or authorize a refund.
+3. **Escalation:** If unresolved between parties, the status shifts to `UNDER_REVIEW`.
+4. **Adjudication:** A platform **Administrator** enters the thread, reviews the attached evidence streams from both parties, utilizes the Kanban module, and forces a specific resolution (`REFUND`, `PARTIAL_REFUND`, or `REJECT`).
 
 ---
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are always welcome! 
-Feel free to check the [issues page] if you want to contribute.
+Contributions, issues, and feature requests are highly welcome! 
+If you plan to implement major architectural changes, please open an issue first to discuss what you would like to change.
 
 ## 📝 License
 
-This project is open-source and available under the strictly non-commercial educational license.
+This software is provided under the **MIT License**. See the `LICENSE` file for full details. Build amazing, safe marketplaces.
