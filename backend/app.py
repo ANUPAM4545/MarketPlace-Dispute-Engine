@@ -29,7 +29,7 @@ app = create_app()
 
 @app.route("/")
 def home():
-    return "Backend is running 🚀"
+    return "Backend is running"
 
 if __name__ == '__main__':
     app.run(debug=os.environ.get('FLASK_DEBUG', 'False').lower() == 'true', 

@@ -190,7 +190,7 @@ export default function OrdersList() {
                                         Amount: <span className="ml-1 text-gold-600 dark:text-gold-400">${order.amount}</span>
                                     </p>
                                 </div>
-                                <div className="mt-2 flex items-center text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
+                                <div className="mt-2 flex flex-col sm:flex-row items-start sm:items-center text-sm text-gray-500 dark:text-gray-400 sm:mt-0 gap-y-2 sm:gap-y-0">
                                     <p className="mr-6 font-light">
                                         Purchased on {new Date(order.created_at).toLocaleDateString()}
                                     </p>

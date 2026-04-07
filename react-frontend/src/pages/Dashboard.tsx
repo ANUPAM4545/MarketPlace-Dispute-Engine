@@ -107,8 +107,8 @@ export default function Dashboard() {
 
                 {/* Seller Tabs */}
                 {user.role === "Seller" && (
-                    <div className="mb-8 border-b border-gray-200 dark:border-appborder">
-                        <div className="flex gap-2">
+                    <div className="mb-8 border-b border-gray-200 dark:border-appborder overflow-x-auto">
+                        <div className="flex gap-2 min-w-max pb-1">
                             <button
                                 onClick={() => setSellerView('orders')}
                                 className={`${tabBaseClass} ${sellerView === 'orders' ? tabActiveClass : tabInactiveClass}`}
@@ -127,8 +127,8 @@ export default function Dashboard() {
 
                 {/* Admin Tabs */}
                 {user.role === "Admin" && (
-                    <div className="mb-8 border-b border-gray-200 dark:border-appborder">
-                        <div className="flex gap-2">
+                    <div className="mb-8 border-b border-gray-200 dark:border-appborder overflow-x-auto">
+                        <div className="flex gap-2 min-w-max pb-1">
                             <button
                                 onClick={() => setAdminView('kanban')}
                                 className={`${tabBaseClass} ${adminView === 'kanban' ? tabActiveClass : tabInactiveClass}`}
