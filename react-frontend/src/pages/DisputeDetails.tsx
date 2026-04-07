@@ -72,12 +72,12 @@ export default function DisputeDetails() {
         <div className="min-h-screen bg-gray-50 dark:bg-appbg transition-colors duration-200 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
                 <div className="bg-white dark:bg-appcard shadow-[0_0_20px_rgba(0,0,0,0.05)] overflow-hidden sm:rounded-2xl border border-gray-100 dark:border-appborder transition-colors duration-200">
-                    <div className="px-4 py-6 sm:px-6 flex justify-between items-center border-b border-gray-100 dark:border-appborder">
+                    <div className="px-4 py-6 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-100 dark:border-appborder gap-4">
                         <div>
-                            <h3 className="text-xl leading-6 font-serif italic text-gray-900 dark:text-white flex items-center font-medium">
-                                Dispute <span className="text-gold-600 dark:text-gold-500 ml-2">#{dispute.id}</span>
+                            <h3 className="text-xl leading-6 font-serif italic text-gray-900 dark:text-white flex flex-wrap items-center font-medium gap-2">
+                                Dispute <span className="text-gold-600 dark:text-gold-500">#{dispute.id}</span>
                                 {dispute.is_suspicious && (
-                                    <span className="ml-4 px-2.5 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-red-50 dark:bg-red-900/40 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800">
+                                    <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-bold rounded-lg bg-red-50 dark:bg-red-900/40 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800">
                                         FRAUD SUSPECTED
                                     </span>
                                 )}
@@ -85,7 +85,7 @@ export default function DisputeDetails() {
                             <p className="mt-2 max-w-2xl text-sm text-gray-500 dark:text-gray-400 font-light">Details and resolution status.</p>
                         </div>
                         <span
-                            className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg border uppercase tracking-wider ${statusColor}`}
+                            className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-lg border uppercase tracking-wider whitespace-nowrap ${statusColor}`}
                         >
                             {dispute.status}
                         </span>

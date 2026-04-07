@@ -100,7 +100,7 @@ export default function Dashboard() {
                 {/* Hero Greeting */}
                 <div className="mb-12 mt-4">
                     <p className="text-gold-600 dark:text-gold-500 uppercase tracking-[0.2em] text-xs font-semibold mb-2">{user.role} DASHBOARD</p>
-                    <h1 className="text-4xl sm:text-5xl font-light text-gray-900 dark:text-white tracking-wide">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-light text-gray-900 dark:text-white tracking-wide">
                         Hello, <span className="font-serif italic text-gold-600 dark:text-gold-500 font-medium">{user.name}</span>
                     </h1>
                 </div>

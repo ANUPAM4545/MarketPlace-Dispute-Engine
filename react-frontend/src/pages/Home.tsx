@@ -141,7 +141,7 @@ export default function Home() {
                         </div>
                     </div>
                     
-                    <h1 className="text-5xl md:text-7xl tracking-out mb-6 font-light animate-fade-in-up opacity-0 animate-delay-100">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-out mb-6 font-light animate-fade-in-up opacity-0 animate-delay-100">
                         <span className="text-gray-900 dark:text-white">Resolve Disputes </span>
                         <br className="hidden sm:block"/>
                         <span className="font-serif italic text-gold-600 dark:text-gold-500 font-medium">Fairly & Efficiently</span>
