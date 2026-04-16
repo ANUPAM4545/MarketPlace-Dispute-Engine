@@ -7,7 +7,7 @@ import DisputeList from "../components/DisputeList";
 import OrdersList from "../components/OrdersList";
 import AdminAnalytics from "../components/AdminAnalytics";
 import AdminKanbanBoard from "../components/AdminKanbanBoard";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
     const { user, loading, logout } = useAuth();
