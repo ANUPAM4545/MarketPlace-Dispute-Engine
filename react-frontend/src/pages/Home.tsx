@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShieldCheck, ArrowRight, Zap, GripHorizontal, Users, Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
+import { motion } from "framer-motion";
 
 export default function Home() {
     const { theme, toggleTheme } = useTheme();
@@ -128,7 +129,12 @@ export default function Home() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-500/10 dark:bg-gold-500/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
                 
                 <div className="mx-auto max-w-5xl px-6 lg:px-8 text-center">
-                    <div className="mb-10 flex justify-center">
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                        className="mb-10 flex justify-center"
+                    >
                         <div className="relative rounded-full px-4 py-1.5 text-sm leading-6 text-gold-600 dark:text-gold-400 border border-gold-500/30 dark:border-gold-500/20 bg-gold-50 dark:bg-gold-500/5 hover:bg-gold-100 dark:hover:bg-gold-500/10 transition-colors cursor-pointer flex items-center gap-2 shadow-[0_0_10px_rgba(212,175,55,0.05)]">
                             <span className="flex h-2 w-2 relative">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-500 dark:bg-gold-400 opacity-75"></span>
@@ -139,19 +145,34 @@ export default function Home() {
                                 Read more <ArrowRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
                             </Link>
                         </div>
-                    </div>
+                    </motion.div>
                     
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl tracking-out mb-6 font-light animate-fade-in-up opacity-0 animate-delay-100">
+                    <motion.h1 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                        className="text-3xl sm:text-4xl md:text-5xl tracking-out mb-6 font-light"
+                    >
                         <span className="text-gray-900 dark:text-white">Resolve Disputes </span>
                         <br className="hidden sm:block"/>
                         <span className="font-serif italic text-gold-600 dark:text-gold-500 font-medium">Fairly & Efficiently</span>
-                    </h1>
+                    </motion.h1>
                     
-                    <p className="mt-8 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light animate-fade-in-up opacity-0 animate-delay-200">
+                    <motion.p 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+                        className="mt-8 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light"
+                    >
                         The ultimate engine for modern marketplaces. Streamline conflict resolution, manage encrypted evidence, and gain clear visual control over every administrative case.
-                    </p>
+                    </motion.p>
                     
-                    <div className="mt-12 flex items-center justify-center gap-x-6 flex-col sm:flex-row gap-y-4 animate-fade-in-up opacity-0 animate-delay-300">
+                    <motion.div 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+                        className="mt-12 flex items-center justify-center gap-x-6 flex-col sm:flex-row gap-y-4"
+                    >
                         <Link
                             to="/register"
                             className="rounded-md bg-gold-600 dark:bg-gold-500 px-8 py-3.5 text-base font-semibold text-white dark:text-appbg shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:bg-gold-700 dark:hover:bg-gold-400 hover:scale-[1.02] transition-all duration-300"
@@ -165,40 +186,70 @@ export default function Home() {
                             Explore Platform Features 
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </Link>
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* Features Highlights Snippet */}
-                <div className="mt-24 sm:mt-32 pb-20 animate-fade-in-up opacity-0 animate-delay-400">
+                <div className="mt-24 sm:mt-32 pb-20">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                        <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:gap-x-8">
-                            <div className="bg-white dark:bg-appcard border border-gray-200 dark:border-appborder rounded-2xl p-8 hover:border-gold-500/40 dark:hover:border-gold-500/30 transition-colors group relative overflow-hidden shadow-sm">
+                        <motion.div 
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-100px" }}
+                            variants={{
+                                visible: { transition: { staggerChildren: 0.15 } },
+                                hidden: {}
+                            }}
+                            className="grid grid-cols-1 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:gap-x-8"
+                        >
+                            <motion.div 
+                                variants={{
+                                    hidden: { opacity: 0, y: 30 },
+                                    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+                                }}
+                                whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
+                                className="bg-white dark:bg-appcard border border-gray-200 dark:border-appborder rounded-2xl p-8 hover:border-gold-500/40 dark:hover:border-gold-500/30 transition-colors group relative overflow-hidden shadow-sm flex flex-col h-full"
+                            >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 rounded-bl-full transition-transform group-hover:scale-110"></div>
-                                <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-gold-50 dark:bg-gold-500/10 text-gold-600 dark:text-gold-500 mb-6 border border-gold-200 dark:border-gold-500/20">
+                                <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-gold-50 dark:bg-gold-500/10 text-gold-600 dark:text-gold-500 mb-6 border border-gold-200 dark:border-gold-500/20 shadow-sm relative z-10">
                                     <Zap className="h-6 w-6" />
                                 </div>
-                                <h3 className="text-xl font-serif italic text-gray-900 dark:text-white mb-3 tracking-wide">Lightning Fast</h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-light">Respond to claims instantly with an automated pipeline and real-time alerts tailored to active disputes.</p>
-                            </div>
+                                <h3 className="text-xl font-serif italic text-gray-900 dark:text-white mb-3 tracking-wide relative z-10">Lightning Fast</h3>
+                                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-light relative z-10">Respond to claims instantly with an automated pipeline and real-time alerts tailored to active disputes.</p>
+                            </motion.div>
                             
-                            <div className="bg-white dark:bg-appcard border border-gray-200 dark:border-appborder rounded-2xl p-8 hover:border-gold-500/40 dark:hover:border-gold-500/30 transition-colors group relative overflow-hidden shadow-sm">
+                            <motion.div 
+                                variants={{
+                                    hidden: { opacity: 0, y: 30 },
+                                    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+                                }}
+                                whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
+                                className="bg-white dark:bg-appcard border border-gray-200 dark:border-appborder rounded-2xl p-8 hover:border-gold-500/40 dark:hover:border-gold-500/30 transition-colors group relative overflow-hidden shadow-sm flex flex-col h-full"
+                            >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 rounded-bl-full transition-transform group-hover:scale-110"></div>
-                                <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-gold-50 dark:bg-gold-500/10 text-gold-600 dark:text-gold-500 mb-6 border border-gold-200 dark:border-gold-500/20">
+                                <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-gold-50 dark:bg-gold-500/10 text-gold-600 dark:text-gold-500 mb-6 border border-gold-200 dark:border-gold-500/20 shadow-sm relative z-10">
                                     <GripHorizontal className="h-6 w-6" />
                                 </div>
-                                <h3 className="text-xl font-serif italic text-gray-900 dark:text-white mb-3 tracking-wide">Visual Kanban</h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-light">Administrators can drag and drop active disputes across stages to intuitively manage the entire case load.</p>
-                            </div>
+                                <h3 className="text-xl font-serif italic text-gray-900 dark:text-white mb-3 tracking-wide relative z-10">Visual Kanban</h3>
+                                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-light relative z-10">Administrators can drag and drop active disputes across stages to intuitively manage the entire case load.</p>
+                            </motion.div>
                             
-                            <div className="bg-white dark:bg-appcard border border-gray-200 dark:border-appborder rounded-2xl p-8 hover:border-gold-500/40 dark:hover:border-gold-500/30 transition-colors group relative overflow-hidden shadow-sm">
+                            <motion.div 
+                                variants={{
+                                    hidden: { opacity: 0, y: 30 },
+                                    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+                                }}
+                                whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
+                                className="bg-white dark:bg-appcard border border-gray-200 dark:border-appborder rounded-2xl p-8 hover:border-gold-500/40 dark:hover:border-gold-500/30 transition-colors group relative overflow-hidden shadow-sm flex flex-col h-full"
+                            >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 rounded-bl-full transition-transform group-hover:scale-110"></div>
-                                <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-gold-50 dark:bg-gold-500/10 text-gold-600 dark:text-gold-500 mb-6 border border-gold-200 dark:border-gold-500/20">
+                                <div className="h-12 w-12 flex items-center justify-center rounded-lg bg-gold-50 dark:bg-gold-500/10 text-gold-600 dark:text-gold-500 mb-6 border border-gold-200 dark:border-gold-500/20 shadow-sm relative z-10">
                                     <Users className="h-6 w-6" />
                                 </div>
-                                <h3 className="text-xl font-serif italic text-gray-900 dark:text-white mb-3 tracking-wide">Role-Based Access</h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-light">Buyers, Sellers, and Admins each get tailor-made views corresponding directly to their specific needs.</p>
-                            </div>
-                        </div>
+                                <h3 className="text-xl font-serif italic text-gray-900 dark:text-white mb-3 tracking-wide relative z-10">Role-Based Access</h3>
+                                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-light relative z-10">Buyers, Sellers, and Admins each get tailor-made views corresponding directly to their specific needs.</p>
+                            </motion.div>
+                        </motion.div>
                     </div>
                 </div>
             </div>

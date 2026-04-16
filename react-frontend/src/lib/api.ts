@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance with base URL for the Flask backend
 const api = axios.create({
-    baseURL: 'https://dispute-backend-d2c7.onrender.com',
+    baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:5001',
     headers: {
         'Content-Type': 'application/json',
     },

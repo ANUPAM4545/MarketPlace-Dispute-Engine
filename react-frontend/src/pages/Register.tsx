@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Loader2, Lock, Mail, User, Phone, ChevronDown, ShieldCheck } from "lucide-react";
 import api from "../lib/api";
 import { cn } from "../lib/utils";
+import { motion } from "framer-motion";
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -37,8 +38,31 @@ export default function Register() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-appbg p-4 sm:p-8 font-sans selection:bg-gold-500 selection:text-black transition-colors duration-200">
-            <div className="w-full max-w-md space-y-8 rounded-2xl bg-white dark:bg-appcard p-8 shadow-xl ring-1 ring-gray-200 dark:ring-appborder sm:p-10 backdrop-blur-xl transition-colors duration-200">
+        <div className="relative isolate flex min-h-screen items-center justify-center bg-gray-50 dark:bg-appbg p-4 sm:p-8 font-sans selection:bg-gold-500 selection:text-black overflow-hidden transition-colors duration-500">
+            {/* Ultra-Premium Background Glowing Orbs */}
+            <motion.div 
+                animate={{ 
+                    scale: [1, 1.2, 1],
+                    opacity: [0.3, 0.5, 0.3],
+                }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-gold-400/20 dark:bg-gold-500/10 rounded-full blur-[100px] pointer-events-none -z-10"
+            />
+            <motion.div 
+                animate={{ 
+                    scale: [1, 1.4, 1],
+                    opacity: [0.2, 0.4, 0.2],
+                }}
+                transition={{ duration: 11, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-gray-400/10 dark:bg-appcard/40 rounded-full blur-[120px] pointer-events-none -z-10"
+            />
+
+            <motion.div 
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full max-w-md space-y-8 rounded-3xl glass-card p-8 sm:p-10 !backdrop-blur-2xl transition-colors duration-200 z-10"
+            >
                 <div className="text-center">
                     <Link to="/" className="inline-flex items-center justify-center mb-6 hover:scale-105 transition-transform">
                         <ShieldCheck className="h-10 w-10 text-gold-600 dark:text-gold-500" />
@@ -188,7 +212,7 @@ export default function Register() {
                         </Link>
                     </div>
                 </form>
-            </div>
+            </motion.div>
         </div>
     );
 }

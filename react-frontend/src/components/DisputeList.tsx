@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../lib/api";
+import { motion } from "framer-motion";
 
 interface Dispute {
     id: number;
@@ -37,16 +38,44 @@ export default function DisputeList() {
     if (error) return <div className="p-8 text-center text-red-500 font-light">Error: {error}</div>;
 
     return (
-        <div className="bg-white dark:bg-appcard shadow-[0_0_15px_rgba(0,0,0,0.05)] overflow-hidden rounded-xl border border-gray-100 dark:border-appborder transition-colors duration-200">
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="bg-white dark:bg-appcard shadow-[0_0_15px_rgba(0,0,0,0.05)] overflow-hidden rounded-xl border border-gray-100 dark:border-appborder transition-colors duration-200"
+        >
             <h3 className="px-4 py-5 sm:px-6 text-xl leading-6 font-serif italic text-gray-900 dark:text-gold-500 font-medium tracking-wide flex justify-between items-center border-b border-gray-100 dark:border-appborder/50">
                 Active Disputes
             </h3>
-            <ul className="divide-y divide-gray-100 dark:divide-appborder/50">
+            <motion.ul 
+                initial="hidden"
+                animate="visible"
+                variants={{
+                    visible: { transition: { staggerChildren: 0.05 } },
+                    hidden: {}
+                }}
+                className="divide-y divide-gray-100 dark:divide-appborder/50"
+            >
                 {disputes.length === 0 ? (
-                    <li className="px-4 py-8 text-center text-gray-500 dark:text-gray-400 font-light">No disputes found.</li>
+                    <motion.li 
+                        variants={{
+                            hidden: { opacity: 0, x: -20 },
+                            visible: { opacity: 1, x: 0 }
+                        }}
+                        className="px-4 py-8 text-center text-gray-500 dark:text-gray-400 font-light"
+                    >
+                        No disputes found.
+                    </motion.li>
                 ) : (
                     disputes.map((dispute) => (
-                        <li key={dispute.id} className="group">
+                        <motion.li 
+                            key={dispute.id} 
+                            variants={{
+                                hidden: { opacity: 0, x: -20 },
+                                visible: { opacity: 1, x: 0 }
+                            }}
+                            className="group"
+                        >
                             <Link to={`/disputes/${dispute.id}`} className="block hover:bg-gray-50/50 dark:hover:bg-appbg/50 transition-colors">
                                 <div className="px-4 py-5 sm:px-6">
                                     <div className="flex items-center justify-between">
@@ -78,10 +107,10 @@ export default function DisputeList() {
                                     </div>
                                 </div>
                             </Link>
-                        </li>
+                        </motion.li>
                     ))
                 )}
-            </ul>
-        </div>
+            </motion.ul>
+        </motion.div>
     );
 }

@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
 from models import db, Dispute, Evidence
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from utils.email import send_email
+from models import User
 
 bp = Blueprint('disputes', __name__, url_prefix='/disputes')
 
@@ -97,6 +99,18 @@ def create_dispute():
             db.session.add(new_dispute)
 
     db.session.commit()
+    
+    seller = User.query.get(order.seller_id)
+    if seller and seller.email:
+        send_email(
+            subject=f"New Dispute Opened for Order #{order_id}",
+            recipient=seller.email,
+            template="dispute_opened",
+            order_id=order_id,
+            category=category,
+            description=description,
+            login_url="http://localhost:5173/login"
+        )
     
     return jsonify({"msg": "Dispute created", "id": new_dispute.id}), 201
 
@@ -256,6 +270,23 @@ def resolve_dispute(id):
     # Log resolution decision?
     
     db.session.commit()
+    
+    from models import Order, User
+    order = Order.query.get(dispute.order_id)
+    buyer = User.query.get(dispute.buyer_id)
+    seller = User.query.get(order.seller_id)
+    
+    for notify_user in [buyer, seller]:
+        if notify_user and notify_user.email:
+            send_email(
+                subject=f"Dispute #{dispute.id} Final Resolution",
+                recipient=notify_user.email,
+                template="status_update",
+                dispute_id=dispute.id,
+                new_status=resolution,
+                login_url="http://localhost:5173/login"
+            )
+
     return jsonify({"msg": "Dispute resolved", "status": dispute.status}), 200
 
 @bp.route('/<int:id>/status', methods=['PUT'])
@@ -278,6 +309,22 @@ def update_dispute_status(id):
         
     dispute.status = new_status
     db.session.commit()
+    
+    from models import Order, User
+    order = Order.query.get(dispute.order_id)
+    buyer = User.query.get(dispute.buyer_id)
+    seller = User.query.get(order.seller_id)
+    
+    for notify_user in [buyer, seller]:
+        if notify_user and notify_user.email:
+            send_email(
+                subject=f"Dispute #{dispute.id} Status Updated",
+                recipient=notify_user.email,
+                template="status_update",
+                dispute_id=dispute.id,
+                new_status=new_status,
+                login_url="http://localhost:5173/login"
+            )
     
     return jsonify({"msg": "Dispute status updated", "status": dispute.status}), 200
 

@@ -7,6 +7,7 @@ import DisputeList from "../components/DisputeList";
 import OrdersList from "../components/OrdersList";
 import AdminAnalytics from "../components/AdminAnalytics";
 import AdminKanbanBoard from "../components/AdminKanbanBoard";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Dashboard() {
     const { user, loading, logout } = useAuth();
@@ -36,7 +37,12 @@ export default function Dashboard() {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-appbg transition-colors duration-200 text-gray-900 dark:text-gray-200 font-sans selection:bg-gold-500 selection:text-black">
             {/* Top Navigation */}
-            <nav className="border-b border-gray-200 dark:border-appborder/50 bg-white/80 dark:bg-appbg/80 backdrop-blur-md sticky top-0 z-40 transition-colors duration-200">
+            <motion.nav 
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="border-b border-gray-200 dark:border-appborder/50 bg-white/80 dark:bg-appbg/80 backdrop-blur-md sticky top-0 z-40 transition-colors duration-200"
+            >
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-20">
                         {/* Left: Brand & Links */}
@@ -94,20 +100,28 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
-            </nav>
+            </motion.nav>
 
-            <main className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+            <motion.main 
+                initial="hidden"
+                animate="visible"
+                variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+                }}
+                className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8"
+            >
                 {/* Hero Greeting */}
-                <div className="mb-12 mt-4">
+                <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }} className="mb-12 mt-4">
                     <p className="text-gold-600 dark:text-gold-500 uppercase tracking-[0.2em] text-xs font-semibold mb-2">{user.role} DASHBOARD</p>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-light text-gray-900 dark:text-white tracking-wide">
                         Hello, <span className="font-serif italic text-gold-600 dark:text-gold-500 font-medium">{user.name}</span>
                     </h1>
-                </div>
+                </motion.div>
 
                 {/* Seller Tabs */}
                 {user.role === "Seller" && (
-                    <div className="mb-8 border-b border-gray-200 dark:border-appborder overflow-x-auto">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }} className="mb-8 border-b border-gray-200 dark:border-appborder overflow-x-auto">
                         <div className="flex gap-2 min-w-max pb-1">
                             <button
                                 onClick={() => setSellerView('orders')}
@@ -122,12 +136,12 @@ export default function Dashboard() {
                                 Manage Disputes
                             </button>
                         </div>
-                    </div>
+                    </motion.div>
                 )}
 
                 {/* Admin Tabs */}
                 {user.role === "Admin" && (
-                    <div className="mb-8 border-b border-gray-200 dark:border-appborder overflow-x-auto">
+                    <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }} className="mb-8 border-b border-gray-200 dark:border-appborder overflow-x-auto">
                         <div className="flex gap-2 min-w-max pb-1">
                             <button
                                 onClick={() => setAdminView('kanban')}
@@ -148,11 +162,11 @@ export default function Dashboard() {
                                 Analytics
                             </button>
                         </div>
-                    </div>
+                    </motion.div>
                 )}
 
                 {/* Dynamic Content Views */}
-                <div className="space-y-6">
+                <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }} className="space-y-6">
                     {user.role === "Buyer" && (
                         <div className="mt-8 border-t border-gray-200 dark:border-appborder pt-8">
                             <div className="flex items-center justify-between mb-6">
@@ -193,8 +207,8 @@ export default function Dashboard() {
                             <DisputeList />
                         </div>
                     )}
-                </div>
-            </main>
+                </motion.div>
+            </motion.main>
         </div>
     );
 }

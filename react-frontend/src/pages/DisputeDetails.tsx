@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import api from "../lib/api";
 import DisputeResponse from "../components/DisputeResponse";
 import AdminPanel from "../components/AdminPanel";
+import { motion } from "framer-motion";
 
 interface Dispute {
     id: number;
@@ -71,7 +72,12 @@ export default function DisputeDetails() {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-appbg transition-colors duration-200 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
-                <div className="bg-white dark:bg-appcard shadow-[0_0_20px_rgba(0,0,0,0.05)] overflow-hidden sm:rounded-2xl border border-gray-100 dark:border-appborder transition-colors duration-200">
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.98, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="bg-white/90 dark:bg-appcard/90 backdrop-blur-xl shadow-[0_0_20px_rgba(0,0,0,0.05)] dark:shadow-[0_0_40px_rgba(0,0,0,0.4)] overflow-hidden sm:rounded-3xl border border-gray-100 dark:border-appborder transition-colors duration-500"
+                >
                     <div className="px-4 py-6 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-100 dark:border-appborder gap-4">
                         <div>
                             <h3 className="text-xl leading-6 font-serif italic text-gray-900 dark:text-white flex flex-wrap items-center font-medium gap-2">
@@ -91,43 +97,48 @@ export default function DisputeDetails() {
                         </span>
                     </div>
                     <div className="px-4 py-5 sm:p-0">
-                        <dl className="sm:divide-y sm:divide-gray-100 dark:sm:divide-appborder/50">
-                            <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-gray-50/50 dark:hover:bg-appbg/50 transition-colors">
+                        <motion.dl 
+                            initial="hidden"
+                            animate="visible"
+                            variants={{ visible: { transition: { staggerChildren: 0.1 } }, hidden: {} }}
+                            className="sm:divide-y sm:divide-gray-100 dark:sm:divide-appborder/50"
+                        >
+                            <motion.div variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }} className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-gray-50/50 dark:hover:bg-appbg/50 transition-colors">
                                 <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Category</dt>
                                 <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2 font-medium">
                                     {dispute.category}
                                 </dd>
-                            </div>
-                            <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-gray-50/50 dark:hover:bg-appbg/50 transition-colors">
+                            </motion.div>
+                            <motion.div variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }} className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-gray-50/50 dark:hover:bg-appbg/50 transition-colors">
                                 <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Description</dt>
                                 <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2 leading-relaxed font-light">
                                     {dispute.description}
                                 </dd>
-                            </div>
-                            <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-gray-50/50 dark:hover:bg-appbg/50 transition-colors">
+                            </motion.div>
+                            <motion.div variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }} className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 hover:bg-gray-50/50 dark:hover:bg-appbg/50 transition-colors">
                                 <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Created At</dt>
                                 <dd className="mt-1 text-sm text-gray-900 dark:text-white sm:mt-0 sm:col-span-2 items-center flex font-light text-opacity-80">
                                     {new Date(dispute.created_at).toLocaleDateString()}
                                 </dd>
-                            </div>
+                            </motion.div>
                             {dispute.seller_response && (
-                                <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gold-50/30 dark:bg-gold-500/5 hover:bg-gold-50/50 dark:hover:bg-gold-500/10 transition-colors">
+                                <motion.div variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }} className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 bg-gold-50/30 dark:bg-gold-500/5 hover:bg-gold-50/50 dark:hover:bg-gold-500/10 transition-colors">
                                     <dt className="text-sm font-medium text-gold-700 dark:text-gold-500">Seller Response</dt>
                                     <dd className="mt-1 text-sm text-gray-900 dark:text-gray-200 sm:mt-0 sm:col-span-2 leading-relaxed font-light italic border-l-2 border-gold-300 dark:border-gold-500/30 pl-4">
                                         "{dispute.seller_response}"
                                     </dd>
-                                </div>
+                                </motion.div>
                             )}
                             
                             {/* EVIDENCE SECTION */}
                             {dispute.evidence && dispute.evidence.length > 0 && (
-                                <div className="py-6 sm:px-6">
+                                <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="py-6 sm:px-6">
                                     <dt className="text-sm font-bold tracking-wide uppercase text-gray-500 dark:text-gold-500 mb-6 border-b border-gray-100 dark:border-appborder/50 pb-3 flex items-center">
                                         Evidence & Audit Log
                                     </dt>
                                     <dd className="mt-1 text-sm text-gray-900 grid grid-cols-1 md:grid-cols-2 gap-8">
                                         {/* Seller pre-delivery evidence */}
-                                        <div className="border border-gray-200 dark:border-appborder rounded-xl p-5 bg-gray-50/50 dark:bg-appbg">
+                                        <div className="border border-gray-200 dark:border-appborder rounded-xl p-5 bg-white/50 dark:bg-appbg/50 backdrop-blur-sm">
                                             <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b border-gray-100 dark:border-appborder/50">Seller Pre-Delivery Images</h4>
                                             {dispute.evidence.filter(e => e.image_type === 'SELLER').map(e => (
                                                 <div key={e.id} className="mb-5 group">
@@ -136,7 +147,7 @@ export default function DisputeDetails() {
                                                     </a>
                                                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-3 flex justify-between items-center font-light">
                                                         <span>{new Date(e.uploaded_at).toLocaleString()}</span>
-                                                        {e.metadata_info && <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md">{(e.metadata_info.file_size / 1024).toFixed(1)} KB</span>}
+                                                        {e.metadata_info && <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md shadow-sm">{(e.metadata_info.file_size / 1024).toFixed(1)} KB</span>}
                                                     </div>
                                                 </div>
                                             ))}
@@ -148,7 +159,7 @@ export default function DisputeDetails() {
                                         </div>
 
                                         {/* Buyer dispute evidence */}
-                                        <div className="border border-gray-200 dark:border-appborder rounded-xl p-5 bg-white dark:bg-appbg">
+                                        <div className="border border-gray-200 dark:border-appborder rounded-xl p-5 bg-white/50 dark:bg-appbg/50 backdrop-blur-sm">
                                             <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b border-gray-100 dark:border-appborder/50">Buyer Dispute Images</h4>
                                             {dispute.evidence.filter(e => e.image_type === 'BUYER').map(e => (
                                                 <div key={e.id} className="mb-5 group">
@@ -157,7 +168,7 @@ export default function DisputeDetails() {
                                                     </a>
                                                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-3 flex justify-between items-center font-light">
                                                         <span>{new Date(e.uploaded_at).toLocaleString()}</span>
-                                                        {e.metadata_info && <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md">{(e.metadata_info.file_size / 1024).toFixed(1)} KB</span>}
+                                                        {e.metadata_info && <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-md shadow-sm">{(e.metadata_info.file_size / 1024).toFixed(1)} KB</span>}
                                                     </div>
                                                 </div>
                                             ))}
@@ -168,10 +179,10 @@ export default function DisputeDetails() {
                                             )}
                                         </div>
                                     </dd>
-                                </div>
+                                </motion.div>
                             )}
 
-                        </dl>
+                        </motion.dl>
                     </div>
                     <div className="px-6 py-6 border-t border-gray-100 dark:border-appborder bg-gray-50/50 dark:bg-appcard">
                         <div className="flex flex-col space-y-5">
@@ -199,7 +210,7 @@ export default function DisputeDetails() {
                                 )}
                         </div>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
