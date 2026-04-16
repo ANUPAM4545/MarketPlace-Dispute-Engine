@@ -124,9 +124,26 @@ export default function Home() {
             </header>
 
             {/* Hero Section */}
-            <div className="relative isolate pt-32 pb-20 lg:pt-48">
-                {/* Subtle golden glow in background */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-500/10 dark:bg-gold-500/5 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+            <div className="relative isolate pt-32 pb-20 lg:pt-48 overflow-hidden">
+                {/* Ambient Animated Orbs */}
+                <div className="absolute inset-0 pointer-events-none -z-10">
+                    <motion.div 
+                        animate={{ 
+                            scale: [1, 1.2, 1],
+                            opacity: [0.3, 0.5, 0.3]
+                        }}
+                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute top-[10%] left-[10%] w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-gold-500/20 dark:bg-gold-500/10 rounded-full blur-[100px]"
+                    />
+                    <motion.div 
+                        animate={{ 
+                            scale: [1, 1.3, 1],
+                            opacity: [0.2, 0.4, 0.2]
+                        }}
+                        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                        className="absolute bottom-[20%] right-[5%] w-[400px] h-[400px] sm:w-[600px] sm:h-[600px] bg-gold-400/20 dark:bg-gold-300/10 rounded-full blur-[120px]"
+                    />
+                </div>
                 
                 <div className="mx-auto max-w-5xl px-6 lg:px-8 text-center">
                     <motion.div 
@@ -151,7 +168,7 @@ export default function Home() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                        className="text-3xl sm:text-4xl md:text-5xl tracking-out mb-6 font-light"
+                        className="text-4xl sm:text-5xl md:text-6xl tracking-tight mb-6 font-light px-2"
                     >
                         <span className="text-gray-900 dark:text-white">Resolve Disputes </span>
                         <br className="hidden sm:block"/>
@@ -162,7 +179,7 @@ export default function Home() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-                        className="mt-8 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light"
+                        className="mt-6 sm:mt-8 text-base sm:text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-light px-4"
                     >
                         The ultimate engine for modern marketplaces. Streamline conflict resolution, manage encrypted evidence, and gain clear visual control over every administrative case.
                     </motion.p>
@@ -175,7 +192,7 @@ export default function Home() {
                     >
                         <Link
                             to="/register"
-                            className="rounded-md bg-gold-600 dark:bg-gold-500 px-8 py-3.5 text-base font-semibold text-white dark:text-appbg shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:bg-gold-700 dark:hover:bg-gold-400 hover:scale-[1.02] transition-all duration-300"
+                            className="w-full sm:w-auto rounded-md bg-gold-600 dark:bg-gold-500 px-8 py-3.5 text-base font-semibold text-white dark:text-appbg gold-glow hover:bg-gold-700 dark:hover:bg-gold-400 hover:scale-[1.02] transition-all duration-300"
                         >
                             Start Resolving Now
                         </Link>
@@ -190,8 +207,8 @@ export default function Home() {
                 </div>
 
                 {/* Features Highlights Snippet */}
-                <div className="mt-24 sm:mt-32 pb-20">
-                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="mt-20 sm:mt-32 pb-20">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <motion.div 
                             initial="hidden"
                             whileInView="visible"

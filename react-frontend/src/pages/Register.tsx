@@ -4,6 +4,7 @@ import { Loader2, Lock, Mail, User, Phone, ChevronDown, ShieldCheck } from "luci
 import api from "../lib/api";
 import { cn } from "../lib/utils";
 import { motion } from "framer-motion";
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -200,6 +201,43 @@ export default function Register() {
                             {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
                             Register
                         </button>
+                    </div>
+                    
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300 dark:border-appborder"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="bg-white dark:bg-appcard/50 px-2 text-gray-500 dark:text-gray-400">Or continue with</span>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-center mt-4">
+                        <GoogleLogin
+                            theme="filled_black"
+                            width="100%"
+                            onSuccess={async (credentialResponse) => {
+                                setIsLoading(true);
+                                setError("");
+                                try {
+                                    // Make sure you login successfully; if new user, google router auto registers them as Buyer
+                                    const res = await api.post("/auth/google", { token: credentialResponse.credential, role: role });
+                                    // Use local storage pattern standard in the app (note: in Register component we don't naturally have 'login' from AuthContext, we just navigate, but we can import useAuth. Or we can just let them navigate to login)
+                                    // Actually, it's better to just do the same login behavior here.
+                                    localStorage.setItem("token", res.data.access_token);
+                                    localStorage.setItem("role", res.data.role);
+                                    localStorage.setItem("name", res.data.name);
+                                    window.location.href = "/dashboard";
+                                } catch (err: any) {
+                                    setError(err.response?.data?.msg || err.message || "Google Login failed");
+                                } finally {
+                                    setIsLoading(false);
+                                }
+                            }}
+                            onError={() => {
+                                setError("Google Login failed");
+                            }}
+                        />
                     </div>
 
                     <div className="text-center text-sm font-light">

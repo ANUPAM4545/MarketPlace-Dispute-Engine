@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShieldCheck, BarChart3, GripHorizontal, FileStack, Palette, MessageSquareText, Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
+import { motion } from "framer-motion";
 
 export default function Features() {
     const { theme, toggleTheme } = useTheme();
@@ -168,61 +169,93 @@ export default function Features() {
             </header>
 
             {/* Hero Section */}
-            <div className="relative pt-32 pb-20 sm:pt-40 sm:pb-24">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-                    <h1 className="text-4xl md:text-6xl tracking-out mb-6 font-light text-gray-900 dark:text-white animate-fade-in-up opacity-0 animate-delay-100">
+            <div className="relative isolate pt-32 pb-20 sm:pt-40 sm:pb-24 overflow-hidden">
+                {/* Ambient Animated Orbs */}
+                <div className="absolute inset-0 pointer-events-none -z-10">
+                    <motion.div 
+                        animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
+                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute top-[-20%] left-[20%] w-[500px] h-[500px] bg-gold-500/10 dark:bg-gold-500/5 rounded-full blur-[100px]"
+                    />
+                </div>
+
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+                    <motion.h1 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="text-4xl md:text-6xl tracking-tight mb-6 font-light text-gray-900 dark:text-white"
+                    >
                         Powerful Features for <br className="hidden sm:block"/> 
                         <span className="font-serif italic text-gold-600 dark:text-gold-500 font-medium">Fair Resolutions</span>
-                    </h1>
-                    <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-600 dark:text-gray-400 font-light animate-fade-in-up opacity-0 animate-delay-200">
+                    </motion.h1>
+                    <motion.p 
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                        className="mt-4 max-w-2xl mx-auto text-base sm:text-lg text-gray-600 dark:text-gray-400 font-light px-2"
+                    >
                         Everything you need to automate, track, and resolve marketplace disputes seamlessly. Discover why thousands trust DisputeEngine.
-                    </p>
+                    </motion.p>
                 </div>
             </div>
 
             {/* Feature Blocks */}
             <div className="py-12 bg-gray-50/50 dark:bg-appbg relative">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-                    <div className="space-y-32">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div className="space-y-24 sm:space-y-32">
                         {features.map((feature, index) => (
-                            <div 
+                            <motion.div 
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-100px" }}
+                                variants={{
+                                    hidden: { opacity: 0, y: 40 },
+                                    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+                                }}
                                 key={feature.title} 
-                                className={`flex flex-col lg:flex-row gap-16 items-center animate-fade-in-up opacity-0 ${index % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}
-                                style={{ animationDelay: `${(index + 3) * 100}ms` }}
+                                className={`flex flex-col lg:flex-row gap-10 sm:gap-16 items-center ${index % 2 !== 0 ? 'lg:flex-row-reverse' : ''}`}
                             >
                                 {/* Text Content */}
-                                <div className="flex-1 space-y-6">
-                                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${feature.color}`}>
-                                        <feature.icon className="w-8 h-8" />
+                                <div className="flex-1 space-y-4 sm:space-y-6 text-center lg:text-left">
+                                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center mx-auto lg:mx-0 ${feature.color}`}>
+                                        <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                                     </div>
-                                    <h2 className="text-3xl font-serif italic text-gray-900 dark:text-white tracking-wide">{feature.title}</h2>
-                                    <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed font-light">
+                                    <h2 className="text-2xl sm:text-3xl font-serif italic text-gray-900 dark:text-white tracking-wide">{feature.title}</h2>
+                                    <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed font-light">
                                         {feature.description}
                                     </p>
                                 </div>
                                 
-                                {/* Image / Visual */}
-                                <div className="flex-1 relative w-full group">
-                                    <div className="absolute inset-0 bg-gold-500/5 rounded-3xl transform rotate-3 scale-105 blur-lg dark:bg-gold-500/10 transition-transform duration-500 group-hover:rotate-6 group-hover:scale-110"></div>
-                                    <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gold-500/10 dark:ring-gold-500/20 bg-gray-100 dark:bg-appcard aspect-video flex items-center justify-center bg-gradient-to-tr from-gray-900 to-black">
+                                {/* Image / Visual (Glassmorphism Placeholder) */}
+                                <div className="flex-1 w-full group mt-4 lg:mt-0 px-2 sm:px-0">
+                                    <div className="relative rounded-3xl overflow-hidden glass-card aspect-video flex items-center justify-center bg-gradient-to-tr from-gray-100 to-white dark:from-appcard dark:to-appbg shadow-[0_8px_32px_rgba(0,0,0,0.05)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-gray-200 dark:border-appborder">
+                                        
+                                        {/* Feature Image */}
                                         <img 
                                             src={feature.image} 
                                             alt={feature.title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100 mix-blend-screen"
+                                            className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-100"
                                         />
+                                        
+                                        {/* Overlay to maintain premium dark feel */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-appbg/20 to-transparent pointer-events-none" />
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))}
                     </div>
 
                     {/* CTA Bottom */}
-                    <div 
-                        className="mt-32 text-center bg-gray-900 dark:bg-appcard border border-appborder/50 rounded-3xl py-16 px-6 sm:py-24 sm:px-12 relative overflow-hidden shadow-2xl animate-scale-in opacity-0"
-                        style={{ animationDelay: '800ms' }}
+                    <motion.div 
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className="mt-32 text-center bg-white dark:bg-appcard border border-gray-200 dark:border-appborder/50 rounded-3xl py-12 px-6 sm:py-24 sm:px-12 relative overflow-hidden shadow-xl"
                     >
                         <div className="absolute inset-0 bg-gold-500/5 mix-blend-overlay"></div>
-                        <h2 className="text-3xl font-light tracking-wide text-white sm:text-4xl mb-6 relative z-10">
+                        <h2 className="text-3xl font-light tracking-tight text-gray-900 dark:text-white sm:text-4xl mb-6 relative z-10">
                             Ready to transform your marketplace?
                         </h2>
                         <div className="mt-10 flex items-center justify-center gap-x-6 relative z-10">
@@ -232,11 +265,11 @@ export default function Features() {
                             >
                                 Start for free
                             </Link>
-                            <Link to="/login" className="text-base font-medium leading-6 text-gray-300 hover:text-gold-400 transition-colors">
+                            <Link to="/login" className="text-base font-medium leading-6 text-gray-600 dark:text-gray-300 hover:text-gold-600 dark:hover:text-gold-400 transition-colors">
                                 Log in <span aria-hidden="true">→</span>
                             </Link>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
             

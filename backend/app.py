@@ -1,4 +1,6 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
 from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
@@ -39,3 +41,4 @@ if __name__ == '__main__':
     app.run(debug=os.environ.get('FLASK_DEBUG', 'False').lower() == 'true', 
             host='0.0.0.0',
             port=int(os.environ.get('PORT', 5000)))
+            
