@@ -41,5 +41,9 @@ def upload_file_to_s3(file, folder="uploads"):
         return url
 
     except Exception as e:
-        print(f"S3 Upload Error: {e}")
+        print(f"--- S3 UPLOAD DETAILED ERROR ---")
+        print(f"Error Type: {type(e).__name__}")
+        print(f"Message: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return None
