@@ -4,6 +4,8 @@ from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
+from utils.email import send_email
+import re
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -16,13 +18,39 @@ def register():
     phone = data.get('phone')
     role = data.get('role', 'Buyer')
 
+    if not email or not password or not name:
+        return jsonify({"msg": "Missing required fields"}), 400
+        
+    # Password security check
+    if len(password) < 8:
+        return jsonify({"msg": "Password must be at least 8 characters long"}), 400
+    if not re.search(r"[0-9]", password):
+        return jsonify({"msg": "Password must contain at least one number"}), 400
+    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        return jsonify({"msg": "Password must contain at least one special character"}), 400
+
     if User.query.filter_by(email=email).first():
         return jsonify({"msg": "User already exists"}), 400
 
-    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+    # Using more secure scrypt hashing
+    hashed_password = generate_password_hash(password, method='scrypt')
     new_user = User(email=email, password_hash=hashed_password, name=name, phone=phone, role=role)
     db.session.add(new_user)
     db.session.commit()
+
+    # Send Welcome Email
+    try:
+        from flask import current_app
+        send_email(
+            subject="Welcome to Market Dispute Engine!",
+            recipient=email,
+            template="welcome",
+            name=name,
+            role=role,
+            login_url="https://market-place-dispute-engine.vercel.app/login"
+        )
+    except Exception as e:
+        print(f"Failed to send welcome email: {e}")
 
     return jsonify({"msg": "User created successfully"}), 201
 
