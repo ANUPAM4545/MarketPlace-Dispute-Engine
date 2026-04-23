@@ -14,13 +14,20 @@ def upload_file_to_s3(file, folder="uploads"):
     if not all([bucket_name, access_key, secret_key]):
         print("S3 Error: Missing AWS credentials in environment variables.")
         return None
+    
+    # Cleanup and verify keys
+    if access_key: access_key = access_key.strip()
+    if secret_key: secret_key = secret_key.strip()
+    
+    print(f"DEBUG: Key ID length: {len(access_key) if access_key else 0}")
+    print(f"DEBUG: Secret Key length: {len(secret_key) if secret_key else 0}")
 
     # Ironclad Session Method
     try:
         from botocore.config import Config
         session = boto3.Session(
-            aws_access_key_id=os.environ.get("S3_KEY_ID"),
-            aws_secret_access_key=os.environ.get("S3_SECRET_KEY"),
+            aws_access_key_id=access_key,
+            aws_secret_access_key=secret_key,
             region_name=region
         )
         s3_client = session.client(
