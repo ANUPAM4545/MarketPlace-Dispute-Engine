@@ -7,9 +7,9 @@ def upload_file_to_s3(file, folder="uploads"):
     Uploads a file object to an AWS S3 bucket and returns the public URL.
     """
     bucket_name = os.environ.get("AWS_BUCKET_NAME")
-    access_key = os.environ.get("AWS_ACCESS_KEY_ID")
-    secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
-    region = os.environ.get("AWS_REGION", "us-east-1")
+    access_key = os.environ.get("S3_KEY_ID")
+    secret_key = os.environ.get("S3_SECRET_KEY")
+    region = os.environ.get("AWS_REGION", "ap-south-1")
 
     if not all([bucket_name, access_key, secret_key]):
         print("S3 Error: Missing AWS credentials in environment variables.")
