@@ -52,34 +52,31 @@ def create_dispute():
     # Handle File Upload
     file = request.files.get('evidence')
     if file and file.filename != '':
-        from utils.s3 import upload_file_to_s3
+        filename = secure_filename(file.filename)
+        upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+            
+        file_path = os.path.join(upload_folder, filename)
+        file.save(file_path)
         
         # Extract metadata
-        file.seek(0, os.SEEK_END)
-        file_size = file.tell()
-        file.seek(0) # Reset to beginning for upload
-        
-        # Upload to S3
-        s3_url = upload_file_to_s3(file)
-        
-        if s3_url:
-            metadata = {
-                "file_size": file_size,
-                "filename": secure_filename(file.filename)
-            }
+        file_size = os.path.getsize(file_path)
+        metadata = {
+            "file_size": file_size,
+            "filename": filename
+        }
 
-            # Save Evidence record
-            evidence = Evidence(
-                dispute_id=new_dispute.id,
-                order_id=order_id,
-                image_type='BUYER',
-                metadata_info=json.dumps(metadata),
-                file_url=s3_url, # Now stores the full AWS URL
-                uploaded_by=current_user_id
-            )
-            db.session.add(evidence)
-        else:
-            return jsonify({"msg": "Failed to upload evidence to S3"}), 500
+        # Save Evidence record
+        evidence = Evidence(
+            dispute_id=new_dispute.id,
+            order_id=order_id,
+            image_type='BUYER',
+            metadata_info=json.dumps(metadata),
+            file_url=f"/static/uploads/{filename}",
+            uploaded_by=current_user_id
+        )
+        db.session.add(evidence)
 
         # FRAUD DETECTION: Check if Seller uploaded pre-delivery evidence
         seller_evidence = Evidence.query.filter_by(order_id=order_id, image_type='SELLER').first()
