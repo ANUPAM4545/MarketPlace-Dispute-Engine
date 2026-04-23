@@ -32,12 +32,14 @@ The platform is fully containerized and hosted live on modern cloud infrastructu
 
 **Marketplace Dispute Engine** abstracts the complex logic of e-commerce conflicts into a beautiful, linear pipeline.
 
-- **🛡️ Secure Role-Based Access Control (RBAC):** Distinct dashboards and isolated capabilities tailored for **Buyers**, **Sellers**, and **Administrators**.
+- **🛡️ Secure Role-Based Access Control (RBAC):** Distinct dashboards and isolated capabilities tailored for **Buyers**, **Sellers**, and **Administrators** with hardened JWT verification.
 - **📋 Admin Kanban Board:** A stunning visual board (powered by `@hello-pangea/dnd`) for Admins to visually drag-and-drop disputes through critical stages (`OPEN` ➔ `UNDER_REVIEW` ➔ `SELLER_RESPONDED` ➔ `RESOLVED` / `REJECTED`).
+- **📧 Intelligent Email Notifications:** Integrated **SMTP relay** (via Gmail/Google App Passwords) providing automated, role-specific onboarding emails and real-time status update alerts to all parties.
 - **📎 Immutable Proof Management:** A specialized evidence upload module allowing both buyers and sellers to attach visual and document proof directly to dispute threads.
+- **💪 Advanced Data Integrity:** Comprehensive database seeding with professional "Market Data" ensuring a ready-to-test environment upon deployment.
 - **💬 Real-Time Dispute Threading:** A centralized messaging and resolution panel tracking every interaction between the opposing parties and moderators.
 - **📊 Operational Analytics:** High-level dynamic charting tracking global metrics (Total Active Users, Order Volume, Active vs. Closed Disputes) to monitor platform health.
-- ** fraud Fraud & Suspicion Detection:** Intelligent flagging schemas isolating potentially suspicious claims automatically.
+- **🕵️ Fraud & Suspicion Detection:** Intelligent flagging schemas isolating potentially suspicious claims automatically based on evidence metadata comparisons.
 
 ---
 
