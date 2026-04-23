@@ -32,8 +32,8 @@ def register():
     if User.query.filter_by(email=email).first():
         return jsonify({"msg": "User already exists"}), 400
 
-    # Using more secure scrypt hashing
-    hashed_password = generate_password_hash(password, method='scrypt')
+    # Using secure pbkdf2:sha256
+    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
     new_user = User(email=email, password_hash=hashed_password, name=name, phone=phone, role=role)
     db.session.add(new_user)
     db.session.commit()
@@ -95,10 +95,23 @@ def google_login():
         
     user = User.query.filter_by(email=email).first()
     if not user:
-        # Auto-register with the requested role (e.g. from the Register page dropdown)
+        # Auto-register with the requested role
         user = User(email=email, name=name, role=requested_role, password_hash='GOOGLE_SSO_USER', phone='N/A')
         db.session.add(user)
         db.session.commit()
+        
+        # Send Welcome Email (Only for the first registration via Google)
+        try:
+            send_email(
+                subject="Welcome to Market Dispute Engine!",
+                recipient=email,
+                template="welcome",
+                name=name,
+                role=requested_role,
+                login_url="https://market-place-dispute-engine.vercel.app/login"
+            )
+        except Exception as e:
+            print(f"Failed to send google welcome email: {e}")
         
     access_token = create_access_token(identity=str(user.id), additional_claims={"role": user.role, "name": user.name})
     return jsonify(access_token=access_token, role=user.role, name=str(user.name)), 200

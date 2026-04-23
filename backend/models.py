@@ -30,6 +30,8 @@ class Dispute(db.Model):
     seller_response = db.Column(db.Text)
     is_suspicious = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    # Relationships
+    order = db.relationship('Order', backref='disputes')
 
 class Evidence(db.Model):
     id = db.Column(db.Integer, primary_key=True)

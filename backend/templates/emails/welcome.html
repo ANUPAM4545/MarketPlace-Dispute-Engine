@@ -3,33 +3,52 @@
 <head>
     <style>
         body { font-family: 'Inter', -apple-system, sans-serif; line-height: 1.6; color: #1a1a1a; margin: 0; padding: 0; background-color: #f9fafb; }
-        .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 16px; overflow: hidden; shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; }
+        .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e5e7eb; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         .header { background: #d4af37; padding: 40px 20px; text-align: center; color: white; }
         .content { padding: 40px; }
         .footer { padding: 20px; text-align: center; font-size: 12px; color: #6b7280; background: #f3f4f6; }
-        .button { display: inline-block; padding: 12px 24px; background-color: #d4af37; color: white !important; text-decoration: none; border-radius: 8px; font-weight: 600; margin-top: 20px; }
-        h1 { margin: 0; font-size: 24px; font-weight: 700; }
-        p { margin: 16px 0; }
+        .button { display: inline-block; padding: 12px 28px; background-color: #d4af37; color: white !important; text-decoration: none; border-radius: 10px; font-weight: 600; margin-top: 20px; }
+        .role-badge { display: inline-block; padding: 2px 10px; background: #fdf2f2; color: #d4af37; border-radius: 6px; font-size: 12px; font-weight: 800; border: 1px solid #d4af3733; text-transform: uppercase; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+        p { margin: 18px 0; color: #374151; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Welcome to Market Dispute Engine</h1>
+            <h1>Market Dispute Engine</h1>
         </div>
         <div class="content">
+            <div class="role-badge">{{ role }} Account</div>
             <p>Hello <strong>{{ name }}</strong>,</p>
-            <p>Welcome to the most premium marketplace dispute resolution platform. We are thrilled to have you on board as a <strong>{{ role }}</strong>.</p>
+            
+            <p>Welcome to the most premium marketplace dispute resolution platform. We are thrilled to have you on board.</p>
+
+            {% if role == 'Buyer' %}
+            <p><strong>Your Buyer Benefits:</strong><br>
+            • Open disputes for orders that don't match descriptions.<br>
+            • Real-time tracking of resolution progress.<br>
+            • Secure messaging with sellers and admins.</p>
+            {% elif role == 'Seller' %}
+            <p><strong>Your Seller Opportunities:</strong><br>
+            • Efficiently respond to buyer disputes with evidence.<br>
+            • Protect your store reputation through fair resolution.<br>
+            • Direct communication channel for conflict mitigation.</p>
+            {% elif role == 'Admin' %}
+            <p><strong>Admin Responsibilities:</strong><br>
+            • Oversight of all platform transactions and disputes.<br>
+            • Final authority on dispute resolutions and refunds.<br>
+            • Advanced analytics for marketplace health monitoring.</p>
+            {% endif %}
+
             <p>Our platform ensures that every transaction is fair, transparent, and protected by our state-of-the-art dispute engine.</p>
-            <p>You can now log in to your dashboard to manage your orders and disputes.</p>
             <center>
-                <a href="{{ login_url }}" class="button">Go to Dashboard</a>
+                <a href="{{ login_url }}" class="button">Access Your Dashboard</a>
             </center>
-            <p>Best regards,<br>The Market Dispute Team</p>
         </div>
         <div class="footer">
             &copy; 2026 Market Dispute Engine. All rights reserved.<br>
-            If you did not create this account, please ignore this email.
+            Your security is our priority.
         </div>
     </div>
 </body>
