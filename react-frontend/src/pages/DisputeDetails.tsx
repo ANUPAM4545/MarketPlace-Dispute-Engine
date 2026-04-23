@@ -62,6 +62,12 @@ export default function DisputeDetails() {
     if (error) return <div className="p-8 text-center text-red-500 font-medium min-h-screen bg-gray-50 dark:bg-appbg transition-colors duration-200">Error: {error}</div>;
     if (!dispute) return <div className="p-8 text-center text-gray-500 min-h-screen bg-gray-50 dark:bg-appbg transition-colors duration-200">Dispute not found</div>;
 
+    const getImageUrl = (url: string) => {
+        if (!url) return '';
+        if (url.startsWith('http')) return url;
+        return `${api.defaults.baseURL}${url}`;
+    };
+
     const statusColor =
         dispute.status === "OPEN"
             ? "bg-red-50 text-red-700 border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20"
@@ -142,8 +148,8 @@ export default function DisputeDetails() {
                                             <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b border-gray-100 dark:border-appborder/50">Seller Pre-Delivery Images</h4>
                                             {dispute.evidence.filter(e => e.image_type === 'SELLER').map(e => (
                                                 <div key={e.id} className="mb-5 group">
-                                                    <a href={`${api.defaults.baseURL}${e.file_url}`} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-lg border border-gray-200 dark:border-appborder bg-white dark:bg-appbg group-hover:border-gold-300 dark:group-hover:border-gold-500/50 transition-colors">
-                                                        <img src={`${api.defaults.baseURL}${e.file_url}`} alt="Seller Evidence" className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                                                    <a href={getImageUrl(e.file_url)} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-lg border border-gray-200 dark:border-appborder bg-white dark:bg-appbg group-hover:border-gold-300 dark:group-hover:border-gold-500/50 transition-colors">
+                                                        <img src={getImageUrl(e.file_url)} alt="Seller Evidence" className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
                                                     </a>
                                                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-3 flex justify-between items-center font-light">
                                                         <span>{new Date(e.uploaded_at).toLocaleString()}</span>
@@ -163,8 +169,8 @@ export default function DisputeDetails() {
                                             <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b border-gray-100 dark:border-appborder/50">Buyer Dispute Images</h4>
                                             {dispute.evidence.filter(e => e.image_type === 'BUYER').map(e => (
                                                 <div key={e.id} className="mb-5 group">
-                                                    <a href={`${api.defaults.baseURL}${e.file_url}`} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-lg border border-gray-200 dark:border-appborder bg-white dark:bg-appbg group-hover:border-gold-300 dark:group-hover:border-gold-500/50 transition-colors">
-                                                        <img src={`${api.defaults.baseURL}${e.file_url}`} alt="Buyer Evidence" className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                                                    <a href={getImageUrl(e.file_url)} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-lg border border-gray-200 dark:border-appborder bg-white dark:bg-appbg group-hover:border-gold-300 dark:group-hover:border-gold-500/50 transition-colors">
+                                                        <img src={getImageUrl(e.file_url)} alt="Buyer Evidence" className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
                                                     </a>
                                                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-3 flex justify-between items-center font-light">
                                                         <span>{new Date(e.uploaded_at).toLocaleString()}</span>

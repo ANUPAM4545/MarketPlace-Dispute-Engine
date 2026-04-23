@@ -30,16 +30,17 @@ def upload_file_to_s3(file, folder="uploads"):
         filename = file.filename
         s3_path = f"{folder}/{filename}"
 
-        # Upload file (with public-read permission if allowed by bucket policy)
+        # Reset file pointer
+        file.seek(0)
+
+        # Upload file (Simple mode)
         s3_client.upload_fileobj(
             file,
             bucket_name,
-            s3_path,
-            ExtraArgs={"ContentType": file.content_type}
+            s3_path
         )
 
         # Build public URL
-        # For S3, the standard URL format is: https://bucket-name.s3.region.amazonaws.com/path
         url = f"https://{bucket_name}.s3.{region}.amazonaws.com/{s3_path}"
         return url
 
