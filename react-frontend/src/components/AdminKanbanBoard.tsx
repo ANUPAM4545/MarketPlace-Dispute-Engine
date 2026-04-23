@@ -10,8 +10,6 @@ import {
     TrendingUp, 
     DollarSign,
     AlertTriangle,
-    Eye,
-    Calendar,
     ArrowRight
 } from 'lucide-react';
 import api from '../lib/api';
@@ -41,7 +39,7 @@ const COLUMNS = [
 export default function AdminKanbanBoard() {
     const [disputes, setDisputes] = useState<Dispute[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [, setError] = useState('');
     const navigate = useNavigate();
 
     const fetchDisputes = async () => {
@@ -171,21 +169,27 @@ export default function AdminKanbanBoard() {
                                                 {groupedDisputes[col.id]?.map((dispute, index) => (
                                                     <Draggable key={dispute.id} draggableId={dispute.id.toString()} index={index}>
                                                         {(provided, snapshot) => (
-                                                            <motion.div
-                                                                layout
-                                                                initial={{ opacity: 0, scale: 0.9 }}
-                                                                animate={{ opacity: 1, scale: 1 }}
-                                                                exit={{ opacity: 0, scale: 0.9 }}
+                                                            <div
                                                                 ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
-                                                                className={clsx(
-                                                                    "group relative bg-white dark:bg-appcard p-5 rounded-2xl border transition-all duration-200 select-none",
-                                                                    snapshot.isDragging 
-                                                                        ? "shadow-2xl border-gold-500 scale-[1.02] z-50 ring-1 ring-gold-500/50" 
-                                                                        : "shadow-sm border-gray-100 dark:border-appborder hover:border-gold-300 dark:hover:border-gold-500/40 hover:shadow-lg"
-                                                                )}
+                                                                style={{
+                                                                    ...provided.draggableProps.style,
+                                                                    userSelect: 'none'
+                                                                }}
                                                             >
+                                                                <motion.div
+                                                                    layout
+                                                                    initial={{ opacity: 0, scale: 0.9 }}
+                                                                    animate={{ opacity: 1, scale: 1 }}
+                                                                    exit={{ opacity: 0, scale: 0.9 }}
+                                                                    className={clsx(
+                                                                        "group relative bg-white dark:bg-appcard p-5 rounded-2xl border transition-all duration-200",
+                                                                        snapshot.isDragging 
+                                                                            ? "shadow-2xl border-gold-500 scale-[1.02] z-50 ring-1 ring-gold-500/50" 
+                                                                            : "shadow-sm border-gray-100 dark:border-appborder hover:border-gold-300 dark:hover:border-gold-500/40 hover:shadow-lg"
+                                                                    )}
+                                                                >
                                                                 {/* Status indicator pill */}
                                                                 <div className="flex justify-between items-start mb-3">
                                                                     <span className="text-[10px] font-black tracking-widest text-gray-400 dark:text-gray-600">
@@ -227,7 +231,8 @@ export default function AdminKanbanBoard() {
                                                                 
                                                                 {/* Hover overlay decorator */}
                                                                 <div className="absolute inset-0 bg-gold-500/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none rounded-2xl" />
-                                                            </motion.div>
+                                                                </motion.div>
+                                                            </div>
                                                         )}
                                                     </Draggable>
                                                 ))}
