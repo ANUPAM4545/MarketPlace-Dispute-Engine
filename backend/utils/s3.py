@@ -21,6 +21,7 @@ def upload_file_to_s3(file, folder="uploads"):
         s3_client = boto3.client(
             "s3",
             region_name=region,
+            endpoint_url=f"https://s3.{region}.amazonaws.com",
             config=Config(signature_version='s3v4')
         )
     except Exception as e:
