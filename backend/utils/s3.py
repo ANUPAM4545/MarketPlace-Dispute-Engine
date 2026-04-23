@@ -11,31 +11,30 @@ def upload_file_to_s3(file, folder="uploads"):
     secret_key = os.environ.get("S3_SECRET_KEY")
     region = os.environ.get("AWS_REGION", "ap-south-1")
 
-    if not all([bucket_name, access_key, secret_key]):
-        print("S3 Error: Missing AWS credentials in environment variables.")
-        return None
-    
-    # Cleanup and verify keys
-    if access_key: access_key = access_key.strip()
-    if secret_key: secret_key = secret_key.strip()
-    
-    print(f"DEBUG: Key ID length: {len(access_key) if access_key else 0}")
-    print(f"DEBUG: Secret Key length: {len(secret_key) if secret_key else 0}")
-
-    # Ironclad Session Method
+    # Keyless IAM Role Detection (Best for AWS environments like App Runner)
     try:
         from botocore.config import Config
-        session = boto3.Session(
-            aws_access_key_id=access_key,
-            aws_secret_access_key=secret_key,
-            region_name=region
-        )
+        # Try to initialize WITHOUT keys first (Native AWS Role)
+        if not access_key or not secret_key:
+            print("S3: No keys found. Attempting to use native IAM Role...")
+            session = boto3.Session(region_name=region)
+        else:
+            # Cleanup and verify keys
+            access_key = access_key.strip()
+            secret_key = secret_key.strip()
+            print(f"S3: Using provided S3_KEY_ID keys...")
+            session = boto3.Session(
+                aws_access_key_id=access_key,
+                aws_secret_access_key=secret_key,
+                region_name=region
+            )
+        
         s3_client = session.client(
             "s3",
             config=Config(signature_version='s3v4')
         )
     except Exception as e:
-        print(f"Boto3 Session Error: {e}")
+        print(f"Boto3 Initialization Error: {e}")
         return None
 
     try:
