@@ -15,17 +15,20 @@ def upload_file_to_s3(file, folder="uploads"):
         print("S3 Error: Missing AWS credentials in environment variables.")
         return None
 
-    # Standard boto3 client initialization (picks up keys from env automatically)
+    # Ironclad Session Method
     try:
         from botocore.config import Config
-        s3_client = boto3.client(
+        session = boto3.Session(
+            aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
+            aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
+            region_name=region
+        )
+        s3_client = session.client(
             "s3",
-            region_name=region,
-            endpoint_url=f"https://s3.{region}.amazonaws.com",
             config=Config(signature_version='s3v4')
         )
     except Exception as e:
-        print(f"Boto3 Client Error: {e}")
+        print(f"Boto3 Session Error: {e}")
         return None
 
     try:
