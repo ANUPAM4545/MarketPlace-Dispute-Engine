@@ -135,7 +135,10 @@ def get_disputes():
         "status": d.status,
         "category": d.category,
         "description": d.description,
-        "created_at": d.created_at
+        "created_at": d.created_at,
+        "is_suspicious": d.is_suspicious,
+        "order_amount": d.order.amount if d.order else 0,
+        "product_name": d.order.product_name if d.order else "N/A"
     } for d in disputes]), 200
 
 @bp.route('/<int:id>', methods=['GET'])
