@@ -142,8 +142,8 @@ export default function DisputeDetails() {
                                             <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b border-gray-100 dark:border-appborder/50">Seller Pre-Delivery Images</h4>
                                             {dispute.evidence.filter(e => e.image_type === 'SELLER').map(e => (
                                                 <div key={e.id} className="mb-5 group">
-                                                    <a href={`http://localhost:5000${e.file_url}`} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-lg border border-gray-200 dark:border-appborder bg-white dark:bg-appbg group-hover:border-gold-300 dark:group-hover:border-gold-500/50 transition-colors">
-                                                        <img src={`http://localhost:5001${e.file_url}`} alt="Seller Evidence" className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                                                    <a href={`${api.defaults.baseURL}${e.file_url}`} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-lg border border-gray-200 dark:border-appborder bg-white dark:bg-appbg group-hover:border-gold-300 dark:group-hover:border-gold-500/50 transition-colors">
+                                                        <img src={`${api.defaults.baseURL}${e.file_url}`} alt="Seller Evidence" className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
                                                     </a>
                                                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-3 flex justify-between items-center font-light">
                                                         <span>{new Date(e.uploaded_at).toLocaleString()}</span>
@@ -163,8 +163,8 @@ export default function DisputeDetails() {
                                             <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b border-gray-100 dark:border-appborder/50">Buyer Dispute Images</h4>
                                             {dispute.evidence.filter(e => e.image_type === 'BUYER').map(e => (
                                                 <div key={e.id} className="mb-5 group">
-                                                    <a href={`http://localhost:5000${e.file_url}`} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-lg border border-gray-200 dark:border-appborder bg-white dark:bg-appbg group-hover:border-gold-300 dark:group-hover:border-gold-500/50 transition-colors">
-                                                        <img src={`http://localhost:5001${e.file_url}`} alt="Buyer Evidence" className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
+                                                    <a href={`${api.defaults.baseURL}${e.file_url}`} target="_blank" rel="noreferrer" className="block overflow-hidden rounded-lg border border-gray-200 dark:border-appborder bg-white dark:bg-appbg group-hover:border-gold-300 dark:group-hover:border-gold-500/50 transition-colors">
+                                                        <img src={`${api.defaults.baseURL}${e.file_url}`} alt="Buyer Evidence" className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
                                                     </a>
                                                     <div className="text-xs text-gray-500 dark:text-gray-400 mt-3 flex justify-between items-center font-light">
                                                         <span>{new Date(e.uploaded_at).toLocaleString()}</span>
