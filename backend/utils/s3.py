@@ -15,11 +15,14 @@ def upload_file_to_s3(file, folder="uploads"):
         print("S3 Error: Missing AWS credentials in environment variables.")
         return None
 
+    from botocore.config import Config
+
     s3_client = boto3.client(
         "s3",
         aws_access_key_id=access_key,
         aws_secret_access_key=secret_key,
-        region_name=region
+        region_name=region,
+        config=Config(signature_version='s3v4')
     )
 
     try:
