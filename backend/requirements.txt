@@ -7,3 +7,4 @@ gunicorn
 psycopg2-binary
 Flask-Mail==0.10.0
 google-auth
+requests
