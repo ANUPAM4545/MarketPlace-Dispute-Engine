@@ -34,7 +34,11 @@ def create_app():
         app.register_blueprint(notifications.bp)
         app.register_blueprint(search.bp)
         
-        db.create_all()
+        try:
+            db.create_all()
+            print("Database tables created/verified successfully!")
+        except Exception as e:
+            print(f"CRITICAL: Database connection failed: {e}")
 
     return app
 
