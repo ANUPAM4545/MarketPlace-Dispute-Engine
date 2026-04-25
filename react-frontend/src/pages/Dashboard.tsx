@@ -10,7 +10,7 @@ import SellerInventory from "../components/SellerInventory";
 import Navbar from "../components/Navbar";
 import DashboardStats from "../components/DashboardStats";
 import { motion } from "framer-motion";
-import { LayoutDashboard, ShoppingBag, Box, History, Clock as ClockIcon, Calendar } from "lucide-react";
+import { ShoppingBag, Box, History, Clock as ClockIcon, Calendar } from "lucide-react";
 
 export default function Dashboard() {
     const { user, loading } = useAuth();
@@ -78,37 +78,38 @@ export default function Dashboard() {
                 className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8"
             >
                 {/* Hero Greeting Section */}
-                <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }} className="mb-12 mt-4 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }} className="mb-8 md:mb-12 mt-4 flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
                         <div className="flex items-center gap-2 mb-2">
                             <span className="w-8 h-[1px] bg-gold-500"></span>
                             <p className="text-gold-600 dark:text-gold-500 uppercase tracking-[0.3em] text-[10px] font-bold">{user.role} COMMAND CENTER</p>
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-light text-gray-900 dark:text-white tracking-tight">
-                            Hello, <span className="font-serif italic text-gold-600 dark:text-gold-500 font-medium">{user.name}</span>
+                        <h1 className="text-3xl sm:text-4xl md:text-6xl font-light text-gray-900 dark:text-white tracking-tight leading-tight">
+                            Hello, <br className="sm:hidden" />
+                            <span className="font-serif italic text-gold-600 dark:text-gold-500 font-medium">{user.name}</span>
                         </h1>
                         <p className="mt-2 text-gray-400 dark:text-gray-500 text-sm font-medium">Welcome back to your business overview.</p>
                     </div>
 
-                    <div className="flex items-center gap-4 bg-white/50 dark:bg-appcard/30 backdrop-blur-sm p-4 rounded-2xl border border-gray-100 dark:border-appborder/30">
+                    <div className="flex flex-wrap items-center gap-3 md:gap-4 bg-white/50 dark:bg-appcard/30 backdrop-blur-sm p-4 rounded-2xl border border-gray-100 dark:border-appborder/30">
                         <div className="flex items-center gap-3 pr-4 border-r border-gray-200 dark:border-appborder/50">
                             <div className="p-2 bg-gold-100 dark:bg-gold-500/10 rounded-lg text-gold-600 dark:text-gold-500">
-                                <ClockIcon className="w-5 h-5" />
+                                <ClockIcon className="w-4 h-4 md:w-5 md:h-5" />
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Local Time</p>
-                                <p className="text-sm font-bold text-gray-900 dark:text-white">
+                                <p className="text-xs md:text-sm font-bold text-gray-900 dark:text-white">
                                     {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
                             <div className="p-2 bg-indigo-100 dark:bg-indigo-500/10 rounded-lg text-indigo-600 dark:text-indigo-400">
-                                <Calendar className="w-5 h-5" />
+                                <Calendar className="w-4 h-4 md:w-5 md:h-5" />
                             </div>
                             <div>
                                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Date</p>
-                                <p className="text-sm font-bold text-gray-900 dark:text-white">
+                                <p className="text-xs md:text-sm font-bold text-gray-900 dark:text-white">
                                     {currentTime.toLocaleDateString([], { month: 'short', day: 'numeric' })}
                                 </p>
                             </div>

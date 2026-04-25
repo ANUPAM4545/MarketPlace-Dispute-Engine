@@ -12,11 +12,16 @@ import DisputeDetails from "./pages/DisputeDetails";
 import Features from "./pages/Features";
 import Profile from "./pages/Profile";
 
+import Pricing from "./pages/Pricing";
+import Contact from "./pages/Contact";
+
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/features" element={<Features />} />
+      <Route path="/pricing" element={<Pricing />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />

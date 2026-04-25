@@ -135,9 +135,9 @@ export default function AdminKanbanBoard() {
             </div>
 
             <DragDropContext onDragEnd={onDragEnd}>
-                <div className="flex gap-6 items-start h-[calc(100vh-320px)] min-h-[500px] pb-4 overflow-x-auto custom-scrollbar">
+                <div className="flex gap-4 md:gap-6 items-start h-[calc(100vh-320px)] min-h-[500px] pb-4 overflow-x-auto custom-scrollbar">
                     {COLUMNS.map((col) => (
-                        <div key={col.id} className="flex-shrink-0 w-[320px] flex flex-col h-full group/col">
+                        <div key={col.id} className="flex-shrink-0 w-[280px] sm:w-[320px] flex flex-col h-full group/col">
                             <div className="flex items-center justify-between mb-4 px-2">
                                 <div className="flex items-center gap-2">
                                     <div className={clsx("p-1.5 rounded-lg", col.bg)}>

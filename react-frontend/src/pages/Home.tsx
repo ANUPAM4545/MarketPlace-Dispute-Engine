@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ShieldCheck, ArrowRight, Zap, GripHorizontal, Users, Sun, Moon, Menu, X, Sparkles, Search, Bell, Box, Activity } from "lucide-react";
-import { useTheme } from "../context/ThemeContext";
+import { ShieldCheck, ArrowRight, Sparkles, Search, Bell, Box, Activity } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Navbar from "../components/Navbar";
 
 export default function Home() {
-    const { theme, toggleTheme } = useTheme();
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [mockupIndex, setMockupIndex] = useState(0);
 
     // Cycle through mockups
@@ -43,97 +41,7 @@ export default function Home() {
 
     return (
         <div className="bg-white dark:bg-appbg transition-colors duration-300 min-h-screen text-gray-900 dark:text-gray-200 font-sans selection:bg-gold-500 selection:text-black">
-            {/* Header */}
-            <header className="absolute inset-x-0 top-0 z-50 border-b border-gray-100 dark:border-appborder/30 bg-white/60 dark:bg-appbg/60 backdrop-blur-xl transition-colors duration-300">
-                <nav className="flex items-center justify-between p-5 lg:px-8 max-w-7xl mx-auto" aria-label="Global">
-                    <div className="flex lg:flex-1">
-                        <Link to="/" className="-m-1.5 p-1.5 transition-transform hover:scale-105">
-                            <span className="sr-only">Dispute Engine</span>
-                            <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-lg bg-gold-50 dark:bg-gold-500/10 flex items-center justify-center border border-gold-200 dark:border-gold-500/30">
-                                    <ShieldCheck className="w-5 h-5 text-gold-600 dark:text-gold-500" />
-                                </div>
-                                <span className="font-serif italic text-xl text-gray-900 dark:text-white tracking-wide font-medium">Dispute<span className="text-gold-600 dark:text-gold-500">Engine</span></span>
-                            </div>
-                        </Link>
-                    </div>
-                    <div className="hidden lg:flex lg:gap-x-12">
-                        <Link to="/" className="text-sm font-bold tracking-wide leading-6 text-gold-600 dark:text-gold-500 uppercase">Home</Link>
-                        <Link to="/features" className="text-sm font-bold tracking-wide leading-6 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors uppercase">Features</Link>
-                    </div>
-                    <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-x-6 items-center">
-                        <button
-                            onClick={toggleTheme}
-                            className="p-2.5 text-gray-500 hover:text-gold-600 dark:text-gray-400 dark:hover:text-gold-400 transition-colors bg-gray-50 dark:bg-appcard rounded-xl border border-gray-200 dark:border-appborder/50"
-                            aria-label="Toggle theme"
-                        >
-                            {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-                        </button>
-                        <Link to="/login" className="text-sm font-bold leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
-                            Log in
-                        </Link>
-                        <Link to="/register" className="text-sm font-bold leading-6 bg-gray-900 dark:bg-gold-500 text-white dark:text-black px-6 py-2.5 rounded-xl hover:bg-black dark:hover:bg-gold-400 transition-all shadow-lg hover:shadow-xl active:scale-95">
-                            Get Started
-                        </Link>
-                    </div>
-                    <div className="flex lg:hidden flex-1 justify-end items-center gap-4">
-                        <button
-                            onClick={toggleTheme}
-                            className="p-2.5 text-gray-500 hover:text-gold-600 dark:text-gray-400 dark:hover:text-gold-400 transition-colors bg-gray-50 dark:bg-appcard rounded-xl border border-gray-200 dark:border-appborder/50"
-                            aria-label="Toggle theme"
-                        >
-                            {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-                        </button>
-                        <button
-                            type="button"
-                            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-200"
-                            onClick={() => setMobileMenuOpen(true)}
-                        >
-                            <span className="sr-only">Open main menu</span>
-                            <Menu className="h-6 w-6" aria-hidden="true" />
-                        </button>
-                    </div>
-                </nav>
-
-                {/* Mobile menu */}
-                <AnimatePresence>
-                    {mobileMenuOpen && (
-                        <div className="lg:hidden" role="dialog" aria-modal="true">
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 bg-gray-900/40 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></motion.div>
-                            <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ type: "spring", damping: 25, stiffness: 200 }} className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white dark:bg-appbg px-6 py-6 sm:max-w-sm border-l border-gray-200 dark:border-appborder shadow-2xl">
-                                <div className="flex items-center justify-between">
-                                    <Link to="/" className="-m-1.5 p-1.5" onClick={() => setMobileMenuOpen(false)}>
-                                        <div className="flex items-center gap-2">
-                                            <ShieldCheck className="w-6 h-6 text-gold-600 dark:text-gold-500" />
-                                            <span className="font-serif italic text-xl text-gray-900 dark:text-white tracking-wide font-medium">Dispute<span className="text-gold-600 dark:text-gold-500">Engine</span></span>
-                                        </div>
-                                    </Link>
-                                    <button
-                                        type="button"
-                                        className="-m-2.5 rounded-md p-2.5 text-gray-500 hover:text-gray-900 dark:hover:text-white"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        <span className="sr-only">Close menu</span>
-                                        <X className="h-6 w-6" aria-hidden="true" />
-                                    </button>
-                                </div>
-                                <div className="mt-8 flow-root">
-                                    <div className="-my-6 divide-y divide-gray-100 dark:divide-appborder">
-                                        <div className="space-y-2 py-6">
-                                            <Link to="/" className="-mx-3 block rounded-xl px-3 py-3 text-base font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-appcard" onClick={() => setMobileMenuOpen(false)}>Home</Link>
-                                            <Link to="/features" className="-mx-3 block rounded-xl px-3 py-3 text-base font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-appcard" onClick={() => setMobileMenuOpen(false)}>Features</Link>
-                                        </div>
-                                        <div className="py-6 space-y-3">
-                                            <Link to="/login" className="-mx-3 block rounded-xl px-3 py-3 text-base font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-appcard text-center border border-gray-200 dark:border-appborder" onClick={() => setMobileMenuOpen(false)}>Log in</Link>
-                                            <Link to="/register" className="-mx-3 block rounded-xl px-3 py-3 text-base font-bold bg-gray-900 dark:bg-gold-500 text-white dark:text-black hover:bg-black dark:hover:bg-gold-400 text-center" onClick={() => setMobileMenuOpen(false)}>Get Started</Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </div>
-                    )}
-                </AnimatePresence>
-            </header>
+            <Navbar />
 
             {/* Hero Section */}
             <div className="relative isolate pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
@@ -266,6 +174,23 @@ export default function Home() {
                 {/* Features Highlights Snippet */}
                 <div className="mt-24 sm:mt-32 pb-10">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                        {/* Trust Section */}
+                        <motion.div 
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ duration: 1 }}
+                            className="text-center mb-20"
+                        >
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] mb-8">Trusted by Global Marketplaces</p>
+                            <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 opacity-40 grayscale group-hover:grayscale-0 transition-all duration-500">
+                                <span className="text-xl font-serif italic text-gray-500">Shopify+</span>
+                                <span className="text-xl font-serif italic text-gray-500">Etsy.Elite</span>
+                                <span className="text-xl font-serif italic text-gray-500">Amazon.Sync</span>
+                                <span className="text-xl font-serif italic text-gray-500">Walmart.AI</span>
+                                <span className="text-xl font-serif italic text-gray-500">Mercari.Global</span>
+                            </div>
+                        </motion.div>
+
                         <motion.div 
                             initial="hidden"
                             whileInView="visible"
@@ -327,6 +252,89 @@ export default function Home() {
                                 <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-light relative z-10">Never miss an update. Receive instant notifications for new orders, shipping updates, and resolved disputes.</p>
                             </motion.div>
                         </motion.div>
+                    </div>
+                </div>
+
+                {/* How It Works Section */}
+                <div className="py-24 sm:py-32 bg-gray-50/50 dark:bg-[#0a0a0a]/50 relative">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl font-light tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+                                Simple steps to <span className="font-serif italic text-gold-600 dark:text-gold-500">success</span>
+                            </h2>
+                            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 font-light">The engine works behind the scenes to keep your business running smoothly.</p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                            {[
+                                { step: "01", title: "Join Engine", desc: "Register as a buyer or seller in seconds." },
+                                { step: "02", title: "Transact", desc: "Browse the catalog or list your own inventory." },
+                                { step: "03", title: "Resolve", desc: "If issues arise, our AI analyzes the evidence." },
+                                { step: "04", title: "Scale", desc: "Focus on growth while we handle the disputes." }
+                            ].map((item, idx) => (
+                                <motion.div 
+                                    key={idx}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: idx * 0.1 }}
+                                    className="relative p-6 rounded-2xl bg-white dark:bg-appcard border border-gray-100 dark:border-appborder/50"
+                                >
+                                    <span className="absolute -top-4 -left-2 text-6xl font-black text-gold-500/10 italic select-none">{item.step}</span>
+                                    <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2 relative z-10">{item.title}</h4>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 font-light leading-relaxed">{item.desc}</p>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Statistics Section */}
+                <div className="py-24 sm:py-32">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div className="bg-gray-900 dark:bg-gold-500 rounded-[3rem] p-12 sm:p-20 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-gold-500/20 to-transparent pointer-events-none"></div>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-12 text-center relative z-10">
+                                <div>
+                                    <div className="text-5xl font-light text-white dark:text-black mb-2">$4.2M+</div>
+                                    <div className="text-xs font-bold text-gray-400 dark:text-black/60 uppercase tracking-widest">Transaction Volume</div>
+                                </div>
+                                <div>
+                                    <div className="text-5xl font-light text-white dark:text-black mb-2">99.4%</div>
+                                    <div className="text-xs font-bold text-gray-400 dark:text-black/60 uppercase tracking-widest">Resolution Accuracy</div>
+                                </div>
+                                <div>
+                                    <div className="text-5xl font-light text-white dark:text-black mb-2">12ms</div>
+                                    <div className="text-xs font-bold text-gray-400 dark:text-black/60 uppercase tracking-widest">AI Analysis Speed</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Final CTA Section */}
+                <div className="py-24 sm:py-32 text-center">
+                    <div className="mx-auto max-w-4xl px-6 lg:px-8">
+                        <h2 className="text-4xl font-light tracking-tight text-gray-900 dark:text-white sm:text-6xl mb-8 leading-tight">
+                            Ready to experience the <br />
+                            <span className="font-serif italic text-gold-600 dark:text-gold-500">future</span> of commerce?
+                        </h2>
+                        <p className="text-xl text-gray-600 dark:text-gray-400 font-light mb-12">
+                            Join thousands of users who have upgraded their marketplace experience with the Dispute Engine.
+                        </p>
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                            <Link
+                                to="/register"
+                                className="w-full sm:w-auto rounded-2xl bg-gray-900 dark:bg-gold-500 px-10 py-5 text-lg font-bold text-white dark:text-black shadow-2xl hover:scale-105 transition-all"
+                            >
+                                Create Free Account
+                            </Link>
+                            <Link
+                                to="/login"
+                                className="text-gray-600 dark:text-gray-400 font-bold hover:text-gray-900 dark:hover:text-white flex items-center gap-2"
+                            >
+                                Already using it? Sign In <ArrowRight className="w-4 h-4" />
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

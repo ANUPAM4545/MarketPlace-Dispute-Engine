@@ -262,7 +262,7 @@ export default function SellerInventory() {
                             <div className="h-48 w-full bg-gray-100 dark:bg-appbg/50 border-b border-gray-100 dark:border-appborder/50 flex items-center justify-center relative overflow-hidden">
                                 {product.image_url ? (
                                     <img 
-                                        src={`http://127.0.0.1:5001${product.image_url}`} 
+                                        src={`${api.defaults.baseURL?.replace('/api', '')}${product.image_url}`} 
                                         alt={product.name} 
                                         className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                                     />

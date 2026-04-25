@@ -126,7 +126,7 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
                 )}
             </AnimatePresence>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 {filteredProducts.map((product) => (
                 <motion.div 
                     key={product.id}
@@ -256,17 +256,17 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="relative w-full max-w-4xl bg-white dark:bg-appbg rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]"
+                            className="relative w-full max-w-4xl bg-white dark:bg-appbg rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row h-full max-h-[90vh] md:h-auto"
                         >
                             <button 
                                 onClick={() => setSelectedProduct(null)}
-                                className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/80 text-white rounded-full transition-colors backdrop-blur-md"
+                                className="absolute top-4 right-4 z-20 p-2 bg-black/50 hover:bg-black/80 text-white rounded-full transition-colors backdrop-blur-md"
                             >
                                 <X className="w-5 h-5" />
                             </button>
 
                             {/* Modal Image Section */}
-                            <div className="w-full md:w-1/2 h-64 md:h-auto bg-gray-100 dark:bg-appcard relative">
+                            <div className="w-full md:w-1/2 h-64 md:h-[600px] bg-gray-100 dark:bg-appcard relative flex-shrink-0">
                                 {selectedProduct.image_url ? (
                                     <img 
                                         src={`${api.defaults.baseURL?.replace('/api', '')}${selectedProduct.image_url}`} 
@@ -281,28 +281,28 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
                             </div>
 
                             {/* Modal Details Section */}
-                            <div className="w-full md:w-1/2 p-8 flex flex-col overflow-y-auto">
-                                <div>
+                            <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col overflow-y-auto">
+                                <div className="flex-1">
                                     <div className="flex justify-between items-start mb-4">
-                                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+                                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
                                             {selectedProduct.name}
                                         </h2>
                                     </div>
                                     
                                     <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-200 dark:border-appborder">
-                                        <div className="text-3xl font-light text-gold-600 dark:text-gold-500">
+                                        <div className="text-2xl md:text-3xl font-light text-gold-600 dark:text-gold-500">
                                             ${selectedProduct.price.toFixed(2)}
                                         </div>
-                                        <div className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 border-l border-gray-200 dark:border-appborder pl-4">
+                                        <div className="flex items-center gap-2 text-xs md:text-sm font-medium text-gray-500 dark:text-gray-400 border-l border-gray-200 dark:border-appborder pl-4">
                                             <User className="w-4 h-4" />
-                                            Sold by <span className="text-gray-900 dark:text-white">{selectedProduct.seller_name}</span>
+                                            <span className="truncate max-w-[100px] md:max-w-none">Sold by {selectedProduct.seller_name}</span>
                                         </div>
                                     </div>
 
                                     <div className="mb-8">
-                                        <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-3 flex items-center gap-2">
+                                        <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-3 flex items-center gap-2">
                                             <Info className="w-4 h-4 text-gold-500" />
-                                            Description & Specifications
+                                            Description
                                         </h4>
                                         <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 whitespace-pre-wrap leading-relaxed bg-gray-50 dark:bg-appcard p-4 rounded-xl border border-gray-100 dark:border-appborder/50">
                                             {selectedProduct.description}
@@ -311,7 +311,7 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
 
                                     {/* Reviews Section */}
                                     <div className="mb-8">
-                                        <h4 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-3">
+                                        <h4 className="text-xs font-bold text-gray-900 dark:text-white uppercase tracking-widest mb-3">
                                             Customer Reviews ({productReviews.length})
                                         </h4>
                                         {reviewsLoading ? (
@@ -326,12 +326,12 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
                                                             <span className="font-semibold text-sm text-gray-900 dark:text-white">{review.user_name}</span>
                                                             <div className="flex gap-0.5">
                                                                 {[1, 2, 3, 4, 5].map(star => (
-                                                                    <span key={star} className={`text-xs ${star <= review.rating ? 'text-gold-500' : 'text-gray-300 dark:text-gray-600'}`}>★</span>
+                                                                    <span key={star} className={`text-[10px] ${star <= review.rating ? 'text-gold-500' : 'text-gray-300 dark:text-gray-600'}`}>★</span>
                                                                 ))}
                                                             </div>
                                                         </div>
                                                         {review.comment && (
-                                                            <p className="text-sm text-gray-600 dark:text-gray-300 font-light">{review.comment}</p>
+                                                            <p className="text-xs text-gray-600 dark:text-gray-300 font-light">{review.comment}</p>
                                                         )}
                                                         <p className="text-[10px] text-gray-400 mt-2">
                                                             {new Date(review.created_at).toLocaleDateString()}
@@ -343,17 +343,18 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
                                     </div>
                                 </div>
 
-                                <div className="mt-auto pt-6 border-t border-gray-200 dark:border-appborder">
-                                    <div className="flex items-center gap-2 text-sm font-medium text-gray-400 mb-4">
+                                {/* Modal Footer (Sticky-like on mobile) */}
+                                <div className="mt-auto pt-6 border-t border-gray-200 dark:border-appborder bg-white dark:bg-appbg sticky bottom-0 z-10 -mx-6 -mb-6 p-6 md:static md:m-0 md:p-0">
+                                    <div className="flex items-center gap-2 text-xs font-medium text-gray-400 mb-4">
                                         <Tag className="w-4 h-4" />
                                         Availability: <span className={selectedProduct.stock > 0 ? "text-green-500" : "text-red-500"}>
                                             {selectedProduct.stock > 0 ? `${selectedProduct.stock} units in stock` : "Out of Stock"}
                                         </span>
                                     </div>
 
-                                    <div className="flex items-center gap-4">
-                                        <div className="w-32">
-                                            <label className="text-xs text-gray-500 dark:text-gray-400 block mb-1">Quantity</label>
+                                    <div className="flex items-center gap-3 md:gap-4">
+                                        <div className="w-20 md:w-32">
+                                            <label className="text-[10px] text-gray-500 dark:text-gray-400 block mb-1">Qty</label>
                                             <input 
                                                 type="number" 
                                                 min="1" 
@@ -361,19 +362,19 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
                                                 value={quantities[selectedProduct.id] || 1}
                                                 onChange={(e) => handleQuantityChange(selectedProduct.id, parseInt(e.target.value) || 1, selectedProduct.stock)}
                                                 disabled={selectedProduct.stock <= 0}
-                                                className="w-full bg-gray-50 dark:bg-appcard border border-gray-200 dark:border-appborder rounded-xl py-3 px-4 text-gray-900 dark:text-white disabled:opacity-50"
+                                                className="w-full bg-gray-50 dark:bg-appcard border border-gray-200 dark:border-appborder rounded-xl py-2 md:py-3 px-3 md:px-4 text-sm md:text-base text-gray-900 dark:text-white disabled:opacity-50"
                                             />
                                         </div>
                                         <button
                                             onClick={() => handleBuy(selectedProduct.id)}
                                             disabled={buyingId === selectedProduct.id || selectedProduct.stock <= 0}
-                                            className={`flex-1 flex items-center justify-center gap-2 py-3 mt-5 rounded-xl font-bold transition-all active:scale-95 ${
+                                            className={`flex-1 flex items-center justify-center gap-2 py-3 md:py-4 mt-5 md:mt-0 rounded-xl font-bold text-sm md:text-base transition-all active:scale-95 ${
                                                 selectedProduct.stock > 0 
                                                     ? "bg-gold-600 dark:bg-gold-500 text-white dark:text-black hover:bg-gold-700 dark:hover:bg-gold-400 shadow-[0_0_20px_rgba(212,175,55,0.3)]" 
                                                     : "bg-gray-100 dark:bg-appbg text-gray-400 cursor-not-allowed"
                                             }`}
                                         >
-                                            <ShoppingCart className="w-5 h-5" />
+                                            <ShoppingCart className="w-4 h-4 md:w-5 md:h-5" />
                                             {buyingId === selectedProduct.id ? "Processing..." : "Buy Now"}
                                         </button>
                                     </div>

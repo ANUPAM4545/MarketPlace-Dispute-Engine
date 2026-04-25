@@ -16,6 +16,8 @@ interface Order {
     seller_id: number;
     product_id: number;
     has_reviewed?: boolean;
+    tracking_id?: string;
+    carrier_name?: string;
 }
 
 export default function OrdersList() {
@@ -256,18 +258,18 @@ export default function OrdersList() {
                                     )}
                                 </div>
 
-                                <div className="flex flex-col items-end gap-2">
-                                    <p className="text-lg font-bold text-gray-900 dark:text-white">
+                                <div className="flex flex-col md:items-end gap-3">
+                                    <p className="text-lg font-bold text-gray-900 dark:text-white md:text-right">
                                         ${order.amount.toFixed(2)}
                                     </p>
                                     
                                     {/* Action Buttons Based on Role & Status */}
-                                    <div className="flex gap-2">
+                                    <div className="flex flex-wrap md:justify-end gap-2">
                                         {user?.role === "Buyer" && order.status === "PENDING" && (
                                             <button
                                                 onClick={() => handlePayment(order.id)}
                                                 disabled={actionLoading === order.id}
-                                                className="bg-gold-600 dark:bg-gold-500 text-white dark:text-black px-4 py-1.5 rounded-md text-sm font-bold hover:bg-gold-700 dark:hover:bg-gold-400 transition-all shadow-[0_0_10px_rgba(212,175,55,0.3)]"
+                                                className="w-full sm:w-auto bg-gold-600 dark:bg-gold-500 text-white dark:text-black px-4 py-1.5 rounded-md text-sm font-bold hover:bg-gold-700 dark:hover:bg-gold-400 transition-all shadow-[0_0_10px_rgba(212,175,55,0.3)]"
                                             >
                                                 {actionLoading === order.id ? "Processing..." : "Pay Now"}
                                             </button>
@@ -277,7 +279,7 @@ export default function OrdersList() {
                                             <button
                                                 onClick={() => handleShipWithProof(order.id)}
                                                 disabled={actionLoading === order.id}
-                                                className="bg-indigo-600 text-white px-4 py-1.5 rounded-md text-sm font-bold hover:bg-indigo-700 transition-all shadow-[0_0_10px_rgba(79,70,229,0.3)] flex items-center gap-2"
+                                                className="w-full sm:w-auto bg-indigo-600 text-white px-4 py-1.5 rounded-md text-sm font-bold hover:bg-indigo-700 transition-all shadow-[0_0_10px_rgba(79,70,229,0.3)] flex items-center justify-center gap-2"
                                             >
                                                 <Truck className="w-4 h-4" />
                                                 {actionLoading === order.id ? "Uploading..." : "Ship with Proof"}
@@ -289,13 +291,13 @@ export default function OrdersList() {
                                                 <button
                                                     onClick={() => handleUpdateStatus(order.id, 'DELIVERED')}
                                                     disabled={actionLoading === order.id}
-                                                    className="bg-green-600 text-white px-4 py-1.5 rounded-md text-sm font-bold hover:bg-green-700 transition-all shadow-[0_0_10px_rgba(5,150,105,0.3)]"
+                                                    className="w-full sm:w-auto bg-green-600 text-white px-4 py-1.5 rounded-md text-sm font-bold hover:bg-green-700 transition-all shadow-[0_0_10px_rgba(5,150,105,0.3)]"
                                                 >
                                                     {actionLoading === order.id ? "Confirming..." : "Mark Delivered"}
                                                 </button>
                                                 <button
                                                     onClick={() => handleFileDispute(order.id, 'Item Not Received')}
-                                                    className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium transition-colors border border-red-200 dark:border-red-500/20 px-3 py-1.5 rounded-md bg-red-50 dark:bg-red-500/10"
+                                                    className="w-full sm:w-auto text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium transition-colors border border-red-200 dark:border-red-500/20 px-3 py-1.5 rounded-md bg-red-50 dark:bg-red-500/10 text-center"
                                                     title="Use this if the item has been stuck in transit for too long."
                                                 >
                                                     Report Not Received
@@ -311,14 +313,14 @@ export default function OrdersList() {
                                                             setReviewingOrderId(order.id);
                                                             setReviewModalOpen(true);
                                                         }}
-                                                        className="bg-gold-500 text-black px-4 py-1.5 rounded-md text-sm font-bold hover:bg-gold-400 transition-all shadow-[0_0_10px_rgba(212,175,55,0.4)] flex items-center gap-1"
+                                                        className="w-full sm:w-auto bg-gold-500 text-black px-4 py-1.5 rounded-md text-sm font-bold hover:bg-gold-400 transition-all shadow-[0_0_10px_rgba(212,175,55,0.4)] flex items-center justify-center gap-1"
                                                     >
                                                         ★ Leave Review
                                                     </button>
                                                 )}
                                                 <button
                                                     onClick={() => handleFileDispute(order.id)}
-                                                    className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium transition-colors border border-red-200 dark:border-red-500/20 px-3 py-1.5 rounded-md bg-red-50 dark:bg-red-500/10"
+                                                    className="w-full sm:w-auto text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium transition-colors border border-red-200 dark:border-red-500/20 px-3 py-1.5 rounded-md bg-red-50 dark:bg-red-500/10 text-center"
                                                 >
                                                     File Dispute
                                                 </button>

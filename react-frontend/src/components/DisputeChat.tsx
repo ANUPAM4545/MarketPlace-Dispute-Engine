@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import api from "../lib/api";
-import { Send, User as UserIcon, ShieldCheck } from "lucide-react";
+import { Send, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 
@@ -61,7 +61,7 @@ export default function DisputeChat({ disputeId, currentUserId }: DisputeChatPro
     if (loading) return <div className="text-center p-4 text-gray-500">Loading chat...</div>;
 
     return (
-        <div className="flex flex-col h-[500px] border border-gray-200 dark:border-appborder rounded-2xl overflow-hidden bg-white dark:bg-appcard shadow-sm mt-8">
+        <div className="flex flex-col h-[450px] sm:h-[600px] border border-gray-200 dark:border-appborder rounded-2xl overflow-hidden bg-white dark:bg-appcard shadow-sm mt-8">
             <div className="p-4 border-b border-gray-200 dark:border-appborder bg-gray-50 dark:bg-appbg/50">
                 <h3 className="font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
                     <ShieldCheck className="w-5 h-5 text-gold-600" />
