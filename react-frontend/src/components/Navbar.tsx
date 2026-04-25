@@ -103,9 +103,13 @@ export default function Navbar() {
                                         Home
                                     </Link>
                                 )}
-                                <Link to="/features" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Features</Link>
-                                <Link to="/pricing" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Pricing</Link>
-                                <Link to="/contact" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Contact</Link>
+                                {!user && (
+                                    <>
+                                        <Link to="/features" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Features</Link>
+                                        <Link to="/pricing" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Pricing</Link>
+                                        <Link to="/contact" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Contact</Link>
+                                    </>
+                                )}
                             </div>
 
                             {/* Search Bar */}
@@ -401,15 +405,19 @@ export default function Navbar() {
                                         Home
                                     </Link>
                                 )}
-                                <Link to="/features" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard font-bold transition-colors">
-                                    <Box className="w-5 h-5" /> Features
-                                </Link>
-                                <Link to="/pricing" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard font-bold transition-colors">
-                                    <Sparkles className="w-5 h-5" /> Pricing
-                                </Link>
-                                <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard font-bold transition-colors">
-                                    <Mail className="w-5 h-5" /> Contact
-                                </Link>
+                                {!user && (
+                                    <>
+                                        <Link to="/features" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard font-bold transition-colors">
+                                            <Box className="w-5 h-5" /> Features
+                                        </Link>
+                                        <Link to="/pricing" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard font-bold transition-colors">
+                                            <Sparkles className="w-5 h-5" /> Pricing
+                                        </Link>
+                                        <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard font-bold transition-colors">
+                                            <Mail className="w-5 h-5" /> Contact
+                                        </Link>
+                                    </>
+                                )}
 
                                 <div className="pt-4 mt-4 border-t border-gray-100 dark:border-white/5 space-y-3">
                                     <button 
