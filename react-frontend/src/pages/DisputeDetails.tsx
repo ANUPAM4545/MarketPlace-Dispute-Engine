@@ -4,6 +4,8 @@ import { useAuth } from "../context/AuthContext";
 import api from "../lib/api";
 import DisputeResponse from "../components/DisputeResponse";
 import AdminPanel from "../components/AdminPanel";
+import GeminiAIInsights from "../components/GeminiAIInsights";
+import DisputeChat from "../components/DisputeChat";
 import { motion } from "framer-motion";
 
 interface Dispute {
@@ -16,6 +18,8 @@ interface Dispute {
     order_id: number;
     seller_response?: string;
     is_suspicious?: boolean;
+    ai_analysis?: string;
+    ai_recommendation?: string;
     evidence?: {
         id: number;
         file_url: string;
@@ -209,11 +213,20 @@ export default function DisputeDetails() {
                             {user?.role === "Admin" &&
                                 dispute.status !== "RESOLVED" &&
                                 dispute.status !== "REJECTED" && (
-                                    <AdminPanel
-                                        disputeId={dispute.id}
-                                        onResolved={() => window.location.reload()}
-                                    />
+                                    <>
+                                        <GeminiAIInsights 
+                                            recommendation={dispute.ai_recommendation || ""} 
+                                            analysis={dispute.ai_analysis || ""} 
+                                        />
+                                        <AdminPanel
+                                            disputeId={dispute.id}
+                                            onResolved={() => window.location.reload()}
+                                        />
+                                    </>
                                 )}
+
+                            {/* Secure Resolution Chat */}
+                            <DisputeChat disputeId={dispute.id} currentUserId={user?.id} />
                         </div>
                     </div>
                 </motion.div>

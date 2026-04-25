@@ -5,6 +5,7 @@ import api from "../lib/api";
 import { cn } from "../lib/utils";
 import { motion } from "framer-motion";
 import { GoogleLogin } from '@react-oauth/google';
+import { useToast } from "../context/ToastContext";
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -13,16 +14,15 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [role, setRole] = useState("Buyer");
-    const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
 
         if (password !== confirmPassword) {
-            setError("Passwords do not match");
+            showToast("Passwords do not match", 'error');
             return;
         }
 
@@ -30,9 +30,10 @@ export default function Register() {
 
         try {
             await api.post("/auth/register", { name, email, phone, password, role });
+            showToast("Registration successful! Please sign in.", 'success');
             navigate("/login");
         } catch (err: any) {
-            setError(err.response?.data?.msg || err.message || "Registration failed");
+            showToast(err.response?.data?.msg || err.message || "Registration failed", 'error');
         } finally {
             setIsLoading(false);
         }
@@ -77,12 +78,6 @@ export default function Register() {
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    {error && (
-                        <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/50 text-center font-medium">
-                            {error}
-                        </div>
-                    )}
-
                     <div className="space-y-4">
                         {/* Name */}
                         <div className="relative">
@@ -218,24 +213,21 @@ export default function Register() {
                             width="100%"
                             onSuccess={async (credentialResponse) => {
                                 setIsLoading(true);
-                                setError("");
                                 try {
-                                    // Make sure you login successfully; if new user, google router auto registers them as Buyer
                                     const res = await api.post("/auth/google", { token: credentialResponse.credential, role: role });
-                                    // Use local storage pattern standard in the app (note: in Register component we don't naturally have 'login' from AuthContext, we just navigate, but we can import useAuth. Or we can just let them navigate to login)
-                                    // Actually, it's better to just do the same login behavior here.
                                     localStorage.setItem("token", res.data.access_token);
                                     localStorage.setItem("role", res.data.role);
                                     localStorage.setItem("name", res.data.name);
+                                    showToast("Successfully registered and logged in", 'success');
                                     window.location.href = "/dashboard";
                                 } catch (err: any) {
-                                    setError(err.response?.data?.msg || err.message || "Google Login failed");
+                                    showToast(err.response?.data?.msg || err.message || "Google Login failed", 'error');
                                 } finally {
                                     setIsLoading(false);
                                 }
                             }}
                             onError={() => {
-                                setError("Google Login failed");
+                                showToast("Google Login failed", 'error');
                             }}
                         />
                     </div>

@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
-from models import db, Order, User
+from models import db, Order, User, Product
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from datetime import datetime
+from routes.notifications import create_notification
 
 bp = Blueprint('orders', __name__, url_prefix='/orders')
 
@@ -19,14 +20,29 @@ def get_orders():
     else: # Admin
         orders = Order.query.all()
 
-    return jsonify([{
-        "id": o.id,
-        "product_name": o.product_name,
-        "amount": o.amount,
-        "status": o.status,
-        "created_at": o.created_at,
-        "seller_id": o.seller_id
-    } for o in orders]), 200
+    from models import Review
+    
+    orders_data = []
+    for o in orders:
+        has_reviewed = False
+        if role == 'Buyer':
+            has_reviewed = Review.query.filter_by(order_id=o.id).first() is not None
+            
+        orders_data.append({
+            "id": o.id,
+            "product_name": o.product_name,
+            "quantity": o.quantity,
+            "amount": o.amount,
+            "status": o.status,
+            "tracking_id": o.tracking_id,
+            "carrier_name": o.carrier_name,
+            "created_at": o.created_at,
+            "seller_id": o.seller_id,
+            "product_id": o.product_id,
+            "has_reviewed": has_reviewed
+        })
+
+    return jsonify(orders_data), 200
 
 @bp.route('/', methods=['POST'])
 @jwt_required()
@@ -36,26 +52,143 @@ def create_order():
     role = claims.get('role')
 
     if role != 'Buyer':
-        return jsonify({"msg": "Only buyers can create orders"}), 403
+        return jsonify({"msg": "Only buyers can place orders"}), 403
 
     data = request.get_json()
-    product_name = data.get('product_name')
-    amount = data.get('amount')
-    seller_id = data.get('seller_id')
+    product_id = data.get('product_id')
+    quantity = data.get('quantity', 1)
+    
+    if not product_id:
+        return jsonify({"msg": "Missing product_id"}), 400
+        
+    try:
+        quantity = int(quantity)
+        if quantity <= 0:
+            return jsonify({"msg": "Quantity must be greater than 0"}), 400
+    except ValueError:
+        return jsonify({"msg": "Invalid quantity"}), 400
 
-    if not all([product_name, amount, seller_id]):
-        return jsonify({"msg": "Missing required fields"}), 400
+    product = Product.query.get(product_id)
+    if not product:
+        return jsonify({"msg": "Product not found"}), 404
 
+    if product.stock < quantity:
+        return jsonify({"msg": f"Only {product.stock} units available in stock"}), 400
+
+    # SECURE: Price and Seller are pulled from the DB, NOT from user input!
     order = Order(
         buyer_id=current_user_id,
-        seller_id=seller_id,
-        product_name=product_name,
-        amount=float(amount)
+        seller_id=product.seller_id,
+        product_id=product.id,
+        product_name=product.name,
+        quantity=quantity,
+        amount=product.price * quantity,
+        status='PENDING'
     )
+    
+    # Decrement stock
+    product.stock -= quantity
+    
     db.session.add(order)
     db.session.commit()
+    
+    # Send notification to seller
+    create_notification(
+        user_id=order.seller_id,
+        title="New Order Received!",
+        message=f"You received an order for {quantity}x {product.name} (Order #{order.id}).",
+        type='SUCCESS'
+    )
 
-    return jsonify({"msg": "Order created", "id": order.id}), 201
+    return jsonify({"msg": "Order placed", "id": order.id}), 201
+
+@bp.route('/<int:id>/pay', methods=['POST'])
+@jwt_required()
+def pay_order(id):
+    current_user_id = get_jwt_identity()
+    order = Order.query.get_or_404(id)
+    
+    if order.buyer_id != int(current_user_id):
+        return jsonify({"msg": "Unauthorized"}), 403
+    
+    if order.status != 'PENDING':
+        return jsonify({"msg": f"Cannot pay for order in {order.status} status"}), 400
+    
+    # Simulate payment processing...
+    order.status = 'PAID'
+    db.session.commit()
+    
+    return jsonify({"msg": "Payment successful", "status": order.status}), 200
+
+@bp.route('/<int:id>/status', methods=['PATCH'])
+@jwt_required()
+def update_order_status(id):
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    role = claims.get('role')
+    
+    order = Order.query.get_or_404(id)
+    data = request.get_json()
+    new_status = data.get('status')
+    
+    if not new_status:
+        return jsonify({"msg": "Status required"}), 400
+
+    # Business Logic for Status Transitions
+    if role == 'Seller':
+        if order.seller_id != int(current_user_id):
+            return jsonify({"msg": "Unauthorized"}), 403
+        
+        if new_status == 'SHIPPED':
+            # ENFORCE: Seller cannot mark as SHIPPED without evidence (pre-delivery proof)
+            from models import Evidence
+            evidence = Evidence.query.filter_by(order_id=id, uploaded_by=current_user_id).first()
+            if not evidence:
+                return jsonify({"msg": "You must upload shipping proof (image) before marking as SHIPPED"}), 400
+            
+            if order.status == 'PAID':
+                order.status = 'SHIPPED'
+                # Extract tracking info if provided
+                order.tracking_id = data.get('tracking_id')
+                order.carrier_name = data.get('carrier_name')
+            else:
+                return jsonify({"msg": "Order must be PAID before it can be SHIPPED"}), 400
+        else:
+            return jsonify({"msg": "Invalid status transition for Seller"}), 400
+            
+    elif role == 'Buyer':
+        if order.buyer_id != int(current_user_id):
+            return jsonify({"msg": "Unauthorized"}), 403
+        if new_status == 'DELIVERED' and order.status == 'SHIPPED':
+            order.status = 'DELIVERED'
+        else:
+            return jsonify({"msg": "Invalid status transition for Buyer"}), 400
+    else:
+        # Admin can override if needed
+        if role == 'Admin':
+            order.status = new_status
+        else:
+            return jsonify({"msg": "Unauthorized role for status update"}), 403
+
+    db.session.commit()
+    
+    # Send notification logic
+    if new_status == 'SHIPPED':
+        create_notification(
+            user_id=order.buyer_id,
+            title="Order Shipped!",
+            message=f"Your order #{order.id} for {order.product_name} has been shipped.",
+            type='SUCCESS'
+        )
+    elif new_status == 'DELIVERED':
+        create_notification(
+            user_id=order.seller_id,
+            title="Order Delivered",
+            message=f"Order #{order.id} has been delivered to the buyer successfully.",
+            type='INFO'
+        )
+
+    return jsonify({"msg": f"Order status updated to {order.status}"}), 200
 
 @bp.route('/seed', methods=['POST'])
 @jwt_required()
@@ -73,19 +206,20 @@ def seed_orders():
     if not seller:
         return jsonify({"msg": "No sellers found to link orders to"}), 404
 
-    orders_data = [
-        {"product_name": "Wireless Headphones", "amount": 99.99},
-        {"product_name": "Smartphone Case", "amount": 19.99},
-        {"product_name": "Laptop Stand", "amount": 45.00}
-    ]
+    # Find some products
+    products = Product.query.limit(3).all()
+    if not products:
+        return jsonify({"msg": "No products found to order"}), 404
 
     created_orders = []
-    for data in orders_data:
+    for p in products:
         order = Order(
             buyer_id=current_user_id,
-            seller_id=seller.id,
-            product_name=data['product_name'],
-            amount=data['amount']
+            seller_id=p.seller_id,
+            product_id=p.id,
+            product_name=p.name,
+            amount=p.price,
+            status='DELIVERED'
         )
         db.session.add(order)
         created_orders.append(order)
@@ -143,3 +277,47 @@ def upload_order_evidence(id):
     db.session.commit()
 
     return jsonify({"msg": "Pre-delivery evidence uploaded successfully", "id": evidence.id}), 201
+
+@bp.route('/<int:id>/review', methods=['POST'])
+@jwt_required()
+def create_order_review(id):
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    role = claims.get('role')
+
+    if role != 'Buyer':
+        return jsonify({"msg": "Only buyers can leave reviews"}), 403
+
+    order = Order.query.get_or_404(id)
+    if order.buyer_id != int(current_user_id):
+        return jsonify({"msg": "You can only review your own orders"}), 403
+
+    if order.status != 'DELIVERED':
+        return jsonify({"msg": "You can only review orders that have been DELIVERED"}), 400
+
+    from models import Review
+    existing_review = Review.query.filter_by(order_id=order.id).first()
+    if existing_review:
+        return jsonify({"msg": "You have already reviewed this order"}), 400
+
+    data = request.get_json()
+    rating = data.get('rating')
+    comment = data.get('comment', '')
+
+    if not rating or not (1 <= int(rating) <= 5):
+        return jsonify({"msg": "Please provide a valid rating between 1 and 5"}), 400
+
+    if not order.product_id:
+        return jsonify({"msg": "Cannot review an order without a valid product reference"}), 400
+
+    review = Review(
+        product_id=order.product_id,
+        user_id=current_user_id,
+        order_id=order.id,
+        rating=int(rating),
+        comment=comment
+    )
+    db.session.add(review)
+    db.session.commit()
+
+    return jsonify({"msg": "Review submitted successfully", "id": review.id}), 201

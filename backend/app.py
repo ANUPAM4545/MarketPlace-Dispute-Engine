@@ -21,11 +21,14 @@ def create_app():
 
     with app.app_context():
         # Import routes here to avoid circular imports
-        from routes import auth, disputes, orders, analytics
+        from routes import auth, disputes, orders, analytics, products, notifications, search
         app.register_blueprint(auth.bp)
         app.register_blueprint(disputes.bp)
         app.register_blueprint(orders.bp)
         app.register_blueprint(analytics.bp)
+        app.register_blueprint(products.bp)
+        app.register_blueprint(notifications.bp)
+        app.register_blueprint(search.bp)
         
         db.create_all()
 
@@ -38,7 +41,8 @@ def home():
     return "Backend is running"
 
 if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 8080))
     app.run(debug=os.environ.get('FLASK_DEBUG', 'False').lower() == 'true', 
             host='0.0.0.0',
-            port=int(os.environ.get('PORT', 5000)))
+            port=port)
             

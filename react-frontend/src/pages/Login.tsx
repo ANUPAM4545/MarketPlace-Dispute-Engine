@@ -6,24 +6,25 @@ import api from "../lib/api";
 import { cn } from "../lib/utils";
 import { motion } from "framer-motion";
 import { GoogleLogin } from '@react-oauth/google';
+import { useToast } from '../context/ToastContext';
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
+    const { showToast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
         setIsLoading(true);
 
         try {
             const res = await api.post("/auth/login", { email, password });
+            showToast("Successfully logged in", 'success');
             login(res.data.access_token, res.data.role, res.data.name);
         } catch (err: any) {
-            setError(err.response?.data?.msg || err.message || "Login failed");
+            showToast(err.response?.data?.msg || err.message || "Login failed", 'error');
         } finally {
             setIsLoading(false);
         }
@@ -66,12 +67,6 @@ export default function Login() {
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    {error && (
-                        <div className="rounded-lg bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-600 dark:text-red-400 border border-red-100 dark:border-red-900/50 text-center font-medium">
-                            {error}
-                        </div>
-                    )}
-
                     <div className="space-y-4">
                         <div className="relative">
                             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -133,18 +128,18 @@ export default function Login() {
                             width="100%"
                             onSuccess={async (credentialResponse) => {
                                 setIsLoading(true);
-                                setError("");
                                 try {
                                     const res = await api.post("/auth/google", { token: credentialResponse.credential });
+                                    showToast("Successfully logged in", 'success');
                                     login(res.data.access_token, res.data.role, res.data.name);
                                 } catch (err: any) {
-                                    setError(err.response?.data?.msg || err.message || "Google Login failed");
+                                    showToast(err.response?.data?.msg || err.message || "Google Login failed", 'error');
                                 } finally {
                                     setIsLoading(false);
                                 }
                             }}
                             onError={() => {
-                                setError("Google Login failed");
+                                showToast("Google Login failed", 'error');
                             }}
                         />
                     </div>

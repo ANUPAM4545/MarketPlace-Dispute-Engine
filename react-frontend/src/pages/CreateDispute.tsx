@@ -8,7 +8,7 @@ export default function CreateDispute() {
     const navigate = useNavigate();
     const location = useLocation();
     const [orderId, setOrderId] = useState(location.state?.orderId?.toString() || "");
-    const [category, setCategory] = useState("Refund");
+    const [category, setCategory] = useState(location.state?.preselectedCategory || "Refund");
     const [description, setDescription] = useState("");
     const [file, setFile] = useState<File | null>(null);
     const [error, setError] = useState("");
@@ -100,6 +100,9 @@ export default function CreateDispute() {
                                 >
                                     <option>Refund</option>
                                     <option>Wrong Item</option>
+                                    <option>Item Not Received</option>
+                                    <option>Damaged in Transit</option>
+                                    <option>Package Tampered</option>
                                     <option>Late Delivery</option>
                                     <option>Fraud</option>
                                     <option>Other</option>

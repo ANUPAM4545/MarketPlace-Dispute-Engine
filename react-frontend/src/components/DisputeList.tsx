@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../lib/api";
 import { motion } from "framer-motion";
+import { ShieldCheck } from "lucide-react";
 
 interface Dispute {
     id: number;
@@ -62,9 +63,11 @@ export default function DisputeList() {
                             hidden: { opacity: 0, x: -20 },
                             visible: { opacity: 1, x: 0 }
                         }}
-                        className="px-4 py-8 text-center text-gray-500 dark:text-gray-400 font-light"
+                        className="px-4 py-16 flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 font-light"
                     >
-                        No disputes found.
+                        <ShieldCheck className="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" />
+                        <p className="text-lg text-gray-900 dark:text-gray-200 mb-1">No active disputes</p>
+                        <p className="text-sm">Everything is running smoothly.</p>
                     </motion.li>
                 ) : (
                     disputes.map((dispute) => (

@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify
 from models import db, Dispute, Evidence
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from utils.email import send_email
+from utils.ai import analyze_dispute_with_ai
+from routes.notifications import create_notification
 from models import User
 
 bp = Blueprint('disputes', __name__, url_prefix='/disputes')
@@ -39,6 +41,13 @@ def create_dispute():
         return jsonify({"msg": "Order not found"}), 404
     if order.buyer_id != int(current_user_id):
         return jsonify({"msg": "You can only dispute your own orders"}), 403
+
+    # Business Logic Rules for Disputes
+    if order.status not in ['DELIVERED', 'SHIPPED']:
+        return jsonify({"msg": "Orders can only be disputed if they are SHIPPED or DELIVERED"}), 400
+        
+    if order.status == 'SHIPPED' and category != 'Item Not Received':
+        return jsonify({"msg": "For items still in transit, the only valid dispute category is 'Item Not Received'"}), 400
 
     new_dispute = Dispute(
         order_id=order_id,
@@ -97,6 +106,30 @@ def create_dispute():
                 new_dispute.is_suspicious = True
 
             db.session.add(new_dispute)
+
+    # TRIGGER AI ANALYSIS
+    try:
+        ai_result = analyze_dispute_with_ai({
+            "category": category,
+            "description": description,
+            "order_status": order.status,
+            "is_suspicious": new_dispute.is_suspicious,
+            "has_buyer_evidence": file is not None
+        })
+        new_dispute.ai_analysis = ai_result.get('analysis')
+        new_dispute.ai_recommendation = ai_result.get('recommendation')
+        
+        # SEND NOTIFICATION TO ADMIN
+        admins = User.query.filter_by(role='Admin').all()
+        for admin in admins:
+            create_notification(
+                user_id=admin.id,
+                title="AI Audit Complete",
+                message=f"Gemini AI has analyzed Dispute #{new_dispute.id}. Recommendation: {new_dispute.ai_recommendation}",
+                type='SUCCESS'
+            )
+    except Exception as e:
+        print(f"AI trigger failed: {e}")
 
     db.session.commit()
     
@@ -188,9 +221,10 @@ def get_dispute(id):
         "description": dispute.description,
         "seller_response": dispute.seller_response,
         "is_suspicious": dispute.is_suspicious,
-        "created_at": dispute.created_at,
-        "buyer_id": dispute.buyer_id,
-        "order_id": dispute.order_id,
+        "is_logistics_fault": dispute.is_logistics_fault,
+        "insurance_claim_filed": dispute.insurance_claim_filed,
+        "ai_analysis": dispute.ai_analysis,
+        "ai_recommendation": dispute.ai_recommendation,
         "evidence": evidence_data
     }), 200
 
@@ -250,6 +284,23 @@ def respond_dispute(id):
         db.session.add(evidence)
 
     db.session.commit()
+    
+    # RE-TRIGGER AI ANALYSIS with Seller Response
+    try:
+        ai_result = analyze_dispute_with_ai({
+            "category": dispute.category,
+            "description": dispute.description,
+            "seller_response": dispute.seller_response,
+            "order_status": order.status,
+            "is_suspicious": dispute.is_suspicious,
+            "has_seller_evidence": True,
+            "has_buyer_evidence": True
+        })
+        dispute.ai_analysis = ai_result.get('analysis')
+        dispute.ai_recommendation = ai_result.get('recommendation')
+        db.session.commit()
+    except Exception:
+        pass
     
     return jsonify({"msg": "Response submitted", "status": dispute.status}), 200
 
@@ -331,6 +382,29 @@ def update_dispute_status(id):
     
     return jsonify({"msg": "Dispute status updated", "status": dispute.status}), 200
 
+@bp.route('/<int:id>/logistics-fault', methods=['PATCH'])
+@jwt_required()
+def toggle_logistics_fault(id):
+    claims = get_jwt()
+    if claims.get('role') != 'Admin':
+        return jsonify({"msg": "Only admins can mark logistics faults"}), 403
+        
+    dispute = Dispute.query.get_or_404(id)
+    data = request.get_json()
+    
+    if 'is_logistics_fault' in data:
+        dispute.is_logistics_fault = data['is_logistics_fault']
+        # If logistics fault is confirmed, automatically file a simulated insurance claim
+        if dispute.is_logistics_fault:
+            dispute.insurance_claim_filed = True
+            
+    db.session.commit()
+    return jsonify({
+        "msg": "Logistics liability updated", 
+        "is_logistics_fault": dispute.is_logistics_fault,
+        "insurance_claim_filed": dispute.insurance_claim_filed
+    }), 200
+
 @bp.route('/<int:id>/messages', methods=['GET'])
 @jwt_required()
 def get_dispute_messages(id):
@@ -389,6 +463,26 @@ def post_dispute_message(id):
     db.session.add(new_message)
     db.session.commit()
     
+    # Send notifications to other parties
+    from models import User
+    from routes.notifications import create_notification
+    admins = User.query.filter_by(role='Admin').all()
+    
+    sender_name = new_message.sender.name
+    notification_msg = f"New message from {sender_name} in Dispute #{id}"
+    
+    if role == 'Buyer':
+        create_notification(order.seller_id, "New Dispute Message", notification_msg, "INFO")
+        for admin in admins:
+            create_notification(admin.id, "New Dispute Message", notification_msg, "INFO")
+    elif role == 'Seller':
+        create_notification(dispute.buyer_id, "New Dispute Message", notification_msg, "INFO")
+        for admin in admins:
+            create_notification(admin.id, "New Dispute Message", notification_msg, "INFO")
+    elif role == 'Admin':
+        create_notification(dispute.buyer_id, "New Dispute Message from Admin", notification_msg, "INFO")
+        create_notification(order.seller_id, "New Dispute Message from Admin", notification_msg, "INFO")
+
     return jsonify({
         "msg": "Message sent",
         "message": {
