@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import api from "../lib/api";
 import { Send, User as UserIcon, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
-import { useToast } from "../context/ToastContext";
+import { toast } from "react-hot-toast";
 
 interface Message {
     id: number;
@@ -23,7 +23,6 @@ export default function DisputeChat({ disputeId, currentUserId }: DisputeChatPro
     const [newMessage, setNewMessage] = useState("");
     const [loading, setLoading] = useState(true);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const { showToast } = useToast();
 
     const fetchMessages = async () => {
         try {
@@ -55,7 +54,7 @@ export default function DisputeChat({ disputeId, currentUserId }: DisputeChatPro
             setNewMessage("");
             fetchMessages(); // Immediately fetch to update UI
         } catch (err: any) {
-            showToast(err.response?.data?.msg || "Failed to send message", 'error');
+            toast.error(err.response?.data?.msg || "Failed to send message");
         }
     };
 

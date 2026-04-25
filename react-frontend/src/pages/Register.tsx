@@ -5,7 +5,7 @@ import api from "../lib/api";
 import { cn } from "../lib/utils";
 import { motion } from "framer-motion";
 import { GoogleLogin } from '@react-oauth/google';
-import { useToast } from "../context/ToastContext";
+import { toast } from "react-hot-toast";
 
 export default function Register() {
     const [name, setName] = useState("");
@@ -16,13 +16,12 @@ export default function Register() {
     const [role, setRole] = useState("Buyer");
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const { showToast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            showToast("Passwords do not match", 'error');
+            toast.error("Passwords do not match");
             return;
         }
 
@@ -30,10 +29,10 @@ export default function Register() {
 
         try {
             await api.post("/auth/register", { name, email, phone, password, role });
-            showToast("Registration successful! Please sign in.", 'success');
+            toast.success("Registration successful! Please sign in.");
             navigate("/login");
         } catch (err: any) {
-            showToast(err.response?.data?.msg || err.message || "Registration failed", 'error');
+            toast.error(err.response?.data?.msg || err.message || "Registration failed");
         } finally {
             setIsLoading(false);
         }
@@ -218,16 +217,16 @@ export default function Register() {
                                     localStorage.setItem("token", res.data.access_token);
                                     localStorage.setItem("role", res.data.role);
                                     localStorage.setItem("name", res.data.name);
-                                    showToast("Successfully registered and logged in", 'success');
+                                    toast.success("Successfully registered and logged in");
                                     window.location.href = "/dashboard";
                                 } catch (err: any) {
-                                    showToast(err.response?.data?.msg || err.message || "Google Login failed", 'error');
+                                    toast.error(err.response?.data?.msg || err.message || "Google Login failed");
                                 } finally {
                                     setIsLoading(false);
                                 }
                             }}
                             onError={() => {
-                                showToast("Google Login failed", 'error');
+                                toast.error("Google Login failed");
                             }}
                         />
                     </div>

@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Plus, Trash2, Package, Info, DollarSign, Database, Edit2, Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../lib/api";
-import { useToast } from "../context/ToastContext";
+import { toast } from "react-hot-toast";
 
 interface Product {
     id: number;
@@ -24,7 +24,6 @@ export default function SellerInventory() {
     const [submitting, setSubmitting] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const searchQuery = searchParams.get("search") || "";
-    const { showToast } = useToast();
 
     const fetchMyProducts = async () => {
         try {
@@ -64,9 +63,9 @@ export default function SellerInventory() {
             }
             handleCancelForm();
             fetchMyProducts();
-            showToast(editingId ? "Product updated successfully" : "Product listed successfully", 'success');
+            toast.success(editingId ? "Product updated successfully" : "Product listed successfully");
         } catch (err: any) {
-            showToast(err.response?.data?.msg || "Failed to list/update product", 'error');
+            toast.error(err.response?.data?.msg || "Failed to list/update product");
         } finally {
             setSubmitting(false);
         }
@@ -97,9 +96,9 @@ export default function SellerInventory() {
         try {
             await api.delete(`/products/${id}`);
             fetchMyProducts();
-            showToast("Product deleted", 'success');
+            toast.success("Product deleted");
         } catch (err: any) {
-            showToast(err.response?.data?.msg || "Failed to delete", 'error');
+            toast.error(err.response?.data?.msg || "Failed to delete");
         }
     };
 

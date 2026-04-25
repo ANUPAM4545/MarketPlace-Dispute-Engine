@@ -1,7 +1,7 @@
 import { useState } from "react";
-
 import { Loader2, Truck, ShieldCheck } from "lucide-react";
 import api from "../lib/api";
+import { toast } from "react-hot-toast";
 
 interface AdminPanelProps {
     disputeId: number;
@@ -23,9 +23,12 @@ export default function AdminPanel({ disputeId, onResolved }: AdminPanelProps) {
                 resolution,
                 is_logistics_fault: isLogisticsFault 
             });
+            toast.success(`Dispute ${resolution.toLowerCase()} successfully`);
             onResolved();
         } catch (err: any) {
-            setError(err.response?.data?.msg || err.message || "Failed to resolve dispute");
+            const msg = err.response?.data?.msg || err.message || "Failed to resolve dispute";
+            setError(msg);
+            toast.error(msg);
         } finally {
             setIsSubmitting(false);
         }
@@ -39,8 +42,9 @@ export default function AdminPanel({ disputeId, onResolved }: AdminPanelProps) {
             });
             setIsLogisticsFault(res.data.is_logistics_fault);
             setInsuranceClaimed(res.data.insurance_claim_filed);
+            toast.success(res.data.is_logistics_fault ? "Logistics liability active" : "Logistics liability removed");
         } catch (err: any) {
-            setError("Failed to update logistics liability");
+            toast.error("Failed to update logistics liability");
         } finally {
             setIsSubmitting(false);
         }

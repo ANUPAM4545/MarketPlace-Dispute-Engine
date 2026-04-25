@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { useToast } from "../context/ToastContext";
+import { toast } from "react-hot-toast";
 import api from "../lib/api";
 import { Package, CreditCard, Truck, CheckCircle, AlertCircle, Search, X, ShoppingBag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,7 +27,6 @@ export default function OrdersList() {
     const [searchParams, setSearchParams] = useSearchParams();
     const searchQuery = searchParams.get("search") || "";
     const navigate = useNavigate();
-    const { showToast } = useToast();
 
     const [reviewModalOpen, setReviewModalOpen] = useState(false);
     const [reviewingOrderId, setReviewingOrderId] = useState<number | null>(null);
@@ -56,7 +55,7 @@ export default function OrdersList() {
             await api.patch(`/orders/${orderId}/status`, { status });
             await fetchOrders();
         } catch (err: any) {
-            showToast(err.response?.data?.msg || "Failed to update status", 'error');
+            toast.error(err.response?.data?.msg || "Failed to update status");
         } finally {
             setActionLoading(null);
         }
@@ -68,7 +67,7 @@ export default function OrdersList() {
             await api.post(`/orders/${orderId}/pay`);
             await fetchOrders();
         } catch (err: any) {
-            showToast(err.response?.data?.msg || "Payment failed", 'error');
+            toast.error(err.response?.data?.msg || "Payment failed");
         } finally {
             setActionLoading(null);
         }
@@ -106,10 +105,10 @@ export default function OrdersList() {
                     tracking_id: tracking
                 });
                 
-                showToast("Order shipped! Tracking info and proof uploaded.", 'success');
+                toast.success("Order shipped! Tracking info and proof uploaded.");
                 await fetchOrders();
             } catch (err: any) {
-                showToast(err.response?.data?.msg || "Failed to process shipping", 'error');
+                toast.error(err.response?.data?.msg || "Failed to process shipping");
             } finally {
                 setActionLoading(null);
             }
@@ -125,14 +124,14 @@ export default function OrdersList() {
                 rating: reviewRating,
                 comment: reviewComment
             });
-            showToast("Review submitted successfully!", 'success');
+            toast.success("Review submitted successfully!");
             setReviewModalOpen(false);
             setReviewingOrderId(null);
             setReviewComment("");
             setReviewRating(5);
             await fetchOrders();
         } catch (err: any) {
-            showToast(err.response?.data?.msg || "Failed to submit review", 'error');
+            toast.error(err.response?.data?.msg || "Failed to submit review");
         } finally {
             setActionLoading(null);
         }

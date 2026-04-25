@@ -6,25 +6,23 @@ import api from "../lib/api";
 import { cn } from "../lib/utils";
 import { motion } from "framer-motion";
 import { GoogleLogin } from '@react-oauth/google';
-import { useToast } from '../context/ToastContext';
+import { toast } from "react-hot-toast";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
-    const { showToast } = useToast();
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
         try {
             const res = await api.post("/auth/login", { email, password });
-            showToast("Successfully logged in", 'success');
+            toast.success("Successfully logged in");
             login(res.data.access_token, res.data.role, res.data.name);
         } catch (err: any) {
-            showToast(err.response?.data?.msg || err.message || "Login failed", 'error');
+            toast.error(err.response?.data?.msg || err.message || "Login failed");
         } finally {
             setIsLoading(false);
         }
@@ -130,16 +128,16 @@ export default function Login() {
                                 setIsLoading(true);
                                 try {
                                     const res = await api.post("/auth/google", { token: credentialResponse.credential });
-                                    showToast("Successfully logged in", 'success');
+                                    toast.success("Successfully logged in");
                                     login(res.data.access_token, res.data.role, res.data.name);
                                 } catch (err: any) {
-                                    showToast(err.response?.data?.msg || err.message || "Google Login failed", 'error');
+                                    toast.error(err.response?.data?.msg || err.message || "Google Login failed");
                                 } finally {
                                     setIsLoading(false);
                                 }
                             }}
                             onError={() => {
-                                showToast("Google Login failed", 'error');
+                                toast.error("Google Login failed");
                             }}
                         />
                     </div>

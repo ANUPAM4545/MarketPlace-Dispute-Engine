@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import api from "../lib/api";
 import { ShoppingCart, Tag, User, Box, X, Info, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useToast } from "../context/ToastContext";
+import { toast } from "react-hot-toast";
 
 interface Product {
     id: number;
@@ -39,7 +39,6 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
     const [reviewsLoading, setReviewsLoading] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
     const searchQuery = searchParams.get("search") || "";
-    const { showToast } = useToast();
 
     const handleProductSelect = async (product: Product) => {
         setSelectedProduct(product);
@@ -76,10 +75,10 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
         const qty = quantities[productId] || 1;
         try {
             await api.post("/orders/", { product_id: productId, quantity: qty });
-            showToast("Order placed successfully!", 'success');
+            toast.success("Order placed successfully!");
             if (onOrderPlaced) onOrderPlaced();
         } catch (err: any) {
-            showToast(err.response?.data?.msg || "Failed to place order", 'error');
+            toast.error(err.response?.data?.msg || "Failed to place order");
         } finally {
             setBuyingId(null);
             setSelectedProduct(null); // Close modal on successful buy
