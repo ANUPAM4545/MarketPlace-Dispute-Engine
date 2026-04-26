@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, current_app
 from utils.email import send_email
 
-bp = Blueprint('support', __name__, url_prefix='/api/support')
+bp = Blueprint('support', __name__, url_prefix='/support')
 
 @bp.route('/contact', methods=['POST'])
 def contact():
