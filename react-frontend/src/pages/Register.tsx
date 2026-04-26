@@ -259,7 +259,7 @@ export default function Register() {
                     </motion.div>
 
                     <motion.div variants={itemVariants} className="flex justify-center mt-4">
-                        <div className="w-full p-0.5 bg-gradient-to-br from-gray-200 to-gray-100 dark:from-white/10 dark:to-white/5 rounded-xl">
+                        <div className="w-fit mx-auto p-0.5 bg-gradient-to-br from-gray-200 to-gray-100 dark:from-white/10 dark:to-white/5 rounded-xl overflow-hidden">
                             <GoogleLogin
                                 theme="filled_black"
                                 width="100%"
