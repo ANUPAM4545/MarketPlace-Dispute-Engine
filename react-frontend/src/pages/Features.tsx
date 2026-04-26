@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { GripHorizontal, Search, Palette, Bell, Sparkles, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
-import Navbar from "../components/Navbar";
 
 export default function Features() {
     
@@ -52,10 +51,8 @@ export default function Features() {
 
     return (
         <div className="bg-white dark:bg-appbg transition-colors duration-300 min-h-screen font-sans selection:bg-gold-500 selection:text-black">
-            <Navbar />
-
             {/* Hero Section */}
-            <div className="relative isolate pt-32 pb-20 sm:pt-40 sm:pb-24 overflow-hidden border-b border-gray-100 dark:border-appborder/50">
+            <div className="relative isolate pt-12 pb-20 sm:pt-20 sm:pb-24 overflow-hidden border-b border-gray-100 dark:border-appborder/50">
                 {/* Ambient Animated Orbs */}
                 <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
                     <motion.div 

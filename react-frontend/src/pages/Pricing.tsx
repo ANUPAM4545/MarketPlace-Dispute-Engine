@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Check, Zap, Sparkles, ArrowRight, Rocket, Crown } from "lucide-react";
 import { motion } from "framer-motion";
-import Navbar from "../components/Navbar";
 
 export default function Pricing() {
     const [billingCycle, setBillingCycle] = useState<"monthly" | "annually">("monthly");
@@ -66,11 +65,8 @@ export default function Pricing() {
         }
     ];
 
-    return (
         <div className="bg-white dark:bg-appbg min-h-screen font-sans selection:bg-gold-500 selection:text-black transition-colors duration-500">
-            <Navbar />
-
-            <div className="relative isolate pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden">
+            <div className="relative isolate pt-12 pb-24 lg:pt-28 lg:pb-32 overflow-hidden">
                 {/* Ambient Background */}
                 <div className="absolute inset-0 -z-10 overflow-hidden">
                     <motion.div 

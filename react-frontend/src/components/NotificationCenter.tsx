@@ -29,7 +29,7 @@ export default function NotificationCenter() {
 
     useEffect(() => {
         fetchNotifications();
-        const interval = setInterval(fetchNotifications, 30000); // Poll every 30s
+        const interval = setInterval(fetchNotifications, 10000); // Poll every 10s
         return () => clearInterval(interval);
     }, []);
 

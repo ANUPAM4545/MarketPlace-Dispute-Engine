@@ -14,20 +14,21 @@ import Profile from "./pages/Profile";
 
 import Pricing from "./pages/Pricing";
 import Contact from "./pages/Contact";
+import MainLayout from "./components/MainLayout";
 
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/features" element={<Features />} />
-      <Route path="/pricing" element={<Pricing />} />
-      <Route path="/contact" element={<Contact />} />
+      <Route path="/" element={<MainLayout><Home /></MainLayout>} />
+      <Route path="/features" element={<MainLayout><Features /></MainLayout>} />
+      <Route path="/pricing" element={<MainLayout><Pricing /></MainLayout>} />
+      <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/create-dispute" element={<CreateDispute />} />
-      <Route path="/disputes/:id" element={<DisputeDetails />} />
+      <Route path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />
+      <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
+      <Route path="/create-dispute" element={<MainLayout><CreateDispute /></MainLayout>} />
+      <Route path="/disputes/:id" element={<MainLayout><DisputeDetails /></MainLayout>} />
       {/* Catch-all: redirect to home */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

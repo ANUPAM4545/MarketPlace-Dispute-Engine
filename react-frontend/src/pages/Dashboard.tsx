@@ -7,7 +7,6 @@ import AdminAnalytics from "../components/AdminAnalytics";
 import AdminKanbanBoard from "../components/AdminKanbanBoard";
 import ProductCatalog from "../components/ProductCatalog";
 import SellerInventory from "../components/SellerInventory";
-import Navbar from "../components/Navbar";
 import DashboardStats from "../components/DashboardStats";
 import { motion } from "framer-motion";
 import { ShoppingBag, Box, History, Clock as ClockIcon, Calendar } from "lucide-react";
@@ -64,9 +63,7 @@ export default function Dashboard() {
                 <div className="absolute bottom-[-10%] left-[20%] w-[50%] h-[50%] bg-gray-400/5 dark:bg-gray-500/5 rounded-full blur-[150px]"></div>
             </div>
             
-            <div className="relative z-10 pt-24">
-                <Navbar />
-            </div>
+
 
             <motion.main 
                 initial="hidden"

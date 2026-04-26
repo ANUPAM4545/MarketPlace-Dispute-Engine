@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ShieldCheck, ArrowRight, Sparkles, Search, Bell, Box, Activity } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Navbar from "../components/Navbar";
 
 export default function Home() {
     const [mockupIndex, setMockupIndex] = useState(0);
@@ -41,10 +40,8 @@ export default function Home() {
 
     return (
         <div className="bg-white dark:bg-appbg transition-colors duration-300 min-h-screen text-gray-900 dark:text-gray-200 font-sans selection:bg-gold-500 selection:text-black">
-            <Navbar />
-
             {/* Hero Section */}
-            <div className="relative isolate pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+            <div className="relative isolate pt-12 pb-20 lg:pt-28 lg:pb-32 overflow-hidden">
                 {/* Ambient Animated Orbs */}
                 <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
                     <motion.div 
