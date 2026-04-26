@@ -65,6 +65,7 @@ export default function Pricing() {
         }
     ];
 
+    return (
         <div className="bg-white dark:bg-appbg min-h-screen font-sans selection:bg-gold-500 selection:text-black transition-colors duration-500">
             <div className="relative isolate pt-12 pb-24 lg:pt-28 lg:pb-32 overflow-hidden">
                 {/* Ambient Background */}
