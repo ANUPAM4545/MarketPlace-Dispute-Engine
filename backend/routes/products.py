@@ -44,11 +44,22 @@ def create_product():
     if 'image' in request.files:
         file = request.files['image']
         if file.filename != '':
-            from utils.s3 import upload_file_to_s3
-            try:
-                image_url = upload_file_to_s3(file, file.filename)
-            except Exception as e:
-                return jsonify({"msg": f"Failed to upload image: {str(e)}"}), 500
+            from utils.s3 import upload_to_s3
+            # 1. Try S3
+            image_url = upload_to_s3(file)
+            
+            if not image_url:
+                # 2. Fallback to Local
+                import os
+                from werkzeug.utils import secure_filename
+                from flask import current_app
+                filename = secure_filename(file.filename)
+                upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
+                if not os.path.exists(upload_folder):
+                    os.makedirs(upload_folder)
+                file_path = os.path.join(upload_folder, filename)
+                file.save(file_path)
+                image_url = f"/static/uploads/{filename}"
 
     # Handle both JSON and form data
     if request.is_json:
@@ -110,11 +121,24 @@ def update_product(id):
     if 'image' in request.files:
         file = request.files['image']
         if file.filename != '':
-            from utils.s3 import upload_file_to_s3
-            try:
-                product.image_url = upload_file_to_s3(file, file.filename)
-            except Exception as e:
-                return jsonify({"msg": f"Failed to upload image: {str(e)}"}), 500
+            from utils.s3 import upload_to_s3
+            # 1. Try S3
+            new_url = upload_to_s3(file)
+            
+            if not new_url:
+                # 2. Fallback to Local
+                import os
+                from werkzeug.utils import secure_filename
+                from flask import current_app
+                filename = secure_filename(file.filename)
+                upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
+                if not os.path.exists(upload_folder):
+                    os.makedirs(upload_folder)
+                file_path = os.path.join(upload_folder, filename)
+                file.save(file_path)
+                new_url = f"/static/uploads/{filename}"
+            
+            product.image_url = new_url
 
     db.session.commit()
     return jsonify({"msg": "Product updated", "id": product.id}), 200
