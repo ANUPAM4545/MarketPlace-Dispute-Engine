@@ -136,7 +136,7 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
                     <div className="h-48 w-full bg-gray-100 dark:bg-appbg relative overflow-hidden group cursor-pointer" onClick={() => handleProductSelect(product)}>
                         {product.image_url ? (
                             <img 
-                                src={`${api.defaults.baseURL?.replace('/api', '')}${product.image_url}`} 
+                                src={product.image_url.startsWith('http') ? product.image_url : `${api.defaults.baseURL?.replace('/api', '')}${product.image_url}`} 
                                 alt={product.name}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                             />
@@ -269,7 +269,7 @@ export default function ProductCatalog({ onOrderPlaced }: ProductCatalogProps) {
                             <div className="w-full md:w-1/2 h-64 md:h-[600px] bg-gray-100 dark:bg-appcard relative flex-shrink-0">
                                 {selectedProduct.image_url ? (
                                     <img 
-                                        src={`${api.defaults.baseURL?.replace('/api', '')}${selectedProduct.image_url}`} 
+                                        src={selectedProduct.image_url.startsWith('http') ? selectedProduct.image_url : `${api.defaults.baseURL?.replace('/api', '')}${selectedProduct.image_url}`} 
                                         alt={selectedProduct.name}
                                         className="w-full h-full object-cover"
                                     />
