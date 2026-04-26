@@ -24,7 +24,6 @@ def contact():
             template="contact_form",
             name=name,
             email=email,
-            subject=subject,
             message=message
         )
         return jsonify({"msg": "Message sent successfully"}), 200
