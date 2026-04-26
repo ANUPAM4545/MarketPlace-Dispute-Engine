@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Mail, Phone, MapPin, Send, MessageSquare, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
+import api from "../lib/api";
 
 export default function Contact() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,11 +16,15 @@ export default function Contact() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        toast.success("Message sent! Our team will contact you shortly.");
-        setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });
-        setIsSubmitting(false);
+        try {
+            await api.post("/support/contact", formData);
+            toast.success("Message sent! Our team will contact you shortly.");
+            setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });
+        } catch (err: any) {
+            toast.error(err.response?.data?.msg || "Failed to send message. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -67,7 +72,7 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Email Us</p>
-                                        <p className="text-lg text-gray-900 dark:text-white font-medium">hello@disputeengine.ai</p>
+                                        <a href="mailto:anupamsingh8095@gmail.com" className="text-lg text-gray-900 dark:text-white font-medium hover:text-gold-500 transition-colors">anupamsingh8095@gmail.com</a>
                                     </div>
                                 </div>
                                 
@@ -77,7 +82,7 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Call Support</p>
-                                        <p className="text-lg text-gray-900 dark:text-white font-medium">+1 (888) DISPUTE-AI</p>
+                                        <a href="tel:+917307679920" className="text-lg text-gray-900 dark:text-white font-medium hover:text-gold-500 transition-colors">+91 7307679920</a>
                                     </div>
                                 </div>
 
@@ -88,8 +93,8 @@ export default function Contact() {
                                     <div>
                                         <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Headquarters</p>
                                         <p className="text-lg text-gray-900 dark:text-white font-medium leading-relaxed">
-                                            One Infinite Loop, <br />
-                                            Cupertino, CA 95014
+                                            Bengaluru, <br />
+                                            Karnataka, India
                                         </p>
                                     </div>
                                 </div>

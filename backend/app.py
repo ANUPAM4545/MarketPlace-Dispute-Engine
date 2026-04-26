@@ -25,7 +25,7 @@ def create_app():
 
     with app.app_context():
         # Import routes here to avoid circular imports
-        from routes import auth, disputes, orders, analytics, products, notifications, search
+        from routes import auth, disputes, orders, analytics, products, notifications, search, support
         app.register_blueprint(auth.bp)
         app.register_blueprint(disputes.bp)
         app.register_blueprint(orders.bp)
@@ -33,6 +33,7 @@ def create_app():
         app.register_blueprint(products.bp)
         app.register_blueprint(notifications.bp)
         app.register_blueprint(search.bp)
+        app.register_blueprint(support.bp)
         
         try:
             db.create_all()
