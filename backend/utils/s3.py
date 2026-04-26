@@ -29,6 +29,7 @@ def upload_to_s3(file_obj, bucket_name=None):
         # Add a UUID to prevent filename collisions
         unique_filename = f"{uuid.uuid4().hex}_{original_filename}"
         
+        file_obj.seek(0)
         s3.upload_fileobj(
             file_obj,
             bucket,
