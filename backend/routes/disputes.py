@@ -4,6 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from utils.email import send_email
 from utils.ai import analyze_dispute_with_ai
 from routes.notifications import create_notification
+from utils.s3 import upload_to_s3
 from models import User
 
 bp = Blueprint('disputes', __name__, url_prefix='/disputes')
@@ -58,34 +59,37 @@ def create_dispute():
     db.session.add(new_dispute)
     db.session.flush() # Get ID
     
-    # Handle File Upload
-    file = request.files.get('evidence')
-    if file and file.filename != '':
-        filename = secure_filename(file.filename)
-        upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
-        if not os.path.exists(upload_folder):
-            os.makedirs(upload_folder)
+        # Handle File Upload
+        file = request.files.get('evidence')
+        if file and file.filename != '':
+            # 1. Try S3 Upload First
+            file_url = upload_to_s3(file)
             
-        file_path = os.path.join(upload_folder, filename)
-        file.save(file_path)
-        
-        # Extract metadata
-        file_size = os.path.getsize(file_path)
-        metadata = {
-            "file_size": file_size,
-            "filename": filename
-        }
+            if file_url:
+                metadata = {"storage": "S3", "filename": file.filename}
+            else:
+                # 2. Fallback to Local Storage
+                filename = secure_filename(file.filename)
+                upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
+                if not os.path.exists(upload_folder):
+                    os.makedirs(upload_folder)
+                    
+                file_path = os.path.join(upload_folder, filename)
+                file.save(file_path)
+                file_size = os.path.getsize(file_path)
+                file_url = f"/static/uploads/{filename}"
+                metadata = {"storage": "LOCAL", "file_size": file_size, "filename": filename}
 
-        # Save Evidence record
-        evidence = Evidence(
-            dispute_id=new_dispute.id,
-            order_id=order_id,
-            image_type='BUYER',
-            metadata_info=json.dumps(metadata),
-            file_url=f"/static/uploads/{filename}",
-            uploaded_by=current_user_id
-        )
-        db.session.add(evidence)
+            # Save Evidence record
+            evidence = Evidence(
+                dispute_id=new_dispute.id,
+                order_id=order_id,
+                image_type='BUYER',
+                metadata_info=json.dumps(metadata),
+                file_url=file_url,
+                uploaded_by=current_user_id
+            )
+            db.session.add(evidence)
 
         # FRAUD DETECTION: Check if Seller uploaded pre-delivery evidence
         seller_evidence = Evidence.query.filter_by(order_id=order_id, image_type='SELLER').first()
@@ -257,31 +261,36 @@ def respond_dispute(id):
     if 'response' in data:
         dispute.seller_response = data['response']
 
-    # Handle Counter-Evidence File Upload
-    file = request.files.get('evidence')
-    if file and file.filename != '':
-        filename = secure_filename(file.filename)
-        upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
-        if not os.path.exists(upload_folder):
-            os.makedirs(upload_folder)
+        # Handle Counter-Evidence File Upload
+        file = request.files.get('evidence')
+        if file and file.filename != '':
+            # 1. Try S3 Upload First
+            file_url = upload_to_s3(file)
             
-        file_path = os.path.join(upload_folder, filename)
-        file.save(file_path)
-        
-        # Save Evidence record
-        # Seller responding to a dispute
-        file_size = os.path.getsize(file_path)
-        metadata = {"file_size": file_size, "filename": filename}
+            if file_url:
+                metadata = {"storage": "S3", "filename": file.filename}
+            else:
+                # 2. Fallback to Local Storage
+                filename = secure_filename(file.filename)
+                upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
+                if not os.path.exists(upload_folder):
+                    os.makedirs(upload_folder)
+                    
+                file_path = os.path.join(upload_folder, filename)
+                file.save(file_path)
+                file_size = os.path.getsize(file_path)
+                file_url = f"/static/uploads/{filename}"
+                metadata = {"storage": "LOCAL", "file_size": file_size, "filename": filename}
 
-        evidence = Evidence(
-            dispute_id=dispute.id,
-            order_id=dispute.order_id,
-            image_type='SELLER',
-            metadata_info=json.dumps(metadata),
-            file_url=f"/static/uploads/{filename}",
-            uploaded_by=current_user_id
-        )
-        db.session.add(evidence)
+            evidence = Evidence(
+                dispute_id=dispute.id,
+                order_id=dispute.order_id,
+                image_type='SELLER',
+                metadata_info=json.dumps(metadata),
+                file_url=file_url,
+                uploaded_by=current_user_id
+            )
+            db.session.add(evidence)
 
     db.session.commit()
     

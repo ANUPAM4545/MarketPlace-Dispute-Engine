@@ -3,6 +3,7 @@ from models import db, Order, User, Product
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from datetime import datetime
 from routes.notifications import create_notification
+from utils.s3 import upload_to_s3
 
 bp = Blueprint('orders', __name__, url_prefix='/orders')
 
@@ -250,27 +251,38 @@ def upload_order_evidence(id):
     if not file or file.filename == '':
         return jsonify({"msg": "No evidence file provided"}), 400
 
-    filename = secure_filename(file.filename)
-    upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
-    if not os.path.exists(upload_folder):
-        os.makedirs(upload_folder)
-        
-    file_path = os.path.join(upload_folder, filename)
-    file.save(file_path)
-
-    # Extract metadata like size
-    file_size = os.path.getsize(file_path)
-    metadata = {
-        "file_size": file_size,
-        "filename": filename
-    }
+    # 1. Try S3 Upload First
+    file_url = upload_to_s3(file)
+    
+    if file_url:
+        # S3 Success
+        metadata = {
+            "storage": "S3",
+            "filename": file.filename
+        }
+    else:
+        # 2. Fallback to Local Storage
+        filename = secure_filename(file.filename)
+        upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
+        if not os.path.exists(upload_folder):
+            os.makedirs(upload_folder)
+            
+        file_path = os.path.join(upload_folder, filename)
+        file.save(file_path)
+        file_size = os.path.getsize(file_path)
+        file_url = f"/static/uploads/{filename}"
+        metadata = {
+            "storage": "LOCAL",
+            "file_size": file_size,
+            "filename": filename
+        }
 
     from models import Evidence
     evidence = Evidence(
         order_id=order.id,
         image_type='SELLER',
         metadata_info=json.dumps(metadata),
-        file_url=f"/static/uploads/{filename}",
+        file_url=file_url,
         uploaded_by=current_user_id
     )
     db.session.add(evidence)
