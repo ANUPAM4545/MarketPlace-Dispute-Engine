@@ -20,11 +20,13 @@
 
 ---
 
-## 🚀 Live Deployment
+## 🚀 Production Infrastructure (AWS)
 
-The platform is fully containerized and hosted live on modern cloud infrastructure:
-- **Frontend (Vercel):** [market-place-dispute-engine.vercel.app](https://market-place-dispute-engine.vercel.app/)
-- **Backend API (Render):** Scalable Python Flask instance connected to robust cloud storage.
+The platform is officially hosted on a highly available AWS enterprise stack:
+- **Frontend (AWS Amplify):** [main.del6ffb4i1wi8.amplifyapp.com](https://main.del6ffb4i1wi8.amplifyapp.com/)
+- **Backend API (AWS App Runner):** Scalable, containerized Flask instance.
+- **Database (AWS RDS):** Managed PostgreSQL instance for high data integrity.
+- **Storage (AWS S3):** Secure object storage for immutable evidence and proof images.
 
 ---
 
