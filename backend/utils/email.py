@@ -35,7 +35,7 @@ def send_email(subject, recipient, template, **kwargs):
 
     msg = Message(
         subject=subject,
-        recipients=[recipient],
+        recipients=[recipient.strip()],
         html=html_body,
         # Ensure sender is set to default if not specified
         sender=app.config.get('MAIL_DEFAULT_SENDER')

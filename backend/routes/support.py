@@ -35,7 +35,7 @@ def test_email_route():
     import threading
     try:
         # Allow testing with a specific recipient via ?to=email@example.com
-        recipient = request.args.get('to') or current_app.config.get('MAIL_USERNAME')
+        recipient = request.args.get('to', '').strip() or current_app.config.get('MAIL_USERNAME')
         
         if not recipient:
             return jsonify({"error": "No recipient specified and MAIL_USERNAME not configured"}), 500

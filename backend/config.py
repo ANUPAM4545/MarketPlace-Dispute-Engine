@@ -14,10 +14,10 @@ class Config:
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY') or secrets.token_hex(16)
 
     # Flask-Mail config
-    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com').strip()
     MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'True').lower() == 'true'
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER') or os.environ.get('MAIL_USERNAME') or 'noreply@disputeengine.com'
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME', '').strip()
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', '').strip()
+    MAIL_DEFAULT_SENDER = (os.environ.get('MAIL_DEFAULT_SENDER') or os.environ.get('MAIL_USERNAME') or 'noreply@disputeengine.com').strip()
     MAIL_SEND_SYNC = os.environ.get('MAIL_SEND_SYNC', 'False').lower() == 'true'
