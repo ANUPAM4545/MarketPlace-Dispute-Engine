@@ -36,7 +36,6 @@ export default function Navbar() {
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(async () => {
