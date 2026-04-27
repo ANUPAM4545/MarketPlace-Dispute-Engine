@@ -16,6 +16,7 @@ def send_async_email(app, msg):
                 print("ERROR: Mail extension not initialized in app.")
         except Exception as e:
             print(f"CRITICAL Error sending email: {str(e)}")
+            raise e
 
 def send_email(subject, recipient, template, **kwargs):
     """
@@ -43,8 +44,11 @@ def send_email(subject, recipient, template, **kwargs):
     # In some environments (like Vercel/Serverless), threads are killed immediately.
     # For those cases, we could allow a synchronous send via config.
     if app.config.get('MAIL_SEND_SYNC', False):
-        send_async_email(app, msg)
-        return None
+        try:
+            send_async_email(app, msg)
+            return True
+        except Exception as e:
+            return str(e)
 
     thread = threading.Thread(target=send_async_email, args=(app, msg))
     thread.start()
