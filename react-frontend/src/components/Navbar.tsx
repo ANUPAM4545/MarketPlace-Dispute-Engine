@@ -87,7 +87,7 @@ export default function Navbar() {
                                 </button>
                             )}
 
-                            <Link to="/" className="flex items-center gap-2 group">
+                            <Link to={user ? "/dashboard" : "/"} className="flex items-center gap-2 group">
                                 <motion.div 
                                     animate={{ 
                                         scale: [1, 1.2, 1],

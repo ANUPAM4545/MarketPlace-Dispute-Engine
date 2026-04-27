@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ShieldCheck, ArrowRight, Sparkles, Search, Bell, Box, Activity } from "lucide-react";
+import { ShieldCheck, ArrowRight, Sparkles, Search, Bell, Box, Activity, LayoutDashboard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
+    const { user } = useAuth();
     const [mockupIndex, setMockupIndex] = useState(0);
 
     // Cycle through mockups
@@ -99,12 +101,21 @@ export default function Home() {
                             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
                             className="mt-10 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
                         >
-                            <Link
-                                to="/register"
-                                className="w-full sm:w-auto rounded-xl bg-gray-900 dark:bg-gold-500 px-8 py-4 text-sm font-bold text-white dark:text-black shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2"
-                            >
-                                Get Started Now <ArrowRight className="w-4 h-4" />
-                            </Link>
+                            {user ? (
+                                <Link
+                                    to="/dashboard"
+                                    className="w-full sm:w-auto rounded-xl bg-gray-900 dark:bg-gold-500 px-8 py-4 text-sm font-bold text-white dark:text-black shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2"
+                                >
+                                    Go to Dashboard <LayoutDashboard className="w-4 h-4" />
+                                </Link>
+                            ) : (
+                                <Link
+                                    to="/register"
+                                    className="w-full sm:w-auto rounded-xl bg-gray-900 dark:bg-gold-500 px-8 py-4 text-sm font-bold text-white dark:text-black shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2"
+                                >
+                                    Get Started Now <ArrowRight className="w-4 h-4" />
+                                </Link>
+                            )}
                             <Link 
                                 to="/features" 
                                 className="w-full sm:w-auto rounded-xl bg-white dark:bg-appcard border border-gray-200 dark:border-appborder px-8 py-4 text-sm font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-appbg hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2"
@@ -319,18 +330,29 @@ export default function Home() {
                             Join thousands of users who have upgraded their marketplace experience with the Dispute Engine.
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                            <Link
-                                to="/register"
-                                className="w-full sm:w-auto rounded-2xl bg-gray-900 dark:bg-gold-500 px-10 py-5 text-lg font-bold text-white dark:text-black shadow-2xl hover:scale-105 transition-all"
-                            >
-                                Create Free Account
-                            </Link>
-                            <Link
-                                to="/login"
-                                className="text-gray-600 dark:text-gray-400 font-bold hover:text-gray-900 dark:hover:text-white flex items-center gap-2"
-                            >
-                                Already using it? Sign In <ArrowRight className="w-4 h-4" />
-                            </Link>
+                            {user ? (
+                                <Link
+                                    to="/dashboard"
+                                    className="w-full sm:w-auto rounded-2xl bg-gray-900 dark:bg-gold-500 px-10 py-5 text-lg font-bold text-white dark:text-black shadow-2xl hover:scale-105 transition-all flex items-center gap-2"
+                                >
+                                    Back to Dashboard <LayoutDashboard className="w-5 h-5" />
+                                </Link>
+                            ) : (
+                                <>
+                                    <Link
+                                        to="/register"
+                                        className="w-full sm:w-auto rounded-2xl bg-gray-900 dark:bg-gold-500 px-10 py-5 text-lg font-bold text-white dark:text-black shadow-2xl hover:scale-105 transition-all"
+                                    >
+                                        Create Free Account
+                                    </Link>
+                                    <Link
+                                        to="/login"
+                                        className="text-gray-600 dark:text-gray-400 font-bold hover:text-gray-900 dark:hover:text-white flex items-center gap-2"
+                                    >
+                                        Already using it? Sign In <ArrowRight className="w-4 h-4" />
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
