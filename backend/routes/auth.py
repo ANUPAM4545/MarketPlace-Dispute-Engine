@@ -41,7 +41,7 @@ def register():
     # Send Welcome Email
     try:
         send_email(
-            subject="Welcome to DisputeEngine.tech!",
+            subject="Welcome to DisputeEngine Elite!",
             recipient=email,
             template="welcome",
             name=name,
@@ -102,7 +102,7 @@ def google_login():
         # Send Welcome Email (Only for the first registration via Google)
         try:
             send_email(
-                subject="Welcome to DisputeEngine.tech!",
+                subject="Welcome to DisputeEngine Elite!",
                 recipient=email,
                 template="welcome",
                 name=name,

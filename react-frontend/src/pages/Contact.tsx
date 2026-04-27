@@ -179,7 +179,7 @@ export default function Contact() {
             </div>
 
             <footer className="py-12 text-center border-t border-gray-100 dark:border-appborder/30">
-                <p className="text-xs text-gray-400 font-light uppercase tracking-widest">© 2026 DisputeEngine. Global Infrastructure.</p>
+                <p className="text-xs text-gray-400 font-light uppercase tracking-widest">© 2026 DisputeEngine Elite. Global Infrastructure.</p>
             </footer>
         </div>
     );

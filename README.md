@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask" />
 </div>
 
-<h1 align="center">⚖️ DisputeEngine.tech</h1>
+<h1 align="center">⚖️ DisputeEngine Elite</h1>
 
 <p align="center">
   <strong>The Gold Standard for E-Commerce Resolution & Automated Mediation.</strong><br>
