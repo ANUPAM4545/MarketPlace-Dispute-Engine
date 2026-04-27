@@ -121,12 +121,10 @@ export default function Navbar() {
                                         Dashboard
                                     </Link>
                                 ) : (
-                                    <Link to="/" className="px-3 lg:px-4 py-1.5 flex items-center gap-2 text-gold-700 dark:text-gold-500 text-sm font-bold hover:bg-gold-500/5 rounded transition-colors uppercase tracking-tight">
-                                        Home
-                                    </Link>
-                                )}
-                                {!user && (
                                     <>
+                                        <Link to="/" className="px-3 lg:px-4 py-1.5 flex items-center gap-2 text-gold-700 dark:text-gold-500 text-sm font-bold hover:bg-gold-500/5 rounded transition-colors uppercase tracking-tight">
+                                            Home
+                                        </Link>
                                         <Link to="/features" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Features</Link>
                                         <Link to="/pricing" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Pricing</Link>
                                         <Link to="/contact" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Contact</Link>

@@ -52,6 +52,21 @@ export default function NotificationCenter() {
         }
     };
 
+    const timeAgo = (dateString: string) => {
+        const date = new Date(dateString);
+        const now = new Date();
+        const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+        if (seconds < 60) return "just now";
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes}m ago`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours}h ago`;
+        const days = Math.floor(hours / 24);
+        if (days < 7) return `${days}d ago`;
+        return date.toLocaleDateString();
+    };
+
     return (
         <div className="relative">
             <button
@@ -100,7 +115,7 @@ export default function NotificationCenter() {
                                                     <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{n.message}</p>
                                                     <div className="flex items-center gap-1.5 mt-2 text-[10px] text-gray-400">
                                                         <Clock className="w-3 h-3" />
-                                                        {new Date(n.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        {timeAgo(n.created_at)}
                                                     </div>
                                                 </div>
                                                 {!n.is_read && (

@@ -8,6 +8,14 @@ export default function Home() {
     const { user } = useAuth();
     const [mockupIndex, setMockupIndex] = useState(0);
 
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            navigate("/dashboard");
+        }
+    }, [user, navigate]);
+
     // Cycle through mockups
     useEffect(() => {
         const interval = setInterval(() => {
