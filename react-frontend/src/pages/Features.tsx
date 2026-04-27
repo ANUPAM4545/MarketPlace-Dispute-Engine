@@ -8,28 +8,28 @@ export default function Features() {
         {
             title: "Autonomous AI Analyst",
             description: "Powered by Gemini & Grok. The engine reads buyer complaints, cross-references seller evidence, and issues a data-driven resolution recommendation instantly. Never get stuck on a complex case again.",
-            image: "/features/evidence.png", // Repurposing image
+            image: "/features/ai_analyst.png",
             icon: Sparkles,
             color: "text-purple-500 bg-purple-500/10 border border-purple-500/20",
         },
         {
             title: "Global Marketplace Catalog",
             description: "A rich e-commerce frontend where buyers can search globally, view comprehensive product details, and place orders seamlessly. Sellers manage their inventory via a dedicated secure portal.",
-            image: "/features/analytics.png", // Repurposing image
+            image: "/features/catalog.png",
             icon: Search,
             color: "text-blue-500 bg-blue-500/10 border border-blue-500/20",
         },
         {
             title: "Real-Time Notification Hub",
             description: "An interactive notification center that pings users the second an event occurs. Whether it's a new order, a shipment dispatch, or an AI ruling, you'll see the alert instantly.",
-            image: "/features/messaging.png", // Repurposing image
+            image: "/features/notifications.png",
             icon: Bell,
             color: "text-emerald-500 bg-emerald-500/10 border border-emerald-500/20",
         },
         {
             title: "Logistics & Order Tracking",
             description: "Visual timeline tracking for every order. Buyers can see exactly when an item is paid, shipped, and delivered, while Sellers are required to upload undeniable proof of shipment.",
-            image: "/features/kanban.png", // Repurposing image
+            image: "/features/tracking.png",
             icon: MapPin,
             color: "text-amber-500 bg-amber-500/10 border border-amber-500/20",
         },
@@ -43,7 +43,7 @@ export default function Features() {
         {
             title: "Premium Dark Aesthetics",
             description: "A meticulously crafted interface that provides a luxurious dark mode experience. Enjoy refined glassmorphism, dynamic animations, and calibrated contrast that reduces eye strain.",
-            image: "/features/theme.png",
+            image: "/features/aesthetics.png",
             icon: Palette,
             color: "text-rose-500 bg-rose-500/10 border border-rose-500/20",
         }
