@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Loader2, Lock, Mail, ShieldCheck } from "lucide-react";
+import { Loader2, Lock, Mail, ArrowLeft } from "lucide-react";
+import { useEffect } from "react";
 import api from "../lib/api";
 import { cn } from "../lib/utils";
 import { motion } from "framer-motion";
@@ -14,7 +15,14 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const { login } = useAuth();
+    const { user, login } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            navigate("/dashboard");
+        }
+    }, [user, navigate]);
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
@@ -85,6 +93,22 @@ export default function Login() {
                 />
             </div>
 
+            {/* Back Button */}
+            <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 }}
+                className="absolute top-8 left-8 z-50"
+            >
+                <button 
+                    onClick={() => navigate("/")}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 dark:bg-appcard/50 dark:hover:bg-appcard border border-white/20 dark:border-white/5 text-gray-900 dark:text-white text-sm font-bold transition-all hover:-translate-x-1"
+                >
+                    <ArrowLeft className="w-4 h-4 text-gold-500" />
+                    Back
+                </button>
+            </motion.div>
+
             {/* Theme Toggle Positioned Absolutely */}
             <motion.div 
                 initial={{ opacity: 0, x: 20 }}
@@ -105,11 +129,11 @@ export default function Login() {
                     <motion.div variants={itemVariants} className="flex justify-center">
                         <Link to="/" className="relative group">
                             <motion.div 
-                                animate={{ rotate: [0, 5, -5, 0] }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-100 to-gold-50 dark:from-gold-500/20 dark:to-gold-500/5 flex items-center justify-center border border-gold-200/50 dark:border-gold-500/20 shadow-inner group-hover:scale-110 transition-transform duration-500"
+                                animate={{ y: [0, -5, 0] }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-white to-gray-50 dark:from-appcard dark:to-appbg flex items-center justify-center border border-gold-200/50 dark:border-gold-500/20 shadow-xl group-hover:scale-110 transition-transform duration-500"
                             >
-                                <ShieldCheck className="h-8 w-8 text-gold-600 dark:text-gold-500" />
+                                <img src="/logo_elite.png" alt="Logo" className="w-16 h-16 object-contain" />
                             </motion.div>
                             <div className="absolute -inset-2 bg-gold-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         </Link>
