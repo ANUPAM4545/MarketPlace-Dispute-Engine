@@ -173,3 +173,13 @@ def get_product_reviews(id):
         "comment": r.comment,
         "created_at": r.created_at.isoformat()
     } for r in reviews]), 200
+
+@bp.route('/cleanup-seeds', methods=['GET'])
+def cleanup_seeds():
+    try:
+        # Delete the specific seed watch
+        Product.query.filter_by(name="Luxury Minimalist Watch").delete()
+        db.session.commit()
+        return jsonify({"status": "Success", "message": "Demo watch removed from all dashboards"}), 200
+    except Exception as e:
+        return jsonify({"status": "Error", "message": str(e)}), 500
