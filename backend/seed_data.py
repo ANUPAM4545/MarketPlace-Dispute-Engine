@@ -10,9 +10,9 @@ with app.app_context():
     db.create_all()
 
     # 1. Create Users
-    admin = User(email="admin@test.com", name="Dhoni Admin", role="Admin", phone="555-0101", address="100 Admin Way, Server City", password_hash=generate_password_hash("Admin@123", method="pbkdf2:sha256"))
-    seller = User(email="seller@test.com", name="Premium Seller", role="Seller", phone="555-0202", address="200 Market Street, Shopville", password_hash=generate_password_hash("Seller@123", method="pbkdf2:sha256"))
-    buyer = User(email="buyer@test.com", name="Regular Buyer", role="Buyer", phone="555-0303", address="300 Home Ave, Resident Town", password_hash=generate_password_hash("Buyer@123", method="pbkdf2:sha256"))
+    admin = User(email="admin@test.com", name="Admin", role="Admin", phone="555-0101", address="100 Admin Way, Server City", password_hash=generate_password_hash("Admin@123", method="pbkdf2:sha256"))
+    seller = User(email="seller@test.com", name="Seller", role="Seller", phone="555-0202", address="200 Market Street, Shopville", password_hash=generate_password_hash("Seller@123", method="pbkdf2:sha256"))
+    buyer = User(email="buyer@test.com", name=" Buyer", role="Buyer", phone="555-0303", address="300 Home Ave, Resident Town", password_hash=generate_password_hash("Buyer@123", method="pbkdf2:sha256"))
     
     db.session.add_all([admin, seller, buyer])
     db.session.commit()

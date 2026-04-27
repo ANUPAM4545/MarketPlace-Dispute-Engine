@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask" />
 </div>
 
-<h1 align="center">⚖️ Marketplace Dispute Engine</h1>
+<h1 align="center">⚖️ DisputeEngine.tech</h1>
 
 <p align="center">
   <strong>The Gold Standard for E-Commerce Resolution & Automated Mediation.</strong><br>
@@ -18,7 +18,7 @@
 
 The platform is officially hosted on a highly available, globally distributed AWS stack ensuring 99.9% uptime and immutable data integrity.
 
-- **🌐 Frontend (AWS Amplify):** [main.del6ffb4i1wi8.amplifyapp.com](https://main.del6ffb4i1wi8.amplifyapp.com/)
+- **🌐 Frontend (Production):** [disputeengine.tech](https://disputeengine.tech)
 - **⚙️ Backend API (AWS App Runner):** Scalable, containerized Python Flask instance.
 - **🐘 Database (AWS RDS):** Managed PostgreSQL cluster for high-fidelity transactional storage.
 - **🖼️ Asset Storage (AWS S3):** Secure, immutable object storage for dispute evidence and product media.

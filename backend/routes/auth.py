@@ -40,14 +40,13 @@ def register():
 
     # Send Welcome Email
     try:
-        from flask import current_app
         send_email(
-            subject="Welcome to Market Dispute Engine!",
+            subject="Welcome to DisputeEngine.tech!",
             recipient=email,
             template="welcome",
             name=name,
             role=role,
-            login_url="https://market-place-dispute-engine.vercel.app/login"
+            login_url="https://disputeengine.tech/login"
         )
     except Exception as e:
         print(f"Failed to send welcome email: {e}")
@@ -103,12 +102,12 @@ def google_login():
         # Send Welcome Email (Only for the first registration via Google)
         try:
             send_email(
-                subject="Welcome to Market Dispute Engine!",
+                subject="Welcome to DisputeEngine.tech!",
                 recipient=email,
                 template="welcome",
                 name=name,
                 role=requested_role,
-                login_url="https://market-place-dispute-engine.vercel.app/login"
+                login_url="https://disputeengine.tech/login"
             )
         except Exception as e:
             print(f"Failed to send google welcome email: {e}")

@@ -1,4 +1,4 @@
-# 🏛️ AWS Masterclass: Marketplace Dispute Engine Architecture
+# 🏛️ AWS Masterclass: DisputeEngine.tech Architecture
 
 This document serves as your complete technical manual and learning guide for the cloud infrastructure powering your application. It explains **what** each service is, **how** it functions, and **why** it was chosen.
 

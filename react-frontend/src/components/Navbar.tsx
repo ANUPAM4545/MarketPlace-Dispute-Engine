@@ -89,7 +89,10 @@ export default function Navbar() {
 
                             <Link to="/" className="flex items-center gap-2 group">
                                 <div className="w-2 h-2 rounded-full bg-gold-500 group-hover:scale-150 transition-transform shadow-[0_0_8px_rgba(212,175,55,0.8)]"></div>
-                                <span className="text-lg lg:text-xl font-medium tracking-wide text-gray-900 dark:text-white"><span className="font-serif italic text-gold-600 dark:text-gold-500">Dispute</span>Engine</span>
+                                <span className="text-lg lg:text-xl font-medium tracking-wide text-gray-900 dark:text-white">
+                                    <span className="font-serif italic text-gold-600 dark:text-gold-500">Dispute</span>Engine
+                                    <span className="text-xs font-sans ml-0.5 opacity-60">.tech</span>
+                                </span>
                             </Link>
 
                             <div className="hidden md:flex items-center gap-1 lg:gap-2 ml-2 lg:ml-4 px-1 py-1 bg-gray-50 dark:bg-appcard border border-gray-200 dark:border-appborder rounded-md">
@@ -380,7 +383,7 @@ export default function Navbar() {
                             <div className="flex items-center justify-between mb-8">
                                 <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-gold-500"></div>
-                                    <span className="font-serif italic text-xl text-gray-900 dark:text-white">Engine</span>
+                                    <span className="font-serif italic text-xl text-gray-900 dark:text-white">Engine.tech</span>
                                 </div>
                                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-500"><X className="w-6 h-6" /></button>
                             </div>

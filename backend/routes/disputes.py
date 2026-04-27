@@ -147,7 +147,7 @@ def create_dispute():
             order_id=order_id,
             category=category,
             description=description,
-            login_url="http://localhost:5173/login"
+            login_url="https://disputeengine.tech/login"
         )
     
     return jsonify({"msg": "Dispute created", "id": new_dispute.id}), 201
@@ -348,7 +348,7 @@ def resolve_dispute(id):
                 template="status_update",
                 dispute_id=dispute.id,
                 new_status=resolution,
-                login_url="http://localhost:5173/login"
+                login_url="https://disputeengine.tech/login"
             )
 
     return jsonify({"msg": "Dispute resolved", "status": dispute.status}), 200
@@ -387,7 +387,7 @@ def update_dispute_status(id):
                 template="status_update",
                 dispute_id=dispute.id,
                 new_status=new_status,
-                login_url="http://localhost:5173/login"
+                login_url="https://disputeengine.tech/login"
             )
     
     return jsonify({"msg": "Dispute status updated", "status": dispute.status}), 200
