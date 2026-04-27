@@ -176,10 +176,25 @@ def get_product_reviews(id):
 
 @bp.route('/cleanup-seeds', methods=['GET'])
 def cleanup_seeds():
+    from models import Order, Dispute
     try:
-        # Delete the specific seed watch
-        Product.query.filter_by(name="Luxury Minimalist Watch").delete()
-        db.session.commit()
-        return jsonify({"status": "Success", "message": "Demo watch removed from all dashboards"}), 200
+        # 1. Find the watch ID
+        watch = Product.query.filter_by(name="Luxury Minimalist Watch").first()
+        if watch:
+            # 2. Delete Disputes linked to orders of this watch
+            orders = Order.query.filter_by(product_id=watch.id).all()
+            order_ids = [o.id for o in orders]
+            Dispute.query.filter(Dispute.order_id.in_(order_ids)).delete(synchronize_session=False)
+            
+            # 3. Delete Orders of this watch
+            Order.query.filter_by(product_id=watch.id).delete(synchronize_session=False)
+            
+            # 4. Delete the watch itself
+            db.session.delete(watch)
+            db.session.commit()
+            return jsonify({"status": "Success", "message": "Demo data (Watch, Orders, Disputes) removed successfully"}), 200
+        
+        return jsonify({"status": "Success", "message": "Demo watch was already removed"}), 200
     except Exception as e:
+        db.session.rollback()
         return jsonify({"status": "Error", "message": str(e)}), 500
