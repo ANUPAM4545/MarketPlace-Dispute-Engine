@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { 
@@ -24,6 +24,12 @@ import api from "../lib/api";
 export default function Navbar() {
     const { user, logout } = useAuth();
     const { theme, toggleTheme } = useTheme();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Determine active path for styling
+    const isActive = (path: string) => location.pathname === path;
+
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -122,12 +128,30 @@ export default function Navbar() {
                                     </Link>
                                 ) : (
                                     <>
-                                        <Link to="/" className="px-3 lg:px-4 py-1.5 flex items-center gap-2 text-gold-700 dark:text-gold-500 text-sm font-bold hover:bg-gold-500/5 rounded transition-colors uppercase tracking-tight">
+                                        <Link 
+                                            to="/" 
+                                            className={`px-3 lg:px-4 py-1.5 flex items-center gap-2 text-sm font-bold transition-colors uppercase tracking-tight rounded ${isActive("/") ? "text-gold-700 dark:text-gold-500 bg-gold-500/10" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}
+                                        >
                                             Home
                                         </Link>
-                                        <Link to="/features" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Features</Link>
-                                        <Link to="/pricing" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Pricing</Link>
-                                        <Link to="/contact" className="px-3 lg:px-4 py-1.5 text-gray-500 dark:text-gray-400 text-sm font-bold hover:text-gray-900 dark:hover:text-white rounded transition-colors uppercase tracking-tight">Contact</Link>
+                                        <Link 
+                                            to="/features" 
+                                            className={`px-3 lg:px-4 py-1.5 text-sm font-bold transition-colors uppercase tracking-tight rounded ${isActive("/features") ? "text-gold-700 dark:text-gold-500 bg-gold-500/10" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}
+                                        >
+                                            Features
+                                        </Link>
+                                        <Link 
+                                            to="/pricing" 
+                                            className={`px-3 lg:px-4 py-1.5 text-sm font-bold transition-colors uppercase tracking-tight rounded ${isActive("/pricing") ? "text-gold-700 dark:text-gold-500 bg-gold-500/10" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}
+                                        >
+                                            Pricing
+                                        </Link>
+                                        <Link 
+                                            to="/contact" 
+                                            className={`px-3 lg:px-4 py-1.5 text-sm font-bold transition-colors uppercase tracking-tight rounded ${isActive("/contact") ? "text-gold-700 dark:text-gold-500 bg-gold-500/10" : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"}`}
+                                        >
+                                            Contact
+                                        </Link>
                                     </>
                                 )}
                             </div>
@@ -419,24 +443,34 @@ export default function Navbar() {
                                         Dashboard
                                     </Link>
                                 ) : (
-                                    <Link 
-                                        to="/" 
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gold-500/10 text-gold-700 dark:text-gold-500 font-bold"
-                                    >
-                                        <LayoutDashboard className="w-5 h-5" />
-                                        Home
-                                    </Link>
-                                )}
-                                {!user && (
                                     <>
-                                        <Link to="/features" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard font-bold transition-colors">
+                                        <Link 
+                                            to="/" 
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${isActive("/") ? "bg-gold-500/10 text-gold-700 dark:text-gold-500" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard"}`}
+                                        >
+                                            <LayoutDashboard className="w-5 h-5" />
+                                            Home
+                                        </Link>
+                                        <Link 
+                                            to="/features" 
+                                            onClick={() => setMobileMenuOpen(false)} 
+                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${isActive("/features") ? "bg-gold-500/10 text-gold-700 dark:text-gold-500" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard"}`}
+                                        >
                                             <Box className="w-5 h-5" /> Features
                                         </Link>
-                                        <Link to="/pricing" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard font-bold transition-colors">
+                                        <Link 
+                                            to="/pricing" 
+                                            onClick={() => setMobileMenuOpen(false)} 
+                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${isActive("/pricing") ? "bg-gold-500/10 text-gold-700 dark:text-gold-500" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard"}`}
+                                        >
                                             <Sparkles className="w-5 h-5" /> Pricing
                                         </Link>
-                                        <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard font-bold transition-colors">
+                                        <Link 
+                                            to="/contact" 
+                                            onClick={() => setMobileMenuOpen(false)} 
+                                            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${isActive("/contact") ? "bg-gold-500/10 text-gold-700 dark:text-gold-500" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-appcard"}`}
+                                        >
                                             <Mail className="w-5 h-5" /> Contact
                                         </Link>
                                     </>
