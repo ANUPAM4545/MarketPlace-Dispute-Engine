@@ -34,19 +34,27 @@ def contact():
 def test_email_route():
     import threading
     try:
-        recipient = current_app.config.get('MAIL_USERNAME')
+        # Allow testing with a specific recipient via ?to=email@example.com
+        recipient = request.args.get('to') or current_app.config.get('MAIL_USERNAME')
+        
         if not recipient:
-            return jsonify({"error": "MAIL_USERNAME not configured"}), 500
+            return jsonify({"error": "No recipient specified and MAIL_USERNAME not configured"}), 500
             
         result = send_email(
             subject="Elite Engine Diagnostic Test",
             recipient=recipient,
             template="welcome",
-            name="System Administrator"
+            name="System Tester",
+            role="User",
+            login_url="https://disputeengine.tech/login"
         )
         
         if result is True or isinstance(result, threading.Thread):
-            return jsonify({"status": "Success", "message": "Email sent successfully or background task started"}), 200
+            return jsonify({
+                "status": "Success", 
+                "message": f"Email sent successfully to {recipient}",
+                "note": "If you used the ?to= parameter, check that specific inbox."
+            }), 200
         else:
             return jsonify({"status": "Failed", "error": str(result)}), 500
     except Exception as e:
