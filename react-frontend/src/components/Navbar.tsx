@@ -89,27 +89,29 @@ export default function Navbar() {
 
                             <Link to={user ? "/dashboard" : "/"} className="flex items-center gap-2 group">
                                 <motion.div 
-                                    animate={{ 
-                                        scale: [1, 1.2, 1],
-                                        boxShadow: [
-                                            "0 0 8px rgba(212,175,55,0.4)",
-                                            "0 0 15px rgba(212,175,55,0.8)",
-                                            "0 0 8px rgba(212,175,55,0.4)"
-                                        ]
-                                    }}
-                                    transition={{ duration: 2, repeat: Infinity }}
-                                    className="w-2 h-2 rounded-full bg-gold-500"
-                                />
-                                <span className="text-lg lg:text-xl font-medium tracking-wide text-gray-900 dark:text-white">
-                                    <span className="font-serif italic text-gold-600 dark:text-gold-500">Dispute</span>Engine
-                                    <motion.span 
-                                        animate={{ opacity: [0.5, 1, 0.5] }}
-                                        transition={{ duration: 3, repeat: Infinity }}
-                                        className="text-xs font-sans ml-1 text-gold-600 dark:text-gold-500 font-bold uppercase tracking-widest"
-                                    >
-                                        Elite
-                                    </motion.span>
-                                </span>
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="relative h-10 lg:h-12 w-auto overflow-hidden rounded-lg shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] transition-shadow duration-300"
+                                >
+                                    <img 
+                                        src="/logo_elite.png" 
+                                        alt="DisputeEngine Elite Logo" 
+                                        className="h-full w-auto object-contain"
+                                    />
+                                    {/* Subtle Overlay Shine */}
+                                    <motion.div 
+                                        animate={{ 
+                                            left: ["-100%", "200%"] 
+                                        }}
+                                        transition={{ 
+                                            duration: 3, 
+                                            repeat: Infinity, 
+                                            ease: "easeInOut",
+                                            repeatDelay: 2
+                                        }}
+                                        className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg]"
+                                    />
+                                </motion.div>
                             </Link>
 
                             <div className="hidden md:flex items-center gap-1 lg:gap-2 ml-2 lg:ml-4 px-1 py-1 bg-gray-50 dark:bg-appcard border border-gray-200 dark:border-appborder rounded-md">
@@ -399,8 +401,11 @@ export default function Navbar() {
                         >
                             <div className="flex items-center justify-between mb-8">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-gold-500"></div>
-                                    <span className="font-serif italic text-xl text-gray-900 dark:text-white">Engine Elite</span>
+                                    <img 
+                                        src="/logo_elite.png" 
+                                        alt="DisputeEngine Elite Logo" 
+                                        className="h-8 w-auto object-contain"
+                                    />
                                 </div>
                                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-500"><X className="w-6 h-6" /></button>
                             </div>
