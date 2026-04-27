@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Plus, Trash2, Package, Info, DollarSign, Database, Edit2, Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../lib/api";
+import { useAuth } from "../context/AuthContext";
 import { toast } from "react-hot-toast";
 
 interface Product {
@@ -15,6 +16,7 @@ interface Product {
 }
 
 export default function SellerInventory() {
+    const { user } = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
@@ -25,9 +27,17 @@ export default function SellerInventory() {
     const [searchParams, setSearchParams] = useSearchParams();
     const searchQuery = searchParams.get("search") || "";
 
+    // Check if we need to load again when user becomes available
+    useEffect(() => {
+        if (user) {
+            fetchMyProducts();
+        }
+    }, [user]);
+
     const fetchMyProducts = async () => {
+        if (!user) return;
         try {
-            const res = await api.get("/products/");
+            const res = await api.get(`/products/?seller_id=${user.id}`);
             setProducts(res.data);
             setLoading(false);
         } catch (err) {
@@ -35,10 +45,6 @@ export default function SellerInventory() {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        fetchMyProducts();
-    }, []);
 
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();

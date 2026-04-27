@@ -6,7 +6,12 @@ bp = Blueprint('products', __name__, url_prefix='/products')
 
 @bp.route('/', methods=['GET'])
 def get_products():
-    products = Product.query.all()
+    seller_id = request.args.get('seller_id')
+    if seller_id:
+        products = Product.query.filter_by(seller_id=seller_id).all()
+    else:
+        products = Product.query.all()
+    
     from models import Review
     products_data = []
     
