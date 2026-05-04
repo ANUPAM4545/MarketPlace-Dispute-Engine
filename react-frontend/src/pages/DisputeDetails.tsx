@@ -5,7 +5,7 @@ import api from "../lib/api";
 import DisputeResponse from "../components/DisputeResponse";
 import AdminPanel from "../components/AdminPanel";
 import GeminiAIInsights from "../components/GeminiAIInsights";
-import DisputeChat from "../components/DisputeChat";
+
 import { motion } from "framer-motion";
 
 interface Dispute {
@@ -225,8 +225,7 @@ export default function DisputeDetails() {
                                     </>
                                 )}
 
-                            {/* Secure Resolution Chat */}
-                            <DisputeChat disputeId={dispute.id} currentUserId={user?.id} />
+
                         </div>
                     </div>
                 </motion.div>
